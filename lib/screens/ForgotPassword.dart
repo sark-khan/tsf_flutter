@@ -19,7 +19,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         // appBar: AppBar(automaticallyImplyLeading: true),
         body: Stack(
           children: [
-            Background(context),
+            Background(context, BackgroundImagePath().LOGINBACKGROUND),
             SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

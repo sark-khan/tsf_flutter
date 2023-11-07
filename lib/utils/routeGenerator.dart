@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tsf/components/background.dart';
 import 'package:tsf/screens/ForgotPassword.dart';
+import 'package:tsf/screens/HomeScreen.dart';
 import 'package:tsf/screens/Login.dart';
+import 'package:tsf/screens/Notifications.dart';
 import 'package:tsf/screens/OrderDetails.dart';
 
 class RouteGenerator {
@@ -11,7 +13,7 @@ class RouteGenerator {
     switch (settings.name) {
       case '/':
         return MaterialPageRoute(builder: (_) => SplashScreen());
-      case '/Login':
+      case '/login':
         return MaterialPageRoute(
           builder: (_) => Login(),
         );
@@ -19,10 +21,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ForgotPassword());
       case '/order-details':
         return MaterialPageRoute(builder: (_) => const OrderDetails());
-      // case '/home':
-      //   return MaterialPageRoute(builder: (_) => HomePage());
-      //   case '/edit':
-      //   return MaterialPageRoute(builder: (_) => EditProfile());
+      case '/home':
+        return MaterialPageRoute(builder: (_) => HomeScreen());
+      case '/notification':
+        return MaterialPageRoute(builder: (_) => const Notifications());
       default:
         return _errorRoute();
     }

@@ -14,24 +14,32 @@ class _bgState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     Future.delayed((Duration(seconds: 2)), () {
-      Navigator.of(context).pushNamed("/Login");
+      Navigator.of(context).pushNamed("/login");
     });
     return Scaffold(
       body: Stack(
-        fit: StackFit.expand,
-        alignment: Alignment.center,
-        children: [Background(context)],
+        children: [
+          Background(context, BackgroundImagePath().SPLASHBACKGROUND)
+          // Column(
+          //   children: [
+          //     SizedBox(
+          //       height: MediaQuery.of(context).size.height * 0.04,
+          //     ),
+          //     TopLayer().topLayerWidget("Home", context),
+          //   ],
+          // )
+        ],
       ),
     );
   }
 }
 
-Widget Background(BuildContext context) {
+Widget Background(BuildContext context, String imagePath) {
   return Container(
-    decoration: const BoxDecoration(
+    decoration: BoxDecoration(
         image: DecorationImage(
-      image: AssetImage("assets/Login.png"),
-      fit: BoxFit.cover,
+      image: AssetImage(imagePath),
+      fit: BoxFit.fill,
     )),
   );
 }

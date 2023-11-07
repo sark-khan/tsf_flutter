@@ -17,13 +17,18 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   TextEditingController emailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
+  bool isPasswordFieldVisible = false;
+  bool isPasswordVisible = false;
+  String buttonText = TextConstants().SUBMIT;
+  bool obscureText = true;
+  bool userChecked = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
-          Background(context),
+          Background(context, BackgroundImagePath().LOGINBACKGROUND),
           Container(
               padding: EdgeInsets.only(
                   top: MediaQuery.of(context).size.height * 0.20),
@@ -53,9 +58,10 @@ class _LoginState extends State<Login> {
                   decoration: InputDecoration(
                     fillColor: AppColors().textFillColor,
                     filled: true,
+                    enabled: !isPasswordFieldVisible,
                     hintText: TextConstants().EMAIL,
-                    prefixIcon: Padding(
-                      padding: const EdgeInsets.all(15.0),
+                    prefixIcon: const Padding(
+                      padding: EdgeInsets.all(15.0),
                       child: Icon(Icons.email),
                     ),
                     border: OutlineInputBorder(
@@ -64,44 +70,61 @@ class _LoginState extends State<Login> {
                 ),
               ),
               const SizedBox(height: 30),
-              Container(
-                decoration: BoxShadows().customDecoration(
-                    AppColors().textFieldShadow, 2, 5.0, const Offset(0, 3)),
-                child: TextField(
-                  controller: passwordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    fillColor: AppColors().textFillColor,
-                    filled: true,
-                    prefixIcon: const Padding(
-                      padding: EdgeInsets.all(15.0),
-                      child: Icon(Icons.password_rounded),
+              Visibility(
+                visible: isPasswordFieldVisible,
+                child: Container(
+                  decoration: BoxShadows().customDecoration(
+                      AppColors().textFieldShadow, 2, 5.0, const Offset(0, 3)),
+                  child: TextField(
+                    controller: passwordController,
+                    obscureText: !isPasswordVisible,
+                    decoration: InputDecoration(
+                      fillColor: AppColors().textFillColor,
+                      filled: true,
+                      prefixIcon: const Padding(
+                        padding: EdgeInsets.all(15.0),
+                        child: Icon(Icons.password_rounded),
+                      ),
+                      suffixIcon: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: IconButton(
+                            icon: Icon(
+                              obscureText
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: obscureText ? Colors.grey : Colors.blue,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                isPasswordVisible = !isPasswordVisible;
+                                obscureText = !obscureText;
+                              });
+                            }),
+                      ),
+                      hintText: TextConstants().PASSWORD,
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)),
                     ),
-                    suffixIcon: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.visibility_off)),
-                    ),
-                    hintText: TextConstants().PASSWORD,
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)),
                   ),
                 ),
               ),
-              Align(
-                  alignment: Alignment.centerRight,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: InkWell(
-                      onTap: () =>
-                          {Navigator.of(context).pushNamed("/forgot-password")},
-                      child: Text(
-                        TextConstants().FORGOTPASSWORD,
-                        style: TextStyle(color: AppColors().white),
+              Visibility(
+                visible: isPasswordFieldVisible,
+                child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: InkWell(
+                        onTap: () => {
+                          Navigator.of(context).pushNamed("/forgot-password")
+                        },
+                        child: Text(
+                          TextConstants().FORGOTPASSWORD,
+                          style: TextStyle(color: AppColors().white),
+                        ),
                       ),
-                    ),
-                  )),
+                    )),
+              ),
               Container(
                 padding: EdgeInsets.only(
                     top: MediaQuery.of(context).size.height * 0.10,
@@ -112,34 +135,48 @@ class _LoginState extends State<Login> {
                   decoration: BoxShadows().customDecoration(
                       AppColors().textFieldShadow, 2, 5, const Offset(0, 2)),
                   child: MaterialButton(
-                      // elevation: 10,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      color: AppColors().gold,
-                      onPressed: hasConnectionWrapper(
-                        () async {
-                          ReturnObj returnObj = CommonFunctions().validateLogin(
-                              emailController.text, passwordController.text);
+                    // elevation: 10,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    color: AppColors().gold,
 
+                    onPressed: hasConnectionWrapper(
+                      () async {
+                        print("reached here");
+                        if (!userChecked) {
+                          ReturnObj returnObj = await CommonFunctions.CheckUser(
+                              emailController.text);
+                          Fluttertoast.showToast(msg: returnObj.message);
                           if (returnObj.status) {
-                            Fluttertoast.showToast(msg: "Login Success");
-                            Navigator.of(context).pushNamed("/forgot-password");
-                          } else {
-                            Fluttertoast.showToast(msg: "Login Failure");
+                            setState(() {
+                              isPasswordFieldVisible = true;
+                              buttonText = TextConstants().LOGIN;
+                              userChecked = !userChecked;
+                              // Set to true or false as needed
+                            });
                           }
-                        },
+                        } else {
+                          print("here");
+                          ReturnObj returnObj = await CommonFunctions.Login(
+                              emailController.text, passwordController.text);
+                          Fluttertoast.showToast(msg: returnObj.message);
+                          if (returnObj.status) {
+                            Navigator.pushNamed(context, "/home");
+                          }
+                        }
+                      },
+                    ),
+                    child: FittedBox(
+                      fit: BoxFit.fitHeight,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Text(buttonText,
+                            style: GoogleFonts.montserrat(
+                                textStyle: TextStyle(color: AppColors().white),
+                                fontWeight: FontWeight.bold)),
                       ),
-                      child: FittedBox(
-                        fit: BoxFit.fitHeight,
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Text(TextConstants().LOGIN,
-                              style: GoogleFonts.montserrat(
-                                  textStyle:
-                                      TextStyle(color: AppColors().white),
-                                  fontWeight: FontWeight.bold)),
-                        ),
-                      )),
+                    ),
+                  ),
                 ),
               )
             ]),
