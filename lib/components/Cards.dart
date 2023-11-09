@@ -9,11 +9,11 @@ class NotificationCard {
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(
               8)), // Adjust the elevation for the card shadow
-      margin: const EdgeInsets.only(
-          left: 10,
-          right: 10,
-          bottom: 10,
-          top: 0), // Adjust the margin for spacing between cards
+      // margin: const EdgeInsets.only(
+      //     left: 10,
+      //     right: 10,
+      //     bottom: 10,
+      //     top: 0), // Adjust the margin for spacing between cards
       child: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Column(children: [
@@ -48,30 +48,30 @@ class NotificationCard {
 
 class HomeCard {
   Widget homeCard(String title, String arrivingTime, String date,
-      String priority, BuildContext context) {
-    final ratio = MediaQuery.of(context).size.width <
-            MediaQuery.of(context).size.height
-        ? MediaQuery.of(context).size.width / MediaQuery.of(context).size.height
-        : MediaQuery.of(context).size.height /
-            MediaQuery.of(context).size.width;
+      String priority, String id, BuildContext context) {
+    // final ratio = MediaQuery.of(context).size.width <
+    //         MediaQuery.of(context).size.height
+    //     ? MediaQuery.of(context).size.width / MediaQuery.of(context).size.height
+    //     : MediaQuery.of(context).size.height /
+    //         MediaQuery.of(context).size.width;
 
     return InkWell(
       onTap: () {
-        Navigator.of(context).pushNamed("/order-details");
+        Navigator.of(context).pushNamed("/order-details", arguments: id);
       },
       child: Card(
         elevation: 3,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(10),
         ),
-        margin: const EdgeInsets.only(
-          left: 10,
-          right: 10,
-          bottom: 10,
-          top: 0,
-        ),
+        // margin: const EdgeInsets.only(
+        //   left: 20,
+        //   right: 10,
+        //   bottom: 10,
+        //   top: 0,
+        // ),
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(15.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -80,51 +80,186 @@ class HomeCard {
                 style: TextStyle(
                   color: Colors.grey,
                   fontWeight: FontWeight.bold,
-                  fontSize: ratio * 30,
+                  fontSize: 16,
                 ),
               ),
               const SizedBox(height: 6),
               Text(
                 date,
                 style: TextStyle(
-                  fontSize: ratio * 20,
+                  fontSize: 10,
                   fontWeight: FontWeight.w300,
                   color: Colors.grey,
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "Estimated Delivery on " + arrivingTime,
-                    textScaleFactor: 0.8,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w300,
-                      color: Colors.green,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "Priority: ",
-                        textScaleFactor: 0.8,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w300,
-                          color: Colors.black,
-                        ),
-                      ),
-                      SizedBox(width: 4),
-                      Text(
-                        priority,
-                        textScaleFactor: 0.8,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w300,
-                          color: Colors.red,
-                        ),
-                      ),
-                    ],
-                  ),
+                  RichText(
+                      text: TextSpan(
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w300,
+                              color: Colors.green,
+                              fontSize: 10),
+                          children: [
+                        const TextSpan(text: "Estimated Delivery on \n"),
+                        TextSpan(
+                            text: arrivingTime,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 12))
+                      ])),
+
+                  RichText(
+                      textAlign: TextAlign.right,
+                      text: TextSpan(
+                          style: TextStyle(
+                              fontWeight: FontWeight.w300,
+                              color: Colors.black,
+                              fontSize: 10),
+                          children: [
+                            TextSpan(text: "Priority \n"),
+                            TextSpan(
+                                text: priority,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 12,
+                                  color: Colors.red,
+                                ))
+                          ])),
+
+                  // Row(
+                  //   children: [
+                  //     // Text(
+                  //     //   "Priority: ",
+                  //     //   textScaleFactor: 0.8,
+                  //     //   style: TextStyle(
+                  //     //     fontWeight: FontWeight.w300,
+                  //     //     color: Colors.black,
+                  //     //   ),
+                  //     // ),
+                  //     SizedBox(width: 4),
+                  //     Text(
+                  //       priority,
+                  //       textScaleFactor: 0.8,
+                  //       style: TextStyle(
+                  //         fontWeight: FontWeight.w300,
+                  //         color: Colors.red,
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget dispatchCard(String title, String inventoryDate, String soDate,
+      String id, BuildContext context) {
+    // final ratio = MediaQuery.of(context).size.width <
+    //         MediaQuery.of(context).size.height
+    //     ? MediaQuery.of(context).size.width / MediaQuery.of(context).size.height
+    //     : MediaQuery.of(context).size.height /
+    //         MediaQuery.of(context).size.width;
+
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).pushNamed("/order-details", arguments: id);
+      },
+      child: Card(
+        elevation: 3,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        // margin: const EdgeInsets.only(
+        //   left: 20,
+        //   right: 10,
+        //   bottom: 10,
+        //   top: 0,
+        // ),
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                soDate,
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w300,
+                  color: Colors.grey,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  RichText(
+                      text: TextSpan(
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w300,
+                              color: Colors.green,
+                              fontSize: 10),
+                          children: [
+                        const TextSpan(text: "Estimated Delivery on \n"),
+                        TextSpan(
+                            text: inventoryDate,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 12))
+                      ])),
+
+                  // RichText(
+                  //     textAlign: TextAlign.right,
+                  //     text: TextSpan(
+                  //         style: TextStyle(
+                  //             fontWeight: FontWeight.w300,
+                  //             color: Colors.black,
+                  //             fontSize: 10),
+                  //         children: [
+                  //           TextSpan(text: "Priority \n"),
+                  //           TextSpan(
+                  //               text: priority,
+                  //               style: TextStyle(
+                  //                 fontWeight: FontWeight.w600,
+                  //                 fontSize: 12,
+                  //                 color: Colors.red,
+                  //               ))
+                  //         ])),
+
+                  // Row(
+                  //   children: [
+                  //     // Text(
+                  //     //   "Priority: ",
+                  //     //   textScaleFactor: 0.8,
+                  //     //   style: TextStyle(
+                  //     //     fontWeight: FontWeight.w300,
+                  //     //     color: Colors.black,
+                  //     //   ),
+                  //     // ),
+                  //     SizedBox(width: 4),
+                  //     Text(
+                  //       priority,
+                  //       textScaleFactor: 0.8,
+                  //       style: TextStyle(
+                  //         fontWeight: FontWeight.w300,
+                  //         color: Colors.red,
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
             ],

@@ -10,13 +10,24 @@ import 'package:google_fonts/google_fonts.dart';
 import '../utils/commonFunctions.dart';
 
 class Login extends StatefulWidget {
+  TextEditingController? emailController;
+  TextEditingController? passwordController;
   @override
   State createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
-  TextEditingController emailController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    widget.emailController = TextEditingController();
+    widget.passwordController = TextEditingController();
+  }
+  // @override
+  // void initState()=>{
+  //   super.initState();
+
+  // }
   bool isPasswordFieldVisible = false;
   bool isPasswordVisible = false;
   String buttonText = TextConstants().SUBMIT;
@@ -52,13 +63,38 @@ class _LoginState extends State<Login> {
             child: Column(children: [
               Container(
                 decoration: BoxShadows().customDecoration(
-                    AppColors().textFieldShadow, 2, 5, const Offset(0, 3)),
+                    AppColors().textFieldShadow, 2.0, 5.0, const Offset(0, 3)),
                 child: TextField(
-                  controller: emailController,
+                  // controller: widget.emailController,
+                  autocorrect: false,
+                  autofocus: true,
+                  // autofillHints: false,
                   decoration: InputDecoration(
                     fillColor: AppColors().textFillColor,
                     filled: true,
                     enabled: !isPasswordFieldVisible,
+                    hintText: TextConstants().EMAIL,
+                    prefixIcon: const Padding(
+                      padding: EdgeInsets.all(15.0),
+                      child: Icon(Icons.email),
+                    ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                ),
+              ),
+              Container(
+                // decoration: BoxShadows().customDecoration(
+                //     AppColors().textFieldShadow, 2.0, 5.0, const Offset(0, 3)),
+                child: TextField(
+                  // controller: widget.emailController,
+                  autocorrect: false,
+                  // autofocus: true,
+                  // autofillHints: false,
+                  decoration: InputDecoration(
+                    fillColor: AppColors().textFillColor,
+                    filled: true,
+                    // enabled: !isPasswordFieldVisible,
                     hintText: TextConstants().EMAIL,
                     prefixIcon: const Padding(
                       padding: EdgeInsets.all(15.0),
@@ -76,7 +112,7 @@ class _LoginState extends State<Login> {
                   decoration: BoxShadows().customDecoration(
                       AppColors().textFieldShadow, 2, 5.0, const Offset(0, 3)),
                   child: TextField(
-                    controller: passwordController,
+                    controller: widget.passwordController,
                     obscureText: !isPasswordVisible,
                     decoration: InputDecoration(
                       fillColor: AppColors().textFillColor,
@@ -145,7 +181,7 @@ class _LoginState extends State<Login> {
                         print("reached here");
                         if (!userChecked) {
                           ReturnObj returnObj = await CommonFunctions.CheckUser(
-                              emailController.text);
+                              widget.emailController!.text);
                           Fluttertoast.showToast(msg: returnObj.message);
                           if (returnObj.status) {
                             setState(() {
@@ -158,7 +194,8 @@ class _LoginState extends State<Login> {
                         } else {
                           print("here");
                           ReturnObj returnObj = await CommonFunctions.Login(
-                              emailController.text, passwordController.text);
+                              widget.emailController!.text,
+                              widget.passwordController!.text);
                           Fluttertoast.showToast(msg: returnObj.message);
                           if (returnObj.status) {
                             Navigator.pushNamed(context, "/home");

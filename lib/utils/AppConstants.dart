@@ -13,6 +13,7 @@ class AppColors {
   Color activeTogleButton = const Color(0xFF3531b9);
   Color cardBackground = const Color(0xFFedeff1);
   Color inactiveToggle = const Color(0xFF6a9dd4);
+  Color buttonColorPurple = const Color(0xFF3531b9);
 }
 
 class TextConstants {
@@ -22,7 +23,9 @@ class TextConstants {
   String FORGOTPASSWORD = "Forgot Password..?";
   String FORGOTPASSWORDSCREENTEXT = "Forgot Password";
   String SUBMIT = "Submit";
-
+  String ORDER_DETAILS = "Order Details";
+  String HOME = "Home";
+  String NOTIFICATION = "Notifications";
   String exampleText = """What is Lorem Ipsum?
 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
 

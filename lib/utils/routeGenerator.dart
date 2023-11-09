@@ -15,19 +15,24 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => SplashScreen());
       case '/login':
         return MaterialPageRoute(
-          builder: (_) => Login(),
+          builder: (_) => HomeScreen(),
         );
       case '/forgot-password':
         return MaterialPageRoute(builder: (_) => const ForgotPassword());
       case '/order-details':
-        return MaterialPageRoute(builder: (_) => const OrderDetails());
+        if (args is String) {
+          return MaterialPageRoute(
+              builder: (_) => OrderDetails(
+                    orderId: args,
+                  ));
+        }
+        break;
       case '/home':
         return MaterialPageRoute(builder: (_) => HomeScreen());
       case '/notification':
         return MaterialPageRoute(builder: (_) => const Notifications());
-      default:
-        return _errorRoute();
     }
+    return _errorRoute();
   }
 
   static Route<dynamic> _errorRoute() {

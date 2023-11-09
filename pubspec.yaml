@@ -39,6 +39,7 @@ dependencies:
   toggle_switch: ^2.1.0
   dio: ^5.3.2
   get_storage:
+  lottie:
 
 dev_dependencies:
   flutter_test:
