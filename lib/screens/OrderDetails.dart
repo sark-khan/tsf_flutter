@@ -101,7 +101,7 @@ class _OrderDetailsState extends State<OrderDetails> {
           elevation: 4.0,
           toolbarHeight: 70.0,
           actions: <Widget>[
-            Buttons().addCommentsButton("Add Comments", context),
+            Buttons().addCommentsButton("Add Comments", context,widget.orderId!),
           ],
         ),
         body: Column(
@@ -111,7 +111,7 @@ class _OrderDetailsState extends State<OrderDetails> {
             // SizedBox(height: MediaQuery.of(context).size.height * 0.04),
             // TopLayer().topLayerWidget("Home", context, visiblity: true),
             FutureBuilder(
-              future: CommonFunctions().getOrderDetails("1232323"),
+              future: CommonFunctions().getOrderDetails(widget.orderId),
               builder: (context, snapshot) {
                 if (snapshot.hasData &&
                     snapshot.connectionState == ConnectionState.done) {
