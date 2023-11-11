@@ -16,7 +16,7 @@ class CheckUserResponse {
   bool isRequestSent;
   bool insertNewPassword;
   String message;
-  UserDetails userDetails;
+  bool userVerified;
 
   CheckUserResponse({
     required this.accountRejected,
@@ -24,7 +24,7 @@ class CheckUserResponse {
     required this.isRequestSent,
     required this.insertNewPassword,
     required this.message,
-    required this.userDetails,
+    required this.userVerified
   });
 
   factory CheckUserResponse.fromJson(Map<String, dynamic> json) =>
@@ -34,7 +34,7 @@ class CheckUserResponse {
         isRequestSent: json["isRequestSent"],
         insertNewPassword: json["insertNewPassword"],
         message: json["message"],
-        userDetails: UserDetails.fromJson(json["userDetails"]),
+        userVerified: json["userVerified"]
       );
 
   Map<String, dynamic> toJson() => {
@@ -42,15 +42,6 @@ class CheckUserResponse {
         "activationRequested": activationRequested,
         "isRequestSent": isRequestSent,
         "insertNewPassword": insertNewPassword,
-        "message": message,
-        "userDetails": userDetails.toJson(),
+        "message": message
       };
-}
-
-class UserDetails {
-  UserDetails();
-
-  factory UserDetails.fromJson(Map<String, dynamic> json) => UserDetails();
-
-  Map<String, dynamic> toJson() => {};
 }

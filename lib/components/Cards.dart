@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:tsf/utils/AppConstants.dart';
 
 class NotificationCard {
@@ -113,7 +112,7 @@ class HomeCard {
                   RichText(
                       textAlign: TextAlign.right,
                       text: TextSpan(
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontWeight: FontWeight.w300,
                               color: Colors.black,
                               fontSize: 10),
@@ -121,7 +120,7 @@ class HomeCard {
                             TextSpan(text: "Priority \n"),
                             TextSpan(
                                 text: priority,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 12,
                                   color: Colors.red,
@@ -158,7 +157,7 @@ class HomeCard {
     );
   }
 
-  Widget dispatchCard(String title, String inventoryDate, String soDate,
+  Widget dispatchCard(String title, DateTime inventoryDate, DateTime soDate,
       String id, BuildContext context) {
     // final ratio = MediaQuery.of(context).size.width <
     //         MediaQuery.of(context).size.height
@@ -188,7 +187,7 @@ class HomeCard {
             children: [
               Text(
                 title,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.grey,
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -196,8 +195,8 @@ class HomeCard {
               ),
               const SizedBox(height: 6),
               Text(
-                soDate,
-                style: TextStyle(
+                soDate.toString().split(" ")[0],
+                style: const TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w300,
                   color: Colors.grey,
@@ -216,50 +215,10 @@ class HomeCard {
                           children: [
                         const TextSpan(text: "Estimated Delivery on \n"),
                         TextSpan(
-                            text: inventoryDate,
+                            text: inventoryDate.toString().split(" ")[0],
                             style: TextStyle(
                                 fontWeight: FontWeight.w600, fontSize: 12))
-                      ])),
-
-                  // RichText(
-                  //     textAlign: TextAlign.right,
-                  //     text: TextSpan(
-                  //         style: TextStyle(
-                  //             fontWeight: FontWeight.w300,
-                  //             color: Colors.black,
-                  //             fontSize: 10),
-                  //         children: [
-                  //           TextSpan(text: "Priority \n"),
-                  //           TextSpan(
-                  //               text: priority,
-                  //               style: TextStyle(
-                  //                 fontWeight: FontWeight.w600,
-                  //                 fontSize: 12,
-                  //                 color: Colors.red,
-                  //               ))
-                  //         ])),
-
-                  // Row(
-                  //   children: [
-                  //     // Text(
-                  //     //   "Priority: ",
-                  //     //   textScaleFactor: 0.8,
-                  //     //   style: TextStyle(
-                  //     //     fontWeight: FontWeight.w300,
-                  //     //     color: Colors.black,
-                  //     //   ),
-                  //     // ),
-                  //     SizedBox(width: 4),
-                  //     Text(
-                  //       priority,
-                  //       textScaleFactor: 0.8,
-                  //       style: TextStyle(
-                  //         fontWeight: FontWeight.w300,
-                  //         color: Colors.red,
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
+                      ]))
                 ],
               ),
             ],

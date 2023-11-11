@@ -12,10 +12,10 @@ class RouteGenerator {
 
     switch (settings.name) {
       case '/':
-        return MaterialPageRoute(builder: (_) => SplashScreen());
+        return MaterialPageRoute(builder: (_) => Login());
       case '/login':
         return MaterialPageRoute(
-          builder: (_) => HomeScreen(),
+          builder: (_) => Login(),
         );
       case '/forgot-password':
         return MaterialPageRoute(builder: (_) => const ForgotPassword());

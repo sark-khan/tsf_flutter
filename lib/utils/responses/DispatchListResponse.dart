@@ -4,41 +4,36 @@
 
 import 'dart:convert';
 
-DispatchListResponse dispatchListResponseFromJson(String str) =>
-    DispatchListResponse.fromJson(json.decode(str));
+DispatchListResponse dispatchListResponseFromJson(String str) => DispatchListResponse.fromJson(json.decode(str));
 
-String dispatchListResponseToJson(DispatchListResponse data) =>
-    json.encode(data.toJson());
+String dispatchListResponseToJson(DispatchListResponse data) => json.encode(data.toJson());
 
 class DispatchListResponse {
-  List<DispatchDetail> dispatchDetails;
+  List<DispatchList> dispatchList;
 
   DispatchListResponse({
-    required this.dispatchDetails,
+    required this.dispatchList,
   });
 
-  factory DispatchListResponse.fromJson(Map<String, dynamic> json) =>
-      DispatchListResponse(
-        dispatchDetails: List<DispatchDetail>.from(
-            json["dispatchDetails"].map((x) => DispatchDetail.fromJson(x))),
-      );
+  factory DispatchListResponse.fromJson(Map<String, dynamic> json) => DispatchListResponse(
+    dispatchList: List<DispatchList>.from(json["dispatchList"].map((x) => DispatchList.fromJson(x))),
+  );
 
   Map<String, dynamic> toJson() => {
-        "dispatchDetails":
-            List<dynamic>.from(dispatchDetails.map((x) => x.toJson())),
-      };
+    "dispatchList": List<dynamic>.from(dispatchList.map((x) => x.toJson())),
+  };
 }
 
-class DispatchDetail {
+class DispatchList {
   String id;
   String region;
   String customerName;
   String destination;
   String inventoryNumber;
-  String inventoryDate;
+  DateTime inventoryDate;
   String poNumber;
   String soNumber;
-  String soDate;
+  DateTime soDate;
   String filmtype;
   String coreInnerDiameter;
   String rollOuterDiameter;
@@ -59,11 +54,11 @@ class DispatchDetail {
   String value;
   String packingType;
   String consignee;
-  String createdAt;
-  String updatedAt;
+  DateTime createdAt;
+  DateTime updatedAt;
   int v;
 
-  DispatchDetail({
+  DispatchList({
     required this.id,
     required this.region,
     required this.customerName,
@@ -98,73 +93,73 @@ class DispatchDetail {
     required this.v,
   });
 
-  factory DispatchDetail.fromJson(Map<String, dynamic> json) => DispatchDetail(
-        id: json["_id"],
-        region: json["region"],
-        customerName: json["customerName"],
-        destination: json["destination"],
-        inventoryNumber: json["inventoryNumber"],
-        inventoryDate: json["inventoryDate"],
-        poNumber: json["poNumber"],
-        soNumber: json["soNumber"],
-        soDate: json["soDate"],
-        filmtype: json["filmtype"],
-        coreInnerDiameter: json["coreInnerDiameter"],
-        rollOuterDiameter: json["rollOuterDiameter"],
-        width: json["width"],
-        dispatchQuantityInKg: json["dispatchQuantityInKg"],
-        vehicleNumber: json["vehicleNumber"],
-        customerAccountCode: json["customerAccountCode"],
-        mktSoNumber: json["mktSoNumber"],
-        dispatchQuantityInSqm: json["dispatchQuantityInSqm"],
-        firstTransporter: json["firstTransporter"],
-        tripNumber: json["tripNumber"],
-        lrNumber: json["lrNumber"],
-        secondTransporter: json["secondTransporter"],
-        mobileNumber: json["mobileNumber"],
-        saleCategory: json["saleCategory"],
-        collectorName: json["collectorName"],
-        grade: json["grade"],
-        value: json["value"],
-        packingType: json["packingType"],
-        consignee: json["consignee"],
-        createdAt: json["createdAt"],
-        updatedAt: json["updatedAt"],
-        v: json["__v"],
-      );
+  factory DispatchList.fromJson(Map<String, dynamic> json) => DispatchList(
+    id: json["_id"],
+    region: json["region"],
+    customerName: json["customerName"],
+    destination: json["destination"],
+    inventoryNumber: json["inventoryNumber"],
+    inventoryDate: DateTime.parse(json["inventoryDate"]),
+    poNumber: json["poNumber"],
+    soNumber: json["soNumber"],
+    soDate: DateTime.parse(json["soDate"]),
+    filmtype: json["filmtype"],
+    coreInnerDiameter: json["coreInnerDiameter"],
+    rollOuterDiameter: json["rollOuterDiameter"],
+    width: json["width"],
+    dispatchQuantityInKg: json["dispatchQuantityInKg"],
+    vehicleNumber: json["vehicleNumber"],
+    customerAccountCode: json["customerAccountCode"],
+    mktSoNumber: json["mktSoNumber"],
+    dispatchQuantityInSqm: json["dispatchQuantityInSqm"],
+    firstTransporter: json["firstTransporter"],
+    tripNumber: json["tripNumber"],
+    lrNumber: json["lrNumber"],
+    secondTransporter: json["secondTransporter"],
+    mobileNumber: json["mobileNumber"],
+    saleCategory: json["saleCategory"],
+    collectorName: json["collectorName"],
+    grade: json["grade"],
+    value: json["value"],
+    packingType: json["packingType"],
+    consignee: json["consignee"],
+    createdAt: DateTime.parse(json["createdAt"]),
+    updatedAt: DateTime.parse(json["updatedAt"]),
+    v: json["__v"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "_id": id,
-        "region": region,
-        "customerName": customerName,
-        "destination": destination,
-        "inventoryNumber": inventoryNumber,
-        "inventoryDate": inventoryDate,
-        "poNumber": poNumber,
-        "soNumber": soNumber,
-        "soDate": soDate,
-        "filmtype": filmtype,
-        "coreInnerDiameter": coreInnerDiameter,
-        "rollOuterDiameter": rollOuterDiameter,
-        "width": width,
-        "dispatchQuantityInKg": dispatchQuantityInKg,
-        "vehicleNumber": vehicleNumber,
-        "customerAccountCode": customerAccountCode,
-        "mktSoNumber": mktSoNumber,
-        "dispatchQuantityInSqm": dispatchQuantityInSqm,
-        "firstTransporter": firstTransporter,
-        "tripNumber": tripNumber,
-        "lrNumber": lrNumber,
-        "secondTransporter": secondTransporter,
-        "mobileNumber": mobileNumber,
-        "saleCategory": saleCategory,
-        "collectorName": collectorName,
-        "grade": grade,
-        "value": value,
-        "packingType": packingType,
-        "consignee": consignee,
-        "createdAt": createdAt,
-        "updatedAt": updatedAt,
-        "__v": v,
-      };
+    "_id": id,
+    "region": region,
+    "customerName": customerName,
+    "destination": destination,
+    "inventoryNumber": inventoryNumber,
+    "inventoryDate": "${inventoryDate.year.toString().padLeft(4, '0')}-${inventoryDate.month.toString().padLeft(2, '0')}-${inventoryDate.day.toString().padLeft(2, '0')}",
+    "poNumber": poNumber,
+    "soNumber": soNumber,
+    "soDate": "${soDate.year.toString().padLeft(4, '0')}-${soDate.month.toString().padLeft(2, '0')}-${soDate.day.toString().padLeft(2, '0')}",
+    "filmtype": filmtype,
+    "coreInnerDiameter": coreInnerDiameter,
+    "rollOuterDiameter": rollOuterDiameter,
+    "width": width,
+    "dispatchQuantityInKg": dispatchQuantityInKg,
+    "vehicleNumber": vehicleNumber,
+    "customerAccountCode": customerAccountCode,
+    "mktSoNumber": mktSoNumber,
+    "dispatchQuantityInSqm": dispatchQuantityInSqm,
+    "firstTransporter": firstTransporter,
+    "tripNumber": tripNumber,
+    "lrNumber": lrNumber,
+    "secondTransporter": secondTransporter,
+    "mobileNumber": mobileNumber,
+    "saleCategory": saleCategory,
+    "collectorName": collectorName,
+    "grade": grade,
+    "value": value,
+    "packingType": packingType,
+    "consignee": consignee,
+    "createdAt": createdAt.toIso8601String(),
+    "updatedAt": updatedAt.toIso8601String(),
+    "__v": v,
+  };
 }

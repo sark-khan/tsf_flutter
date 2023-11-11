@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:get/utils.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tsf/components/Buttons.dart';
 import 'package:tsf/components/Cards.dart';
-import 'package:tsf/components/WidgetStyle.dart';
 import 'package:tsf/utils/AppConstants.dart';
-import 'package:tsf/utils/NotificationListData.dart';
 import 'package:tsf/utils/commonFunctions.dart';
 import 'package:tsf/utils/responses/NotificationResponse.dart';
 
@@ -21,7 +19,6 @@ class _NotificationState extends State<Notifications> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          // automaticallyImplyLeading: false,
           backgroundColor: Colors.transparent,
           elevation: 0,
           title: Padding(
@@ -56,9 +53,18 @@ class _NotificationState extends State<Notifications> {
                 child: FutureBuilder(
                   future: CommonFunctions().getNotifications(),
                   builder: (context, snapshot) {
+
                     if (snapshot.hasData) {
-                      List<Message> notifResponse =
-                          snapshot.data["notifications"];
+                      ReturnObj? ret= snapshot.data;
+
+                      if(!ret!.status){
+                        return const Center(child: Text("Server is Busy",style: TextStyle(
+                          fontSize: 22.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        )));
+                      }
+                      List<Message> notifResponse = ret.data!.cast<Message>();
                       return notifResponse.isEmpty
                           ? Column(
                               children: [
@@ -87,10 +93,11 @@ class _NotificationState extends State<Notifications> {
                               },
                             );
                     } else if (snapshot.hasError) {
-                      return Center(child: Text("Error: ${snapshot.error}"));
+                      printError(info: "Error in Notification : ${snapshot.error}");
+                      return Center(child: Text(TextConstants().SERVER_BUSY));
                     } else {
                       return const Center(
-                          child: CircularProgressIndicator(color: Colors.blue));
+                          child: CircularProgressIndicator(color: Colors.white));
                     }
                   },
                   // child: ListView.builder(
