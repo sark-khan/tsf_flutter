@@ -5,7 +5,7 @@ import 'package:tsf/utils/Storage.dart';
 import 'package:tsf/utils/commonFunctions.dart';
 
 class Buttons {
-  Widget addCommentsButton(String text, BuildContext context) {
+  Widget addCommentsButton(String text, BuildContext context, String orderId) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
       child: ElevatedButton(
@@ -13,7 +13,7 @@ class Buttons {
           showDialog(
             context: context,
             builder: (BuildContext context) {
-              return showDialogs(context);
+              return showDialogs(context, orderId);
             },
           )
         },
@@ -64,7 +64,7 @@ class Buttons {
     );
   }
 
-  Dialog showDialogs(BuildContext context) {
+  Dialog showDialogs(BuildContext context, String orderId) {
     TextEditingController commentController = TextEditingController();
     return Dialog(
       shape: RoundedRectangleBorder(
@@ -115,7 +115,7 @@ class Buttons {
             ElevatedButton(
               onPressed: () async {
                 ReturnObj response =
-                    await CommonFunctions().addComments(commentController.text);
+                    await CommonFunctions().addComments(commentController.text,orderId);
                 // if(response.status){
                 Fluttertoast.showToast(msg: response.message);
                 Navigator.of(context)

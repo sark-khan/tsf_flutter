@@ -200,11 +200,11 @@ class CommonFunctions {
     }
   }
 
-  Future<ReturnObj> addComments(String comment) async {
+  Future<ReturnObj> addComments(String comment, String orderId ) async {
     try {
       headers['token'] = Storage.getJwtToken();
       var data = json
-          .encode({"orderId": "654bb54d84df9569eb656a85", "comment": comment});
+          .encode({"orderId": orderId, "comment": comment});
 
       var response = await dio.request(
         '$APIURL/api/order/order-comments',
