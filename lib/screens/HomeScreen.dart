@@ -1,94 +1,176 @@
 import 'package:flutter/material.dart';
-import 'package:get_storage/get_storage.dart';
+// import 'package:get_storage/get_storage.dart';
+import 'package:lottie/lottie.dart';
 import 'package:toggle_switch/toggle_switch.dart';
+import 'package:tsf/components/Buttons.dart';
 import 'package:tsf/components/Cards.dart';
-import 'package:tsf/components/WidgetStyle.dart';
+// import 'package:tsf/components/WidgetStyle.dart';
 import 'package:tsf/components/background.dart';
 import 'package:tsf/utils/AppConstants.dart';
-import 'package:tsf/utils/CardListData.dart';
+// import 'package:tsf/utils/CardListData.dart';
 import 'package:tsf/utils/commonFunctions.dart';
+import 'package:tsf/utils/responses/OrdersResponse.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
-  State createState() => _HomeScreen();
+  _HomeScreenState createState() => _HomeScreenState();
+
 }
 
-class _HomeScreen extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> {
+  int toggleIndex = 0;
+  Future<ReturnObj>? futureData;
+
+  void initState() {
+    super.initState();
+    futureData = CommonFunctions().getOrders(); // Default data
+  }
+
+  void updateData() {
+    setState(() {
+      futureData = toggleIndex == 0
+          ? CommonFunctions().getOrders()
+          : CommonFunctions().getDispatchList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Stack(
-        children: [
-          Background(context, BackgroundImagePath().INNERBACKGROUND),
-          Column(
-            children: [
-              SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-              TopLayer().topLayerWidget("Home", context, visiblity: false),
-              Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(
-                        left: MediaQuery.of(context).size.width * 0.09,
-                        right: MediaQuery.of(context).size.width * 0.09),
-                    child: ToggleSwitch(
-                      minWidth: MediaQuery.of(context).size.width * 0.4,
-                      minHeight: MediaQuery.of(context).size.height * 0.05,
-                      initialLabelIndex: 0,
-                      cornerRadius: 10.0,
+    Size screenSize= MediaQuery.of(context).size;
+    return WillPopScope(
+      onWillPop: ()async {
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          title: Padding(
+            padding: EdgeInsets.symmetric(horizontal: screenSize.width*0.01),
+            child: Text(TextConstants().HOME),
+          ),
+          toolbarHeight: screenSize.height*0.1087,
+          actions: [
+            Buttons().notificationButton(context),
+            Buttons().logoutButton(context),
+          ],
+        ),
+        resizeToAvoidBottomInset: false,
+        extendBodyBehindAppBar: true,
+        body: Stack(
+          children: [
+            Background(context, BackgroundImagePath().INNERBACKGROUND),
+            Column(
+              children: [
+                SizedBox(height: screenSize.height*0.151315789),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ToggleSwitch(
+                      minWidth: MediaQuery.of(context).size.width,
+                      minHeight: screenSize.height*0.0592105263,
+                      initialLabelIndex: toggleIndex,
+                      cornerRadius: 5.0,
                       activeFgColor: AppColors().white,
                       inactiveBgColor: AppColors().inactiveToggle,
                       inactiveFgColor: AppColors().white,
                       totalSwitches: 2,
-                      labels: ["Sales Order", "Dispatch Summary"],
+                      labels: const ["Sales Order", "Dispatch Summary"],
                       borderWidth: 2.0,
                       borderColor: [Colors.blueGrey],
                       activeBgColors: [
                         [AppColors().activeTogleButton],
-                        [AppColors().activeTogleButton]
+                        [AppColors().activeTogleButton],
                       ],
                       onToggle: (index) {
-                        print('switched to: $index');
+                        toggleIndex = index!;
+                        updateData();
                       },
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
-              Container(
-                  height: MediaQuery.of(context).size.height * 0.70,
-                  width: MediaQuery.of(context).size.width * 0.80,
+                  ],
+                ),
+                SizedBox(
+                  height: screenSize.height*0.0131578947,
+                ),
+                Expanded(
                   child: FutureBuilder(
-                      future: CommonFunctions().getOrders(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return ListView.builder(
-                            padding: EdgeInsets.zero,
-                            itemCount: snapshot.data.length,
-                            itemBuilder: (context, index) {
-                              print(snapshot.data[0][0]);
-                              return HomeCard().homeCard(
-                                  snapshot.data[0][0]['orderId']!,
-                                  snapshot.data[0][0]['arrivingTime']!,
-                                  snapshot.data[0][0]['orderPlacedTime']!,
-                                  snapshot.data[0][0]['priority']!,
-                                  context);
-                            },
+                    future: futureData,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(color: Colors.blue),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Text("Error: ${snapshot.error}"),
+                        );
+                      } else {
+                        ReturnObj? ret= snapshot.data;
+                        if(!ret!.status){
+                           return Center(
+                            child: Text(ret.message),
                           );
-                        } else if (snapshot.hasError) {
-                          return Center(
-                              child: Text("Error: ${snapshot.error}"));
-                        } else {
-                          return const Center(
-                              child: CircularProgressIndicator(
-                                  color: Colors.blue));
                         }
-                      }))
-            ],
-          )
-        ],
+                        List<dynamic>? orders = ret!.data as List<dynamic>;
+
+
+                        if (orders.isEmpty) {
+                          return Center(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: screenSize.height*0.0789473684),
+                              child: Column(
+                                children: [
+                                  Lottie.asset(
+                                    'assets/NotFound.json',
+                                    width: screenSize.width*0.694444444,
+                                    height: screenSize.height*0.328947368,
+                                  ),
+                                   Text(
+                                    TextConstants().NOT_FOUND,
+                                    style: const TextStyle(
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }
+
+                        return ListView.builder(
+                          padding: EdgeInsets.zero,
+                          itemCount: orders.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: EdgeInsets.symmetric(horizontal: screenSize.width*0.0333333333),
+                              child: toggleIndex == 0
+                                  ? HomeCard().homeCard(
+                                      orders[index].region!,
+                                      orders[index].promiseDate!,
+                                      orders[index].requestDate!,
+                                      orders[index].soDate!,
+                                      orders[index].id!,
+                                      context)
+                                  : HomeCard().dispatchCard(
+                                      orders[index].region!,
+                                      orders[index].inventoryDate!,
+                                      orders[index].soDate!,
+                                      orders[index].id!,
+                                      context),
+                            );
+                          },
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

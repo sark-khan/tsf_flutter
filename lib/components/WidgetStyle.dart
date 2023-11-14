@@ -9,9 +9,9 @@ class BoxShadows {
       BoxShadow(
           color: color,
           // Shadow color
-          spreadRadius: spreadRadius,
+          spreadRadius: double.parse(spreadRadius.toString()),
           // Spread of the shadow
-          blurRadius: blurRadius,
+          blurRadius: double.parse(blurRadius.toString()),
           // Blur radius of the shadow
           offset: offset)
     ]);
@@ -58,6 +58,10 @@ class TopLayer {
                   ),
                 ),
               ),
+              Align(
+                alignment: Alignment.centerRight,
+                // child: IconButton(icon: Icon(Icons.vert)),
+              )
             ],
           ),
           Container(
