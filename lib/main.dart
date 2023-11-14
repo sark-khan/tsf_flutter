@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tsf/components/background.dart';
-import 'package:tsf/screens/ForgotPassword.dart';
-import 'package:tsf/screens/Login.dart';
-import 'package:tsf/screens/OrderDetails.dart';
-import 'package:tsf/utils/AppConstants.dart';
-import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:tsf/utils/routeGenerator.dart';
 
-void main() {
+void main() async {
+  await GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
