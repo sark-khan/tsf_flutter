@@ -19,40 +19,21 @@ class _bgState extends State<SplashScreen> {
   }
 
   void navigateToNextPage() {
-    Future.delayed(Duration(seconds: 2), () {
-      if (!Storage.getJwtToken()) {
+    String token = Storage.getJwtToken();
+    Future.delayed(const Duration(seconds: 2), () {
+      if (token.isEmpty) {
         Navigator.of(context).pushReplacementNamed("/login");
       } else {
         Navigator.of(context).pushReplacementNamed("/home");
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
-    // Future.delayed((Duration(seconds: 2)), () {
-    //   // Storage.addJwtToken(
-    //   //     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNhcmlrLnNhay5raGFuQGdtYWlsLmNvbSIsIm5hbWUiOiJzYXJpa19sb2NhbCIsInJvbGUiOiJVc2VyIiwidXNlcklkIjoiNjUyM2E2ZGMxNTYwODEyMTg0MGRkMmZlIiwiYWNjb3VudE51bWJlciI6IjEyMzQ1Njc4OTAiLCJpYXQiOjE2OTk0MzQzNDJ9.NH5get8DFsvRVEOomA4lbyGQyVVQd6uEbLbFqkVxMPY");
-    //   if (!Storage.getJwtToken()) {
-    //     return Navigator.of(context).pushNamed("/login");
-    //   } else {
-    //     return Navigator.of(context).pushNamed("/home");
-    //   }
-    // });
-
-    // , arguments: "6524fbbcf78efb4533d83999"
     return Scaffold(
       body: Stack(
-        children: [
-          Background(context, BackgroundImagePath().SPLASHBACKGROUND)
-          // Column(
-          //   children: [
-          //     SizedBox(
-          //       height: MediaQuery.of(context).size.height * 0.04,
-          //     ),
-          //     TopLayer().topLayerWidget("Home", context),
-          //   ],
-          // )
-        ],
+        children: [Background(context, BackgroundImagePath().SPLASHBACKGROUND)],
       ),
     );
   }

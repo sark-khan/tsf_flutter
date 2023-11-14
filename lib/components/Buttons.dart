@@ -9,13 +9,15 @@ class Buttons {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
       child: ElevatedButton(
-        onPressed: () => {
+        onPressed: () {
+          var token = Storage.getJwtToken();
+          print("${token} hellooo");
           showDialog(
             context: context,
             builder: (BuildContext context) {
               return showDialogs(context, orderId);
             },
-          )
+          );
         },
         child: Text(text),
         style: ElevatedButton.styleFrom(
@@ -28,6 +30,7 @@ class Buttons {
     return Padding(
       padding: EdgeInsets.only(right: 20, top: 20, bottom: 20, left: 5),
       child: FloatingActionButton(
+          heroTag: "logoutButton",
           elevation: 0,
           backgroundColor: Colors.transparent,
           // style: ButtonStyle(
@@ -48,6 +51,7 @@ class Buttons {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
       child: FloatingActionButton(
+          heroTag: "notifButton",
           elevation: 0,
           backgroundColor: Colors.transparent,
           onPressed: () {
@@ -114,8 +118,8 @@ class Buttons {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
-                ReturnObj response =
-                    await CommonFunctions().addComments(commentController.text,orderId);
+                ReturnObj response = await CommonFunctions()
+                    .addComments(commentController.text, orderId);
                 // if(response.status){
                 Fluttertoast.showToast(msg: response.message);
                 Navigator.of(context)
