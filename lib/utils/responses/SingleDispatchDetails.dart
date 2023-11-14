@@ -43,7 +43,7 @@ class DispatchDetails {
   String width;
   String dispatchQuantityInKg;
   String vehicleNumber;
-  String customerAccountCode;
+  String userAccountNumber;
   String mktSoNumber;
   String dispatchQuantityInSqm;
   String firstTransporter;
@@ -77,7 +77,7 @@ class DispatchDetails {
     required this.width,
     required this.dispatchQuantityInKg,
     required this.vehicleNumber,
-    required this.customerAccountCode,
+    required this.userAccountNumber,
     required this.mktSoNumber,
     required this.dispatchQuantityInSqm,
     required this.firstTransporter,
@@ -113,7 +113,7 @@ class DispatchDetails {
         width: json["width"],
         dispatchQuantityInKg: json["dispatchQuantityInKg"],
         vehicleNumber: json["vehicleNumber"],
-        customerAccountCode: json["customerAccountCode"],
+        userAccountNumber: json["userAccountNumber"],
         mktSoNumber: json["mktSoNumber"],
         dispatchQuantityInSqm: json["dispatchQuantityInSqm"],
         firstTransporter: json["firstTransporter"],
@@ -148,7 +148,7 @@ class DispatchDetails {
         "width": width,
         "dispatchQuantityInKg": dispatchQuantityInKg,
         "vehicleNumber": vehicleNumber,
-        "customerAccountCode": customerAccountCode,
+        "userAccountNumber": userAccountNumber,
         "mktSoNumber": mktSoNumber,
         "dispatchQuantityInSqm": dispatchQuantityInSqm,
         "firstTransporter": firstTransporter,

@@ -23,7 +23,6 @@ class CommonFunctions {
       var data =
           json.encode({"accountNumberOrEmail": email.toLowerCase(), "password": password});
       var dio = Dio();
-      print("${email} helloooooopppppp");
       var response = await dio.request(
         '$APIURL/api/auth/login',
         options: Options(
@@ -262,6 +261,7 @@ class CommonFunctions {
         // data: data,
       );
       if (response.statusCode == 200) {
+        print("${response.data} hellloooo");
         DispatchListResponse dispatchList =
             DispatchListResponse.fromJson(response.data);
         return ReturnObj<List<DispatchList>>(message: "Received Successfully", status: true,data: dispatchList.dispatchList);

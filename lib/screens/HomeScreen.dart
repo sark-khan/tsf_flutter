@@ -139,7 +139,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           );
                         }
-
                         return ListView.builder(
                           padding: EdgeInsets.zero,
                           itemCount: orders.length,

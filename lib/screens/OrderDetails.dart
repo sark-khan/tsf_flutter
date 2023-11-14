@@ -9,7 +9,8 @@ import 'package:tsf/utils/responses/SingleOrderDetailsResponse.dart';
 
 class OrderDetails extends StatefulWidget {
   String? orderId;
-  OrderDetails({this.orderId, super.key});
+  bool? isOrderPage;
+  OrderDetails({this.orderId, super.key, this.isOrderPage});
 
   @override
   State createState() => _OrderDetailsState();
@@ -80,6 +81,37 @@ class _OrderDetailsState extends State<OrderDetails> {
     ],
   ];
 
+  final dispatchDetailsOrder = [
+    ["Customer Name", "customerName"],
+    ["Region", "region"],
+    ["Destination", "destination"],
+    ["Inventory Number", "inventoryNumber"],
+    ["Inventory Date", "inventoryDate"],
+    ["PO Number", "poNumber"],
+    ["SO Number", "soNumber"],
+    ["SO Date", "soDate"],
+    ["Film Type", "filmtype"],
+    ["Core Inner Diameter", "coreInnerDiameter"],
+    ["Roll Outer Diameter", "rollOuterDiameter"],
+    ["Width", "width"],
+    ["Dispatch Quantity In Kg", "dispatchQuantityInKg"],
+    ["Vehicle Number", "vehicleNumber"],
+    ["Customer Account Code", "customerAccountCode"],
+    ["MKT SO Number", "mktSoNumber"],
+    ["Dispatch Quantity In Sqm", "dispatchQuantityInSqm"],
+    ["First Transporter", "firstTransporter"],
+    ["Trip Number", "tripNumber"],
+    ["LR Number", "lrNumber"],
+    ["Second Transporter", "secondTransporter"],
+    ["Mobile Number", "mobileNumber"],
+    ["Sale Category", "saleCategory"],
+    ["Collector Name", "collectorName"],
+    ["Grade", "grade"],
+    ["Value", "value"],
+    ["Packing Type", "packingType"],
+    ["Consignee", "consignee"],
+  ];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -101,7 +133,8 @@ class _OrderDetailsState extends State<OrderDetails> {
           elevation: 4.0,
           toolbarHeight: 70.0,
           actions: <Widget>[
-            Buttons().addCommentsButton("Add Comments", context,widget.orderId!),
+            Buttons()
+                .addCommentsButton("Add Comments", context, widget.orderId!),
           ],
         ),
         body: Column(
@@ -111,26 +144,27 @@ class _OrderDetailsState extends State<OrderDetails> {
             // SizedBox(height: MediaQuery.of(context).size.height * 0.04),
             // TopLayer().topLayerWidget("Home", context, visiblity: true),
             FutureBuilder(
-              future: CommonFunctions().getOrderDetails(widget.orderId),
+              future: widget.isOrderPage!
+                  ? CommonFunctions().getOrderDetails(widget.orderId)
+                  : CommonFunctions().getDispatchDetails(widget.orderId),
               builder: (context, snapshot) {
                 if (snapshot.hasData &&
                     snapshot.connectionState == ConnectionState.done) {
-                  ReturnObj ret =
-                      snapshot.data!;
-                  if(!ret!.status){
+                  ReturnObj ret = snapshot.data!;
+                  if (!ret!.status) {
                     return Center(
                       child: Text(ret.message),
                     );
                   }
                   return Expanded(
                     child: ListView.builder(
-                        itemCount: orderDetails.length,
+                        itemCount: widget.isOrderPage!?orderDetails.length: dispatchDetailsOrder.length,
                         itemBuilder: (context, index) {
+                          List _orderUIKeys = widget.isOrderPage!
+                              ? orderDetails[index]
+                              : dispatchDetailsOrder[index];
 
-                          List _orderUIKeys = orderDetails[index];
-
-                          Map jsonVal =
-                              json.decode(json.encode(ret.data));
+                          Map jsonVal = json.decode(json.encode(ret.data));
 
                           dynamic value = jsonVal[_orderUIKeys[1]];
                           return Container(
@@ -160,11 +194,11 @@ class _OrderDetailsState extends State<OrderDetails> {
                                         MediaQuery.of(context).size.width * 0.3,
                                   ),
                                   alignment: Alignment.centerLeft,
-                                  padding: EdgeInsets.all(10),
+                                  padding: const EdgeInsets.all(10),
                                   child: Text(
                                     '$value',
                                     style:
-                                        TextStyle(overflow: TextOverflow.clip),
+                                        const TextStyle(overflow: TextOverflow.clip),
                                     textAlign: TextAlign.left,
                                   ),
                                 ),
@@ -174,9 +208,9 @@ class _OrderDetailsState extends State<OrderDetails> {
                         }),
                   );
                 } else if (snapshot.hasError) {
-                    return Center(
-                      child: Text(TextConstants().SERVER_BUSY),
-                    );
+                  return Center(
+                    child: Text(TextConstants().SERVER_BUSY),
+                  );
                 } else {
                   return const Center(
                       child: CircularProgressIndicator(color: Colors.blue));

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tsf/components/background.dart';
 import 'package:tsf/screens/ForgotPassword.dart';
 import 'package:tsf/screens/HomeScreen.dart';
 import 'package:tsf/screens/Login.dart';
@@ -8,8 +7,7 @@ import 'package:tsf/screens/OrderDetails.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
-    final args = settings.arguments;
-
+    final args = settings.arguments as Map<String, dynamic>?;
     switch (settings.name) {
       case '/':
         return MaterialPageRoute(builder: (_) => Login());
@@ -20,12 +18,12 @@ class RouteGenerator {
       case '/forgot-password':
         return MaterialPageRoute(builder: (_) => const ForgotPassword());
       case '/order-details':
-        if (args is String) {
           return MaterialPageRoute(
               builder: (_) => OrderDetails(
-                    orderId: args,
+                    orderId: args!["orderId"],
+                    isOrderPage: args["isOrderPage"],
                   ));
-        }
+
         break;
       case '/home':
         return MaterialPageRoute(builder: (_) => HomeScreen());

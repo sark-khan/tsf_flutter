@@ -48,15 +48,11 @@ class NotificationCard {
 class HomeCard {
   Widget homeCard(String title, String arrivingTime, String date,
       String priority, String id, BuildContext context) {
-    // final ratio = MediaQuery.of(context).size.width <
-    //         MediaQuery.of(context).size.height
-    //     ? MediaQuery.of(context).size.width / MediaQuery.of(context).size.height
-    //     : MediaQuery.of(context).size.height /
-    //         MediaQuery.of(context).size.width;
 
     return InkWell(
       onTap: () {
-        Navigator.of(context).pushNamed("/order-details", arguments: id);
+        Navigator.of(context).pushNamed("/order-details",
+            arguments: {"orderId": id, "isOrderPage": true});
       },
       child: Card(
         elevation: 3,
@@ -167,7 +163,8 @@ class HomeCard {
 
     return InkWell(
       onTap: () {
-        Navigator.of(context).pushNamed("/order-details", arguments: id);
+        Navigator.of(context).pushNamed("/order-details",
+            arguments: {"orderId": id, "isOrderPage": false});
       },
       child: Card(
         elevation: 3,

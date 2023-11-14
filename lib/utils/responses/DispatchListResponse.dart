@@ -40,7 +40,6 @@ class DispatchList {
   String width;
   String dispatchQuantityInKg;
   String vehicleNumber;
-  String customerAccountCode;
   String mktSoNumber;
   String dispatchQuantityInSqm;
   String firstTransporter;
@@ -57,6 +56,7 @@ class DispatchList {
   DateTime createdAt;
   DateTime updatedAt;
   int v;
+  String userAccountNumber;
 
   DispatchList({
     required this.id,
@@ -74,7 +74,6 @@ class DispatchList {
     required this.width,
     required this.dispatchQuantityInKg,
     required this.vehicleNumber,
-    required this.customerAccountCode,
     required this.mktSoNumber,
     required this.dispatchQuantityInSqm,
     required this.firstTransporter,
@@ -91,6 +90,7 @@ class DispatchList {
     required this.createdAt,
     required this.updatedAt,
     required this.v,
+    required this.userAccountNumber,
   });
 
   factory DispatchList.fromJson(Map<String, dynamic> json) => DispatchList(
@@ -109,7 +109,6 @@ class DispatchList {
     width: json["width"],
     dispatchQuantityInKg: json["dispatchQuantityInKg"],
     vehicleNumber: json["vehicleNumber"],
-    customerAccountCode: json["customerAccountCode"],
     mktSoNumber: json["mktSoNumber"],
     dispatchQuantityInSqm: json["dispatchQuantityInSqm"],
     firstTransporter: json["firstTransporter"],
@@ -126,6 +125,7 @@ class DispatchList {
     createdAt: DateTime.parse(json["createdAt"]),
     updatedAt: DateTime.parse(json["updatedAt"]),
     v: json["__v"],
+    userAccountNumber: json["userAccountNumber"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -144,7 +144,6 @@ class DispatchList {
     "width": width,
     "dispatchQuantityInKg": dispatchQuantityInKg,
     "vehicleNumber": vehicleNumber,
-    "customerAccountCode": customerAccountCode,
     "mktSoNumber": mktSoNumber,
     "dispatchQuantityInSqm": dispatchQuantityInSqm,
     "firstTransporter": firstTransporter,
@@ -161,5 +160,6 @@ class DispatchList {
     "createdAt": createdAt.toIso8601String(),
     "updatedAt": updatedAt.toIso8601String(),
     "__v": v,
+    "userAccountNumber": userAccountNumber,
   };
 }
