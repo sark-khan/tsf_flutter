@@ -14,7 +14,7 @@ class _bgState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     Future.delayed((Duration(seconds: 2)), () {
-      Navigator.of(context).pushNamed("/login");
+      Navigator.of(context).pushNamed("/admin-dashboard");
     });
     return Scaffold(
       body: Stack(

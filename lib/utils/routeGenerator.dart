@@ -5,6 +5,7 @@ import 'package:tsf/screens/HomeScreen.dart';
 import 'package:tsf/screens/Login.dart';
 import 'package:tsf/screens/Notifications.dart';
 import 'package:tsf/screens/OrderDetails.dart';
+import 'package:tsf/screens/adminDashboard.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -16,6 +17,10 @@ class RouteGenerator {
       case '/login':
         return MaterialPageRoute(
           builder: (_) => Login(),
+        );
+      case '/admin-dashboard':
+        return MaterialPageRoute(
+          builder: (_) => const AdminDashboard(),
         );
       case '/forgot-password':
         return MaterialPageRoute(builder: (_) => const ForgotPassword());

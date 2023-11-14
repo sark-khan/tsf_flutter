@@ -3,6 +3,7 @@ import 'dart:html';
 import 'dart:js_interop';
 
 import 'package:dio/dio.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:tsf/utils/Storage.dart';
 import 'package:tsf/utils/responses/CheckUser.dart';
 import 'package:tsf/utils/responses/LoginResponse.dart';
@@ -94,7 +95,6 @@ class CommonFunctions {
     String token = Storage.getJwtToken();
     // var headers = {'token': token, 'Content-Type': 'application/json'};
     headers['token'] = token;
-    print(headers);
     // var headers = {
     //   'token':
     //       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNhcmlrLnNhay5raGFuQGdtYWlsLmNvbSIsIm5hbWUiOiJzYXJpa19sb2NhbCIsInJvbGUiOiJVc2VyIiwidXNlcklkIjoiNjUyM2E2ZGMxNTYwODEyMTg0MGRkMmZlIiwiYWNjb3VudE51bWJlciI6IjEyMzQ1Njc4OTAiLCJpYXQiOjE2OTgzMDM3ODN9.vLxV-JhTIQOF50YAeqtNQ54W0yuEre1ktZu1AchfeWU',
@@ -113,6 +113,7 @@ class CommonFunctions {
     if (response.statusCode == 200) {
       Orders ordersMap = Orders.fromJson(response.data);
       print(ordersMap.orders);
+      print(">>>>>>>>>${getUserType()}");
       return {
         ordersMap.orders,
       };
@@ -127,3 +128,6 @@ class ReturnObj {
   String message;
   ReturnObj({required this.message, required this.status});
 }
+
+getUserType() => Jwt.parseJwt("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNhcmlrLnNhay5raGFuQGdtYWlsLmNvbSIsIm5hbWUiOiJzYXJpa19sb2NhbCIsInJvbGUiOiJVc2VyIiwidXNlcklkIjoiNjUyM2E2ZGMxNTYwODEyMTg0MGRkMmZlIiwiYWNjb3VudE51bWJlciI6IjEyMzQ1Njc4OTAiLCJpYXQiOjE2OTkzNTM0Njh9.P_3Ta5DBqQ_ZYsW3WOhwTBjhMyIdJ7FjKHyaIAX_bCQ")["role"];
+

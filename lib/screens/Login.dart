@@ -6,6 +6,7 @@ import 'package:tsf/components/background.dart';
 import 'package:tsf/components/customLoader.dart';
 import 'package:tsf/utils/AppConstants.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tsf/utils/Constants.dart';
 
 import '../utils/commonFunctions.dart';
 
@@ -142,7 +143,6 @@ class _LoginState extends State<Login> {
 
                     onPressed: hasConnectionWrapper(
                       () async {
-                        print("reached here");
                         if (!userChecked) {
                           ReturnObj returnObj = await CommonFunctions.CheckUser(
                               emailController.text);
@@ -152,11 +152,9 @@ class _LoginState extends State<Login> {
                               isPasswordFieldVisible = true;
                               buttonText = TextConstants().LOGIN;
                               userChecked = !userChecked;
-                              // Set to true or false as needed
                             });
                           }
                         } else {
-                          print("here");
                           ReturnObj returnObj = await CommonFunctions.Login(
                               emailController.text, passwordController.text);
                           Fluttertoast.showToast(msg: returnObj.message);
