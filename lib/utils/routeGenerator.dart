@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tsf/components/background.dart';
 import 'package:tsf/screens/ForgotPassword.dart';
 import 'package:tsf/screens/HomeScreen.dart';
 import 'package:tsf/screens/Login.dart';
@@ -18,11 +19,11 @@ class RouteGenerator {
       case '/forgot-password':
         return MaterialPageRoute(builder: (_) => const ForgotPassword());
       case '/order-details':
-          return MaterialPageRoute(
-              builder: (_) => OrderDetails(
-                    orderId: args!["orderId"],
-                    isOrderPage: args["isOrderPage"],
-                  ));
+        return MaterialPageRoute(
+            builder: (_) => OrderDetails(
+                  orderId: args!["orderId"],
+                  isOrderPage: args["isOrderPage"],
+                ));
 
         break;
       case '/home':
