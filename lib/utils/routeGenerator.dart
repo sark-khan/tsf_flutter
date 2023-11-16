@@ -5,6 +5,8 @@ import 'package:tsf/screens/HomeScreen.dart';
 import 'package:tsf/screens/Login.dart';
 import 'package:tsf/screens/Notifications.dart';
 import 'package:tsf/screens/OrderDetails.dart';
+import 'package:tsf/screens/adminDashboard.dart';
+import 'package:tsf/screens/adminScreens/NotificationScreen.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -16,6 +18,10 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (_) => Login(),
         );
+      case '/admin-dashboard':
+        return MaterialPageRoute(
+          builder: (_) => const AdminDashboard(),
+        );
       case '/forgot-password':
         return MaterialPageRoute(builder: (_) => const ForgotPassword());
       case '/order-details':
@@ -24,12 +30,12 @@ class RouteGenerator {
                   orderId: args!["orderId"],
                   isOrderPage: args["isOrderPage"],
                 ));
-
-        break;
       case '/home':
         return MaterialPageRoute(builder: (_) => HomeScreen());
       case '/notification':
         return FadeRoute(page: const Notifications());
+      case '/admin-notifications':
+        return MaterialPageRoute(builder: (_) => AdminNotifications());
     }
     return _errorRoute();
   }

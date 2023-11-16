@@ -38,10 +38,11 @@ dependencies:
   google_fonts: ^6.0.0
   toggle_switch: ^2.1.0
   dio: ^5.3.2
+  jwt_decode: ^0.3.1
+  collapsible_sidebar: ^2.0.6
   get_storage:
   lottie:
   page_transition:
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
