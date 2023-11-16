@@ -26,6 +26,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-        initialRoute: '/', onGenerateRoute: RouteGenerator.generateRoute);
+        initialRoute: '/admin-dashboard', onGenerateRoute: RouteGenerator.generateRoute);
   }
 }

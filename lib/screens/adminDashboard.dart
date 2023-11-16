@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:collapsible_sidebar/collapsible_sidebar.dart';
+import 'package:get/get.dart';
+import 'package:tsf/screens/Notifications.dart';
 import 'package:tsf/screens/adminScreens/Dashboard.dart';
+import 'package:tsf/screens/adminScreens/NotificationScreen.dart';
 import 'package:tsf/screens/adminScreens/priorityRequests.dart';
 import 'package:tsf/screens/adminScreens/userRequests.dart';
+import 'package:tsf/utils/stateController.dart';
 
 import 'adminScreens/SubAdmins.dart';
 
@@ -26,12 +30,13 @@ class SidebarPage extends StatefulWidget {
 class _SidebarPageState extends State<SidebarPage> {
   late List<CollapsibleItem> _items;
   late String _headline;
-
+    StateController stateController = Get.put(StateController());
   @override
   void initState() {
     super.initState();
     _items = _generateItems;
     _headline = _items.firstWhere((item) => item.isSelected).text;
+    stateController.headline.value =_headline;
   }
 
   List<CollapsibleItem> get _generateItems {
@@ -39,23 +44,28 @@ class _SidebarPageState extends State<SidebarPage> {
       CollapsibleItem(
           text: 'Priority Requests',
           icon: Icons.assessment,
-          onPressed: () => setState(() => _headline = 'Priority Requests'),
-
-          // isSelected: true,
+          onPressed: () => setState(() =>     stateController.headline.value = 'Priority Requests'),
           ),
       CollapsibleItem(
         text: 'Users',
         icon: Icons.people,
-        isSelected: true,
-        onPressed: () => setState(() => _headline = 'Users'),
+
+        onPressed: () => setState(() =>     stateController.headline.value = 'Users'),
 
       ),
 
       CollapsibleItem(
           text: 'Sub Admins',
          icon: Icons.hdr_auto_sharp,
-          onPressed: () => setState(() => _headline = 'Sub Admins'),
+                 isSelected: true,
+          onPressed: () => setState(() =>     stateController.headline.value = 'Sub Admins'),
 
+              ),
+              CollapsibleItem(
+          text: 'Notifications ',
+         icon: Icons.notifications,
+         
+          onPressed: () => setState(() =>     stateController.headline.value = 'Notifications'),
               ),
               
 
@@ -70,9 +80,7 @@ class _SidebarPageState extends State<SidebarPage> {
       child: CollapsibleSidebar(
         isCollapsed:false,
         items: _items,
-        collapseOnBodyTap: false,
         title: 'TSF',
-        showToggleButton: false,
         bottomPadding: 0,
         body: _body(size, context),
         backgroundColor: Colors.black87,
@@ -103,7 +111,7 @@ class _SidebarPageState extends State<SidebarPage> {
 
   Widget _body(Size size, BuildContext context) {
   
-     switch(_headline){
+     switch(    stateController.headline.value){
       case "Priority Requests" :
         return PriorityRequests(context: context,);
         case "Users" :
@@ -112,6 +120,8 @@ class _SidebarPageState extends State<SidebarPage> {
         return Dashboard(context: context,);
         case "Sub Admins" :
         return SubAdmins();
+        case "Notifications" :
+        return AdminNotifications(context: context,);
 
     }
     return Dashboard();

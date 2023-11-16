@@ -6,6 +6,7 @@ import 'package:tsf/screens/Login.dart';
 import 'package:tsf/screens/Notifications.dart';
 import 'package:tsf/screens/OrderDetails.dart';
 import 'package:tsf/screens/adminDashboard.dart';
+import 'package:tsf/screens/adminScreens/NotificationScreen.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -36,6 +37,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => HomeScreen());
       case '/notification':
         return MaterialPageRoute(builder: (_) => const Notifications());
+        case '/admin-notifications':
+        return MaterialPageRoute(builder: (_) =>  AdminNotifications());
     }
     return _errorRoute();
   }
