@@ -17,6 +17,7 @@ class Notifications extends StatefulWidget {
 class _NotificationState extends State<Notifications> {
   @override
   Widget build(BuildContext context) {
+    Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -53,30 +54,42 @@ class _NotificationState extends State<Notifications> {
                 child: FutureBuilder(
                   future: CommonFunctions().getNotifications(),
                   builder: (context, snapshot) {
-
                     if (snapshot.hasData) {
-                      ReturnObj? ret= snapshot.data;
+                      ReturnObj? ret = snapshot.data;
 
-                      if(!ret!.status){
-                        return const Center(child: Text("Server is Busy",style: TextStyle(
-                          fontSize: 22.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        )));
+                      if (!ret!.status) {
+                        return const Center(
+                            child: Text("Server is Busy",
+                                style: TextStyle(
+                                  fontSize: 22.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                )));
                       }
                       List<Message> notifResponse = ret.data!.cast<Message>();
                       return notifResponse.isEmpty
-                          ? Column(
-                              children: [
-                                Lottie.asset('NotFound.json',
-                                    width: 300, height: 300),
-                                const Text("No Orders Found",
-                                    style: TextStyle(
-                                      fontSize: 22.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ))
-                              ],
+                          ? Center(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: screenSize.height * 0.1389473684),
+                                child: Column(
+                                  children: [
+                                    Lottie.asset(
+                                      'assets/NotFound.json',
+                                      width: screenSize.width * 0.694444444,
+                                      height: screenSize.height * 0.328947368,
+                                    ),
+                                    Text(
+                                      TextConstants().NOT_FOUND,
+                                      style: const TextStyle(
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             )
                           : ListView.builder(
                               padding: EdgeInsets.zero,
@@ -93,11 +106,13 @@ class _NotificationState extends State<Notifications> {
                               },
                             );
                     } else if (snapshot.hasError) {
-                      printError(info: "Error in Notification : ${snapshot.error}");
+                      printError(
+                          info: "Error in Notification : ${snapshot.error}");
                       return Center(child: Text(TextConstants().SERVER_BUSY));
                     } else {
                       return const Center(
-                          child: CircularProgressIndicator(color: Colors.white));
+                          child:
+                              CircularProgressIndicator(color: Colors.white));
                     }
                   },
                   // child: ListView.builder(

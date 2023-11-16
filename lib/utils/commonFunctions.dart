@@ -19,7 +19,7 @@ import 'responses/UserActivationResponse.dart';
 
 class CommonFunctions {
   static Dio dio = Dio();
-  static String APIURL = "http://192.168.10.10:2000";
+  static String APIURL = "http://tsf-dev.ddns.net";
   static var headers = {'Content-Type': 'application/json'};
 
   Future<ReturnObj> Login(String email, String password) async {
@@ -54,12 +54,16 @@ class CommonFunctions {
     }
   }
 
-
-  Future<ReturnObj> AddSubAdmin(String email, String password, String name) async {
+  Future<ReturnObj> AddSubAdmin(
+      String email, String password, String name) async {
     try {
       var headers = {'Content-Type': 'application/json'};
-      var data = json.encode(
-          {"email": email.toLowerCase(), "password": password , "name":name , "role":"Subadmin"});
+      var data = json.encode({
+        "email": email.toLowerCase(),
+        "password": password,
+        "name": name,
+        "role": "Subadmin"
+      });
       var dio = Dio();
       var response = await dio.request(
         '$APIURL/api/auth/register',
@@ -71,13 +75,11 @@ class CommonFunctions {
       );
 
       if (response.statusCode == 200) {
-
         return ReturnObj(status: true, message: response.data["message"]);
       }
       return ReturnObj(message: TextConstants().SERVER_BUSY, status: false);
     } on DioException catch (e) {
-  
-        return ReturnObj(status: false, message: e.response!.data["message"]);
+      return ReturnObj(status: false, message: e.response!.data["message"]);
     } catch (error) {
       printError(info: "Error in Login $error");
       return ReturnObj(status: false, message: "Error in Login $error");
@@ -91,6 +93,7 @@ class CommonFunctions {
       }
       var bodyData = json
           .encode({"accountNumberOrEmail": accountNumberOrEmail.toLowerCase()});
+      print("here in check User");
       var response = await dio.request(
         "$APIURL/api/auth/check-user",
         options: Options(
@@ -99,6 +102,7 @@ class CommonFunctions {
         ),
         data: bodyData,
       );
+      print("${response.data} helloooooo status");
       if (response.statusCode == 200) {
         CheckUserResponse checkUserResponse =
             CheckUserResponse.fromJson(response.data);
@@ -115,11 +119,12 @@ class CommonFunctions {
           return ReturnObj(status: false, message: "Waiting for Approval");
         }
         if (checkUserResponse.insertNewPassword) {
-          return ReturnObj(message: "Insert New Message", status: true);
+          return ReturnObj(message: response.data['message'], status: true);
         }
       }
       return ReturnObj(status: false, message: "Server is Busy");
     } on DioException catch (e) {
+      print("${e.response} helloooooo status check");
       if (e.response!.statusCode == 401) {
         return ReturnObj(status: false, message: "Your account is Rejected");
       }
@@ -314,7 +319,8 @@ class CommonFunctions {
     }
   }
 
-  Future<ReturnObj> activateUser({String? authRequestId, bool? isApproved}) async {
+  Future<ReturnObj> activateUser(
+      {String? authRequestId, bool? isApproved}) async {
     try {
       var data = json
           .encode({"authRequestId": authRequestId, "isApproved": isApproved});
@@ -331,8 +337,8 @@ class CommonFunctions {
         message: response.data["message"],
         status: response.statusCode == 200 ? true : false,
       );
-    }on DioException catch(e){
-        return ReturnObj(status: false, message: e.response!.data["message"]);
+    } on DioException catch (e) {
+      return ReturnObj(status: false, message: e.response!.data["message"]);
     } catch (error) {
       printError(info: "Error in User Activation $error");
       return ReturnObj(status: false, message: "Internal Server Error");
@@ -393,8 +399,6 @@ class CommonFunctions {
           status: false, message: "Internal Server Error", data: []);
     }
   }
-
-
 }
 
 class ReturnObj<T> {
