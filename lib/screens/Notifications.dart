@@ -37,7 +37,8 @@ class _NotificationState extends State<Notifications> {
             height: double.infinity,
             decoration: const BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage("assets/Login.png"), fit: BoxFit.cover)),
+                    image: AssetImage("assets/InnerBackground.png"),
+                    fit: BoxFit.cover)),
           ),
           Column(
             children: [
