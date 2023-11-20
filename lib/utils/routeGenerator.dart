@@ -15,7 +15,7 @@ class RouteGenerator {
     final args = settings.arguments as Map<String, dynamic>?;
     switch (settings.name) {
       case '/':
-        return FadeRoute(page: ResetPassword());
+        return FadeRoute(page: SplashScreen());
       case '/login':
         return FadeRoute(
           page: Login(),
@@ -27,11 +27,11 @@ class RouteGenerator {
       case '/forgot-password':
         return FadeRoute(page: const ForgotPassword());
       case '/order-details':
-        return FadeRoute(
-            page: OrderDetails(
-          orderId: args!["orderId"],
-          isOrderPage: args["isOrderPage"],
-        ));
+        return MaterialPageRoute(
+            builder: (_) => OrderDetails(
+                  orderId: args!["orderId"],
+                  isOrderPage: args["isOrderPage"],
+                ));
       case '/home':
         return FadeRoute(page: HomeScreen());
       case '/notification':

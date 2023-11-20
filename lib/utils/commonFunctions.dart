@@ -1,16 +1,17 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/utils.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 
-import 'dart:html' as html;
+// ignore: avoid_web_libraries_in_flutter
+// import 'dart:html' as html;
 import 'package:tsf/utils/AppConstants.dart';
 import 'package:tsf/utils/Storage.dart';
 import 'package:tsf/utils/responses/CheckUser.dart';
 import 'package:tsf/utils/responses/DispatchListResponse.dart';
+import 'package:tsf/utils/responses/ForgotPasswordResponse.dart';
 import 'package:tsf/utils/responses/LoginResponse.dart';
 import 'package:tsf/utils/responses/NotificationResponse.dart';
 import 'package:tsf/utils/responses/SingleDispatchDetails.dart';
@@ -141,9 +142,10 @@ class CommonFunctions {
     }
   }
 
-  Future<ReturnObj> getOrderDetails(String? orderId) async {
+  Future<ReturnObj> getOrderDetails(String orderId) async {
     try {
-      if (orderId!.isEmpty) {
+      print({orderId});
+      if (orderId.isEmpty) {
         return ReturnObj(
             message: "Error in get Particular Details", status: false);
       }
@@ -152,8 +154,9 @@ class CommonFunctions {
 
       headers['token'] = Storage.getJwtToken();
       var data = json.encode({"orderId": orderId});
+      print({data});
       var response = await dio.request(
-        '$APIURL/api/order/get-order-details',
+        '$APIURL/api/order/get-order-details?orderId=$orderId',
         options: Options(
           method: 'GET',
           headers: headers,
@@ -188,7 +191,7 @@ class CommonFunctions {
 
       var data = json.encode({"orderId": orderId});
       var response = await dio.request(
-        '$APIURL/api/order/get-dispatch-details',
+        '$APIURL/api/order/get-dispatch-details?',
         options: Options(
           method: 'GET',
           headers: headers,
@@ -406,9 +409,9 @@ class CommonFunctions {
   Future<ReturnObj> ResetPassword(
       String password, String confirmPassword) async {
     try {
-      if (kIsWeb) {
-        headers['token'] = getIdFromQueryParameter();
-      }
+      // if (kIsWeb) {
+      //   headers['token'] = getIdFromQueryParameter();
+      // }
       var data = json
           .encode({"password": password, "confirmPassword": confirmPassword});
 
@@ -431,6 +434,39 @@ class CommonFunctions {
       return ReturnObj(status: false, message: "Server is Busy");
     }
   }
+
+  Future<ReturnObj> ForgotPassword(String email) async {
+    try {
+      var headers = {'Content-Type': 'application/json'};
+      if (email.isEmpty) {
+        return ReturnObj(message: "Please fill the Email Field", status: false);
+      }
+      var data = json.encode({"accountNumberOrEmail": email.toLowerCase()});
+      var dio = Dio();
+      var response = await dio.request(
+        '$APIURL/api/auth/forgot-password',
+        options: Options(
+          method: 'POST',
+          headers: headers,
+        ),
+        data: data,
+      );
+
+      if (response.statusCode == 200) {
+        ForgotPasswordResponse forgotPasswordResponse =
+            ForgotPasswordResponse.fromJson(response.data);
+        return ReturnObj(status: true, message: forgotPasswordResponse.message);
+      }
+      return ReturnObj(message: TextConstants().SERVER_BUSY, status: false);
+    } on DioException catch (e) {
+      // if (e.response!.statusCode == 401) {
+      return ReturnObj(status: false, message: e.response!.data["message"]);
+      // }
+    } catch (error) {
+      printError(info: "Error in Login $error");
+      return ReturnObj(status: false, message: "Login UnSuccessfull");
+    }
+  }
 }
 
 class ReturnObj<T> {
@@ -442,7 +478,18 @@ class ReturnObj<T> {
 
 String getUserRole() => Jwt.parseJwt(Storage.getJwtToken())['role'];
 
-String getIdFromQueryParameter() {
-  Uri uri = Uri.parse(html.window.location.href);
-  return uri.queryParameters['id'].toString() ?? '';
-}
+// String getIdFromQueryParameter() {
+//   // if (kIsWeb) {
+//   //   Uri uri = Uri.parse(html.window.location.href);
+//   //   // Debugging: print the URI
+//   //   print('Current URI: $uri');
+
+//   //   String? id = uri.queryParameters['id'];
+//   //   // Debugging: print the retrieved ID
+//   //   print('Retrieved ID: $id');
+
+//   //   return id ?? ''; // Using null-aware operator
+//   // }
+//   // // Fallback for non-web platforms
+//   // return "";
+// }

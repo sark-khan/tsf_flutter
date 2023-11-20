@@ -5,7 +5,6 @@ import 'package:tsf/components/background.dart';
 import 'package:tsf/components/customLoader.dart';
 import 'package:tsf/utils/AppConstants.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tsf/utils/Constants.dart';
 
 import '../utils/commonFunctions.dart';
 
@@ -179,13 +178,11 @@ class _LoginState extends State<Login> {
                           () async {
                             if (!userChecked) {
                               email = emailController!.text;
-                              print("${email} hello");
                               ReturnObj returnObj =
                                   await CommonFunctions().CheckUser(email!);
-                              print("reched here in returnObj");
                               // await CommonFunctions()
                               //     .CheckUser("admin@gmail.com");
-                              Fluttertoast.showToast(msg: returnObj.message);
+
                               if (returnObj.status) {
                                 setState(() {
                                   isPasswordFieldVisible = true;
@@ -193,6 +190,8 @@ class _LoginState extends State<Login> {
                                   userChecked = !userChecked;
                                   // Set to true or false as needed
                                 });
+                              } else {
+                                Fluttertoast.showToast(msg: returnObj.message);
                               }
                             } else {
                               if (emailController!.text == "") {

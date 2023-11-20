@@ -48,7 +48,6 @@ class NotificationCard {
 class HomeCard {
   Widget homeCard(String title, String arrivingTime, String date,
       String priority, String id, BuildContext context) {
-
     return InkWell(
       onTap: () {
         Navigator.of(context).pushNamed("/order-details",
@@ -73,7 +72,7 @@ class HomeCard {
               Text(
                 title,
                 style: TextStyle(
-                  color: Colors.grey,
+                  color: Colors.grey[700],
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
@@ -98,30 +97,30 @@ class HomeCard {
                               color: Colors.green,
                               fontSize: 10),
                           children: [
-                        const TextSpan(text: "Estimated Delivery on \n"),
+                        const TextSpan(text: "Promise Date: \n"),
                         TextSpan(
                             text: arrivingTime,
                             style: TextStyle(
                                 fontWeight: FontWeight.w600, fontSize: 12))
                       ])),
 
-                  RichText(
-                      textAlign: TextAlign.right,
-                      text: TextSpan(
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w300,
-                              color: Colors.black,
-                              fontSize: 10),
-                          children: [
-                            TextSpan(text: "Priority \n"),
-                            TextSpan(
-                                text: priority,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 12,
-                                  color: Colors.red,
-                                ))
-                          ])),
+                  // RichText(
+                  //     textAlign: TextAlign.right,
+                  //     text: TextSpan(
+                  //         style: const TextStyle(
+                  //             fontWeight: FontWeight.w300,
+                  //             color: Colors.black,
+                  //             fontSize: 10),
+                  //         children: [
+                  //           TextSpan(text: "Priority \n"),
+                  //           TextSpan(
+                  //               text: priority,
+                  //               style: const TextStyle(
+                  //                 fontWeight: FontWeight.w600,
+                  //                 fontSize: 12,
+                  //                 color: Colors.red,
+                  //               ))
+                  //         ])),
 
                   // Row(
                   //   children: [
