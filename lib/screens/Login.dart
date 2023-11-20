@@ -13,11 +13,6 @@ class Login extends StatefulWidget {
   @override
   State createState() => _LoginState();
 }
-// void initState() {
-//   // super.initState();
-//   // widget.emailController = TextEditingController();
-//   // widget.passwordController = TextEditingController();
-// }
 
 class _LoginState extends State<Login> {
   TextEditingController? emailController;

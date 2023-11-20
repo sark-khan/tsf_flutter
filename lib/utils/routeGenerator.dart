@@ -5,6 +5,8 @@ import 'package:tsf/screens/HomeScreen.dart';
 import 'package:tsf/screens/Login.dart';
 import 'package:tsf/screens/Notifications.dart';
 import 'package:tsf/screens/OrderDetails.dart';
+import 'package:tsf/screens/ResetPassword.dart';
+import 'package:tsf/screens/ResetPasswordSuccess.dart';
 import 'package:tsf/screens/adminDashboard.dart';
 import 'package:tsf/screens/adminScreens/NotificationScreen.dart';
 
@@ -13,29 +15,33 @@ class RouteGenerator {
     final args = settings.arguments as Map<String, dynamic>?;
     switch (settings.name) {
       case '/':
-        return MaterialPageRoute(builder: (_) => SplashScreen());
+        return FadeRoute(page: ResetPassword());
       case '/login':
-        return MaterialPageRoute(
-          builder: (_) => Login(),
+        return FadeRoute(
+          page: Login(),
         );
       case '/admin-dashboard':
-        return MaterialPageRoute(
-          builder: (_) => const AdminDashboard(),
+        return FadeRoute(
+          page: const AdminDashboard(),
         );
       case '/forgot-password':
-        return MaterialPageRoute(builder: (_) => const ForgotPassword());
+        return FadeRoute(page: const ForgotPassword());
       case '/order-details':
-        return MaterialPageRoute(
-            builder: (_) => OrderDetails(
-                  orderId: args!["orderId"],
-                  isOrderPage: args["isOrderPage"],
-                ));
+        return FadeRoute(
+            page: OrderDetails(
+          orderId: args!["orderId"],
+          isOrderPage: args["isOrderPage"],
+        ));
       case '/home':
-        return MaterialPageRoute(builder: (_) => HomeScreen());
+        return FadeRoute(page: HomeScreen());
       case '/notification':
         return FadeRoute(page: const Notifications());
       case '/admin-notifications':
         return MaterialPageRoute(builder: (_) => AdminNotifications());
+      case "/reset-password":
+        return MaterialPageRoute(builder: (_) => ResetPassword());
+      case "/reset-password-success":
+        return MaterialPageRoute(builder: (_) => const ResetPasswordSuccess());
     }
     return _errorRoute();
   }

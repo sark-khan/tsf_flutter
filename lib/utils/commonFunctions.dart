@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/utils.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+
+import 'dart:html' as html;
 import 'package:tsf/utils/AppConstants.dart';
 import 'package:tsf/utils/Storage.dart';
 import 'package:tsf/utils/responses/CheckUser.dart';
@@ -458,7 +461,34 @@ class CommonFunctions {
     }
   }
 
+  Future<ReturnObj> ResetPassword(
+      String password, String confirmPassword) async {
+    try {
+      if (kIsWeb) {
+        headers['token'] = getIdFromQueryParameter();
+      }
+      var data = json
+          .encode({"password": password, "confirmPassword": confirmPassword});
 
+      var response = await dio.request(
+        '$APIURL/api/auth/reset-password',
+        options: Options(
+          method: 'POST',
+          headers: headers,
+        ),
+        data: data,
+      );
+      if (response.statusCode == 200) {
+        return ReturnObj(message: response.data["message"], status: true);
+      }
+      return ReturnObj(message: response.data["message"], status: false);
+    } on DioException catch (e) {
+      return ReturnObj(status: false, message: e.response!.data["message"]);
+    } catch (error) {
+      printError(info: "Error in reset password $error");
+      return ReturnObj(status: false, message: "Server is Busy");
+    }
+  }
 }
 
 class ReturnObj<T> {
@@ -469,3 +499,8 @@ class ReturnObj<T> {
 }
 
 String getUserRole() => Jwt.parseJwt(Storage.getJwtToken())['role'];
+
+String getIdFromQueryParameter() {
+  Uri uri = Uri.parse(html.window.location.href);
+  return uri.queryParameters['id'].toString() ?? '';
+}
