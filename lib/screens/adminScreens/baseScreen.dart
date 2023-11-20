@@ -282,38 +282,38 @@ class BaseUI extends StatelessWidget {
                                       SizedBox(
                                         height: 12,
                                       ),
-                                      Stack(
-                                        children: [
-                                          const Icon(
-                                            Icons.notifications,
-                                            size: 40,
-                                            color: Color.fromARGB(117, 2, 2, 2),
-                                          ),
-                                          Positioned(
-                                            top: 0,
-                                            right: 0,
-                                            child: Container(
-                                              padding: EdgeInsets.all(5),
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: Colors.red,
-                                              ),
-                                              child: Text(
-                                                '3', // Replace with dynamic count variable
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Text(
-                                        "Notifications",
-                                        style:
-                                            TextStyle(color: Colors.blueGrey),
-                                      )
+                                      // Stack(
+                                      //   children: [
+                                      //     const Icon(
+                                      //       Icons.notifications,
+                                      //       size: 40,
+                                      //       color: Color.fromARGB(117, 2, 2, 2),
+                                      //     ),
+                                      //     Positioned(
+                                      //       top: 0,
+                                      //       right: 0,
+                                      //       child: Container(
+                                      //         padding: EdgeInsets.all(5),
+                                      //         decoration: BoxDecoration(
+                                      //           shape: BoxShape.circle,
+                                      //           color: Colors.red,
+                                      //         ),
+                                      //         child: Text(
+                                      //           '3', // Replace with dynamic count variable
+                                      //           style: TextStyle(
+                                      //             color: Colors.white,
+                                      //             fontSize: 15,
+                                      //           ),
+                                      //         ),
+                                      //       ),
+                                      //     ),
+                                      //   ],
+                                      // ),
+                                      //  Text(
+                                      //   "Notifications",
+                                      //   style:
+                                      //       TextStyle(color: Colors.blueGrey),
+                                      // )
                                     ],
                                   ),
                                 ),

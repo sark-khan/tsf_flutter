@@ -184,10 +184,8 @@ class _LoginState extends State<Login> {
                           () async {
                             if (!userChecked) {
                               email = emailController!.text;
-                              print("${email} hello");
                               ReturnObj returnObj =
                                   await CommonFunctions().CheckUser(email!);
-                              print("reched here in returnObj");
                               // await CommonFunctions()
                               //     .CheckUser("admin@gmail.com");
                               Fluttertoast.showToast(msg: returnObj.message);
@@ -209,7 +207,7 @@ class _LoginState extends State<Login> {
                                     msg: "Please enter Password");
                               }
                               ReturnObj returnObj = await CommonFunctions()
-                                  // .Login("admin@gmail.com", "Wpadmin123#");
+                      
                                   .Login(emailController!.text,
                                       passwordController!.text);
                               Fluttertoast.showToast(msg: returnObj.message);

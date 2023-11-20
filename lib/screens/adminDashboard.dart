@@ -41,10 +41,10 @@ class _SidebarPageState extends State<SidebarPage> {
   List<CollapsibleItem> get _generateItems {
     return [
       CollapsibleItem(
-        text: 'Priority Requests',
+        text: 'User Comments',
         icon: Icons.assessment,
         onPressed: () => setState(
-            () => stateController.headline.value = 'Priority Requests'),
+            () => stateController.headline.value = 'User Comments'),
       ),
       CollapsibleItem(
         text: 'Users',
@@ -111,7 +111,7 @@ class _SidebarPageState extends State<SidebarPage> {
 
   Widget _body(Size size, BuildContext context) {
     switch (stateController.headline.value) {
-      case "Priority Requests":
+      case "User Comments":
         return PriorityRequests(
           context: context,
         );

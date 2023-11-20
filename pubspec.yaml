@@ -43,6 +43,7 @@ dependencies:
   get_storage:
   lottie:
   page_transition:
+  intl: ^0.17.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

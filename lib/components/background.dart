@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:tsf/components/WidgetStyle.dart';
 import 'package:tsf/utils/AppConstants.dart';
 import 'package:tsf/utils/Storage.dart';
+import 'package:tsf/utils/commonFunctions.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -24,7 +25,9 @@ class _bgState extends State<SplashScreen> {
       if (token.isEmpty) {
         Navigator.of(context).pushReplacementNamed("/login");
       } else {
-        Navigator.of(context).pushReplacementNamed("/home");
+        getUserRole() == "Admin"
+            ? Navigator.pushNamed(context, "/admin-dashboard")
+            : Navigator.pushNamed(context, "/home");
       }
     });
   }

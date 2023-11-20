@@ -8,6 +8,7 @@ import 'package:tsf/utils/AppConstants.dart';
 import 'package:tsf/utils/Storage.dart';
 import 'package:tsf/utils/responses/CheckUser.dart';
 import 'package:tsf/utils/responses/DispatchListResponse.dart';
+import 'package:tsf/utils/responses/GetComments.dart';
 import 'package:tsf/utils/responses/LoginResponse.dart';
 import 'package:tsf/utils/responses/NotificationResponse.dart';
 import 'package:tsf/utils/responses/SingleDispatchDetails.dart';
@@ -19,7 +20,7 @@ import 'responses/UserActivationResponse.dart';
 
 class CommonFunctions {
   static Dio dio = Dio();
-  static String APIURL = "http://tsf-dev.ddns.net";
+  static String APIURL = "http://192.168.10.10:2000";
   static var headers = {'Content-Type': 'application/json'};
 
   Future<ReturnObj> Login(String email, String password) async {
@@ -210,6 +211,34 @@ class CommonFunctions {
     }
   }
 
+    Future<ReturnObj> getComments() async {
+    try {
+      headers['token'] = Storage.getJwtToken();
+      var response = await dio.request(
+        '$APIURL/api/order/order-comments',
+        options: Options(
+          method: 'GET',
+          headers: headers,
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        GetCommentsResponse commentsMap = GetCommentsResponse.fromJson(response.data);
+        return ReturnObj<List<GetOrderCommentsDetail>>(
+            message: "Comments Received Successfully",
+            status: true,
+            data: commentsMap.getOrderCommentsDetails);
+
+      } else {
+        return ReturnObj(message: "Server is Busy", status: false);
+      }
+    } catch (error) {
+      printError(info: "Error In getOrders $error");
+      return ReturnObj(status: false, message: "Internal Server Error");
+    }
+  }
+
+
   Future<ReturnObj> getOrders() async {
     try {
       headers['token'] = Storage.getJwtToken();
@@ -268,14 +297,12 @@ class CommonFunctions {
   Future<ReturnObj> getNotifications() async {
     try {
       headers['token'] = Storage.getJwtToken();
-      print("${headers["token"]} hello3");
       var response = await dio.request(
         '$APIURL/api/notification/all-notifications',
         options: Options(
           method: 'GET',
           headers: headers,
         ),
-        // data: data,
       );
       if (response.statusCode == 200) {
         NotificationResponse notifResponse =
@@ -373,6 +400,37 @@ class CommonFunctions {
     }
   }
 
+    Future<ReturnObj> assignSubadmin(String userID , String subadminId) async {
+    try {
+      headers['token'] = Storage.getJwtToken();
+      var data = json.encode({
+  "userId":userID,
+  "subadminId": subadminId
+});
+      var response = await dio.request(
+        '$APIURL/api/auth/add-subadmin-to-user',
+        options: Options(
+          method: 'POST',
+          headers: headers,
+        ),
+        data: data,
+      );
+      if (response.statusCode == 200) {
+
+        return ReturnObj(
+            message: response.data["message"],
+            status: true,
+          );
+      }
+      return ReturnObj(
+             message: response.data["message"], status: false, data: []);
+    } catch (error) {
+      printError(info: "Unable to get Activation List $error");
+      return ReturnObj(
+          status: false, message: "Internal Server Error", );
+    }
+  }
+
   Future<ReturnObj> getSubadminList() async {
     try {
       headers['token'] = Storage.getJwtToken();
@@ -399,6 +457,8 @@ class CommonFunctions {
           status: false, message: "Internal Server Error", data: []);
     }
   }
+
+
 }
 
 class ReturnObj<T> {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tsf/screens/adminScreens/baseScreen.dart';
 import 'package:tsf/utils/commonFunctions.dart';
+import 'package:tsf/utils/responses/SubadminResponse.dart';
 import 'package:tsf/utils/responses/UserActivationResponse.dart';
 
 class UserRequests extends StatefulWidget {
@@ -15,21 +16,30 @@ class UserRequests extends StatefulWidget {
 
 class _UserRequestsState extends State<UserRequests> {
   List<Request> userActivationRequestList = [];
+    List<Subadmins> subAdminsList = [];
+  List<String> subAdminNames = [];
   bool _isScreenLoading = true;
   bool? getterStatus;
-  String subadminSelected="A";
+ 
   @override
   void initState() {
     super.initState();
     getActivationRequests();
   }
 
+
   getActivationRequests() async {
     try {
+      ReturnObj returnObj2 = await CommonFunctions().getSubadminList();
       ReturnObj returnObj = await CommonFunctions().getUserActivationRequests();
       userActivationRequestList = returnObj.data;
+      subAdminsList = returnObj2.data;
+      subAdminNames =  subAdminsList.map((subadmin) => subadmin.name.toString()).toList();
       _isScreenLoading = false;
       getterStatus = returnObj.status;
+      userActivationRequestList.forEach((element) {
+        element.selectedSubAdmin = subAdminsList[0].name;
+      });
       setState(() {});
     } catch (_) {
       _isScreenLoading = getterStatus = false;
@@ -65,7 +75,7 @@ class _UserRequestsState extends State<UserRequests> {
                                     1: FlexColumnWidth(5),
                                     2: FlexColumnWidth(5),
                                     3: FlexColumnWidth(5),
-                                    4: FlexColumnWidth(5),
+                                    4: FlexColumnWidth(8  ),
                                     5:FlexColumnWidth(5)
                                   },
                                   defaultVerticalAlignment:
@@ -120,7 +130,7 @@ class _UserRequestsState extends State<UserRequests> {
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text(
-                                          'Action',
+                                          'Action (Activate/Deactivate)',
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 18),
@@ -155,6 +165,7 @@ class _UserRequestsState extends State<UserRequests> {
 
   TableRow _tableRow(int index, String name, String userName,
       String CustomerCode, String Status) {
+
     return TableRow(
         decoration: !(index % 2 == 0)
             ? BoxDecoration(color: Colors.blueGrey[50])
@@ -186,23 +197,35 @@ class _UserRequestsState extends State<UserRequests> {
                   fontWeight: FontWeight.bold),
             ),
           ),
+          userActivationRequestList[index].assignedSubadmin != null ?
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(child: Text("${userActivationRequestList[index].assignedSubadmin?.name.toString()}"  , style: TextStyle(color: Colors.blueGrey, fontSize: 15, fontWeight: FontWeight.bold),)),
+          ):
  Padding(
           padding: const EdgeInsets.only(left:20.0, right:20),
           child: DropdownButton( 
-                value: subadminSelected, 
+            key:Key(userActivationRequestList[index].id.toString()) ,
+                value: userActivationRequestList[index].selectedSubAdmin, 
                 icon: const Icon(Icons.keyboard_arrow_down),    
      
-                items: ["A","B","C"].map((String items) { 
+                items: subAdminNames.map((String item) { 
                   return DropdownMenuItem( 
-                    value: items, 
-                    child: Text(items), 
+                    value: item, 
+                    child: Text(item), 
                   ); 
                 }).toList(), 
         
-                onChanged: (String? newValue) {  
-                  setState(() { 
-                    subadminSelected = newValue!; 
-                  }); 
+                onChanged: (String? newValue)async {  
+                
+                   Subadmins sb =  subAdminsList.firstWhere((element) => element.name == newValue);
+
+                    ReturnObj obj =   await  CommonFunctions().assignSubadmin(userActivationRequestList[index].requestCreatedBy.id, sb.sId.toString());
+                    Fluttertoast.showToast(msg: obj.message);
+                    getActivationRequests();
+                    setState(() {
+                      
+                    });
                 }, 
               ),
         ), 

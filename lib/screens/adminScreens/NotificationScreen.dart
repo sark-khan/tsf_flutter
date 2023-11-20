@@ -1,11 +1,42 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
 import 'package:flutter/material.dart';
 import 'package:tsf/screens/adminScreens/baseScreen.dart';
+import 'package:tsf/utils/commonFunctions.dart';
+import 'package:tsf/utils/responses/NotificationResponse.dart';
 
 // ignore: must_be_immutable
-class AdminNotifications extends StatelessWidget {
+class AdminNotifications extends StatefulWidget {
   BuildContext? context;
   AdminNotifications({this.context, super.key});
 
+  @override
+  State<AdminNotifications> createState() => _AdminNotificationsState();
+}
+
+class _AdminNotificationsState extends State<AdminNotifications> {
+    bool _isScreenLoading = true;
+  bool? getterStatus;
+  List<Message> notifications  = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getNotifications();
+  }
+
+  getNotifications() async {
+    try{ReturnObj obj = await CommonFunctions().getNotifications();
+    notifications = obj.data;
+    _isScreenLoading = false;
+          getterStatus = obj.status;
+    setState(() {
+      
+    });}  catch (_) {
+      _isScreenLoading = getterStatus = false;
+      setState(() {});
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,51 +46,63 @@ class AdminNotifications extends StatelessWidget {
         Column(
           children: [
             const SizedBox(height: 20,),
-            
+             _isScreenLoading
+                    ? Center(
+                        child: CircularProgressIndicator(
+                        color: Colors.grey,
+                      ))
+                    : !getterStatus!
+                        ? Center(child: Text("Something Went Wrong! :/"))
+                        : 
             Container(
               height: 600,
               width: double.infinity,
-              
-              child: SingleChildScrollView(
-                child: Table(
-                   
-                  columnWidths:   {
-                        0: FlexColumnWidth(10 ),
-                        1: FlexColumnWidth(10),
-                        2: FlexColumnWidth(10),
-                        3: FlexColumnWidth(20),
-                        4: FlexColumnWidth(5)},
-              
-                  defaultVerticalAlignment: TableCellVerticalAlignment.bottom,
-                border: TableBorder.all(), 
-                children: [ 
-                  TableRow(
-                    children :[
-                    Padding(
+            
+              child: ListView.builder(
+                itemCount: notifications.length,
+                itemBuilder: (BuildContext context, int index){
+                  Message notif = notifications[index];
+                    return Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Order ID', style: TextStyle(fontWeight: FontWeight.bold , fontSize: 18 , ),),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('So No', style: TextStyle(fontWeight: FontWeight.bold , fontSize: 18) , ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('Customer Code',  style: TextStyle(fontWeight: FontWeight.bold , fontSize: 18 ) ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('User Comments',  style: TextStyle(fontWeight: FontWeight.bold , fontSize: 18 ),),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('Action',  style: TextStyle(fontWeight: FontWeight.bold , fontSize: 18 ),),
-                    )
-                  ]),
-                  ...List.generate(100, (index) => _tableRow(index,"123","128013","551","User has asked to change the priority of the request"),)
-                ]
-              ),
-              ),),
+                      child: Container(
+                    
+                          decoration: BoxDecoration(
+                       color: index%2==0? Colors.blueGrey[100]: Colors.white,
+    borderRadius: BorderRadius.all(Radius.circular(10))
+  ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(notif.notificationText , style: TextStyle(color: Colors.black , fontSize: 18),),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(notif.notificationText.split(" has ")[0].toString(),  style: TextStyle(color: Colors.blueGrey , fontSize: 15),),
+                                    ),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(notif.createdAt,  style: TextStyle(color: Colors.grey[900] , fontSize: 15),),
+                                ),
+                               
+                                
+                          ],),
+                        ),
+                      ),
+                    );
+                }),
+                
+                ),
 
             
           ],

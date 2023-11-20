@@ -31,6 +31,8 @@ class Request {
     bool isResponded;
     bool isApproved;
     bool isStatusLoading;
+    String? selectedSubAdmin ;
+    AssignedSubadmin? assignedSubadmin;
     String createdAt;
     int v;
 
@@ -39,8 +41,10 @@ class Request {
         required this.requestCreatedBy,
         required this.requestFor,
         required this.isResponded,
+        this.selectedSubAdmin,
         required this.isApproved,
         required this.createdAt,
+        this.assignedSubadmin,
         this.isStatusLoading  =false,
         required this.v,
     });
@@ -52,6 +56,7 @@ class Request {
         requestFor: List<String>.from(json["requestFor"].map((x) => x)),
         isResponded: json["isResponded"],
         isApproved: json["isApproved"],
+        assignedSubadmin: json["assignedSubadmin"] == null ? null : AssignedSubadmin.fromJson(json["assignedSubadmin"]),
         v: json["__v"],
     );
 
@@ -62,10 +67,30 @@ class Request {
         "isResponded": isResponded,
         "isApproved": isApproved,
         "createdAt": createdAt,
+        "assignedSubadmin": assignedSubadmin?.toJson(),
         "__v": v,
     };
 }
 
+class AssignedSubadmin {
+    String id;
+    String name;
+
+    AssignedSubadmin({
+        required this.id,
+        required this.name,
+    });
+
+    factory AssignedSubadmin.fromJson(Map<String, dynamic> json) => AssignedSubadmin(
+        id: json["_id"],
+        name: json["name"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "_id": id,
+        "name": name,
+    };
+}
 
 class RequestCreatedBy {
     String id;
