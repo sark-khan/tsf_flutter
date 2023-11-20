@@ -23,7 +23,7 @@ class NotificationCard {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w100,
-                color: AppColors().lightGrey,
+                color: Colors.grey[1000],
               ),
             ),
           ),
@@ -83,7 +83,7 @@ class HomeCard {
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w300,
-                  color: Colors.grey,
+                  color: Colors.grey[1000],
                 ),
               ),
               const SizedBox(height: 10),
@@ -183,8 +183,8 @@ class HomeCard {
             children: [
               Text(
                 title,
-                style: const TextStyle(
-                  color: Colors.grey,
+                style: TextStyle(
+                  color: Colors.grey[700],
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
@@ -192,10 +192,10 @@ class HomeCard {
               const SizedBox(height: 6),
               Text(
                 soDate.toString().split(" ")[0],
-                style: const TextStyle(
+                style:  TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w300,
-                  color: Colors.grey,
+                  color: Colors.grey[1000],
                 ),
               ),
               const SizedBox(height: 10),
@@ -209,7 +209,7 @@ class HomeCard {
                               color: Colors.green,
                               fontSize: 10),
                           children: [
-                        const TextSpan(text: "Estimated Delivery on \n"),
+                        const TextSpan(text: "Dispatched on \n"),
                         TextSpan(
                             text: inventoryDate.toString().split(" ")[0],
                             style: TextStyle(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tsf/components/WidgetStyle.dart';
 import 'package:tsf/components/background.dart';
@@ -17,6 +18,7 @@ class _LoginState extends State<Login> {
   TextEditingController? emailController;
   TextEditingController? passwordController;
   String? email;
+  bool isLoading=false;
 
   @override
   void initState() {
@@ -30,7 +32,9 @@ class _LoginState extends State<Login> {
   String buttonText = TextConstants().SUBMIT;
   bool obscureText = true;
   bool userChecked = false;
-
+  bool _isLoading= false;
+  bool toastShowingPassword=false;
+  bool toastShowing=false;
   @override
   void dispose() {
     emailController!.dispose(); // Don't forget to dispose of the controller
@@ -43,8 +47,9 @@ class _LoginState extends State<Login> {
       onWillPop: () async {
         return false;
       },
+
       child: Scaffold(
-        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInset: false,
         body: SingleChildScrollView(
           child: Stack(
             children: [
@@ -174,8 +179,13 @@ class _LoginState extends State<Login> {
                             borderRadius: BorderRadius.circular(10)),
                         color: AppColors().gold,
 
-                        onPressed: hasConnectionWrapper(
+                        onPressed:
                           () async {
+
+                            _isLoading=true;
+                            setState(() {
+
+                            });
                             if (!userChecked) {
                               email = emailController!.text;
                               ReturnObj returnObj =
@@ -195,12 +205,23 @@ class _LoginState extends State<Login> {
                               }
                             } else {
                               if (emailController!.text == "") {
-                                return Fluttertoast.showToast(
+
+                                _isLoading=false;
+                                Fluttertoast.showToast(
                                     msg: "Please enter the email");
+                                return;
                               }
                               if (passwordController!.text == "") {
-                                return Fluttertoast.showToast(
-                                    msg: "Please enter Password");
+
+                                _isLoading=false;
+                                if(!toastShowing){
+                                  toastShowing=true;
+                                  bool? done= await Fluttertoast.showToast(
+                                      msg: "Please enter Password");
+                                  print("hello $done");
+
+                                }
+                                 return;
                               }
                               ReturnObj returnObj = await CommonFunctions()
                                   // .Login("admin@gmail.com", "Wpadmin123#");
@@ -214,8 +235,12 @@ class _LoginState extends State<Login> {
                                     : Navigator.pushNamed(context, "/home");
                               }
                             }
+                            _isLoading=false;
+                            setState(() {
+
+                            });
                           },
-                        ),
+
                         child: FittedBox(
                           fit: BoxFit.fitHeight,
                           child: Padding(
@@ -231,9 +256,24 @@ class _LoginState extends State<Login> {
                     ),
                   )
                 ]),
-              )
+              ),
+              _isLoading ? _loadingOverlay() : SizedBox.shrink(),
             ],
           ),
+        ),
+      ),
+    );
+  }
+  Widget _loadingOverlay() {
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      color: Colors.black.withOpacity(0.5),
+      child: Center(
+
+        child: SpinKitDoubleBounce(
+          color: Colors.blue,
+          size: 50.0,
         ),
       ),
     );

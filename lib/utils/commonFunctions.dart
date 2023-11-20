@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/utils.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 
@@ -18,12 +17,11 @@ import 'package:tsf/utils/responses/SingleDispatchDetails.dart';
 import 'package:tsf/utils/responses/SingleOrderDetailsResponse.dart';
 import 'package:tsf/utils/responses/OrdersResponse.dart';
 import 'package:tsf/utils/responses/SubadminResponse.dart';
-
 import 'responses/UserActivationResponse.dart';
 
 class CommonFunctions {
   static Dio dio = Dio();
-  static String APIURL = "http://192.168.10.10:2000";
+  static String APIURL = "https://eager-rain-80700.pktriot.net";
   static var headers = {'Content-Type': 'application/json'};
 
   Future<ReturnObj> Login(String email, String password) async {
@@ -46,12 +44,12 @@ class CommonFunctions {
         Storage.addJwtToken(loginResponse.token);
         return ReturnObj(status: true, message: "Logged in Successfully");
       }
-      return ReturnObj(message: TextConstants().SERVER_BUSY, status: false);
+      return ReturnObj(message: response!.data["message"], status: false);
     } on DioException catch (e) {
-      if (e.response!.statusCode == 401) {
-        return ReturnObj(status: false, message: "Password did not Match");
-      }
-      return ReturnObj(message: TextConstants().SERVER_BUSY, status: false);
+      // if (e.response!.statusCode == 401) {
+      //   return ReturnObj(status: false, message: "Password did not Match");
+      // // }
+      return ReturnObj(message: e.response!.data["message"], status: false);
     } catch (error) {
       printError(info: "Error in Login $error");
       return ReturnObj(status: false, message: "Login UnSuccessfull");
@@ -191,7 +189,7 @@ class CommonFunctions {
 
       var data = json.encode({"orderId": orderId});
       var response = await dio.request(
-        '$APIURL/api/order/get-dispatch-details?',
+        '$APIURL/api/order/get-dispatch-details?orderId=$orderId',
         options: Options(
           method: 'GET',
           headers: headers,
@@ -250,6 +248,9 @@ class CommonFunctions {
 
   Future<ReturnObj> addComments(String comment, String orderId) async {
     try {
+      if(comment.isEmpty){
+        return ReturnObj(message: "Enter your Comment before Pressing Submit", status: false);
+      }
       headers['token'] = Storage.getJwtToken();
       var data = json.encode({"orderId": orderId, "comment": comment});
 
