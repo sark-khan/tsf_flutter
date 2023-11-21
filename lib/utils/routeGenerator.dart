@@ -15,7 +15,7 @@ class RouteGenerator {
     final args = settings.arguments as Map<String, dynamic>?;
     switch (settings.name) {
       case '/':
-        return FadeRoute(page: ResetPassword());
+        return FadeRoute(page: SplashScreen());
       case '/login':
         return FadeRoute(
           page: Login(),

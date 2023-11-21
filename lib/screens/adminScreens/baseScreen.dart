@@ -1,24 +1,68 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_new
+// ignore_for_file: prefer_const_constructors, unnecessary_new, prefer_const_literals_to_create_immutables, sort_child_properties_last
 
+
+import 'package:file_picker_pro/file_data.dart';
+import 'package:file_picker_pro/file_picker.dart';
+import 'package:file_picker_pro/files.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:mime/mime.dart';
 import 'package:tsf/utils/AppConstants.dart';
 import 'package:tsf/utils/commonFunctions.dart';
-
+import 'package:file_selector/file_selector.dart';
 import '../../utils/stateController.dart';
 
 // ignore: must_be_immutable
-class BaseUI extends StatelessWidget {
+class BaseUI extends StatefulWidget {
   Widget child;
   String headline;
-  final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _roleController = TextEditingController();
-  final _nameController = TextEditingController();
-  final _passwordController = TextEditingController();
+
   BaseUI({required this.child, required this.headline, super.key});
+
+  @override
+  State<BaseUI> createState() => _BaseUIState();
+}
+
+class _BaseUIState extends State<BaseUI> {
+  final _formKey = GlobalKey<FormState>();
+     XFile? selectedFile;
+  final _emailController = TextEditingController();
+
+  final _roleController = TextEditingController();
+
+  final _nameController = TextEditingController();
+
+  final _passwordController = TextEditingController();
+
   StateController stateController = Get.find<StateController>();
+  bool _isLoading = false;
+
+  Future<ReturnObj> _pickFile() async {
+    try{
+      final typeGroup = XTypeGroup();
+    final file = await openFile(acceptedTypeGroups: [typeGroup]);
+    if (file != null) {
+        selectedFile = file;
+       List<int> fileBytes = await selectedFile!.readAsBytes();
+    _isLoading = true;
+    setState(() {
+      
+    });
+    ReturnObj obj =   await CommonFunctions().AddUsers(fileBytes);
+     _isLoading = false;
+    setState(() {
+      
+    });
+    return obj;
+    }else{
+      return ReturnObj(message: "No File Selected", status: false);
+    }
+    }catch(Exception){
+        return ReturnObj(message: "No File Selected", status: false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,7 +82,7 @@ class BaseUI extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    headline,
+                    widget.headline,
                     style: TextStyle(
                         fontSize: 40,
                         color: Colors.grey[700],
@@ -49,6 +93,77 @@ class BaseUI extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      stateController.headline.value == "Users"?
+                      InkWell(
+                        onTap: (){
+                           showDialog(
+                                    context: context,
+                                    builder: (_) => new AlertDialog(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10.0))),
+                                          content: Builder(
+                                            builder: (context) {
+                                              var height =
+                                                  MediaQuery.of(context)
+                                                      .size
+                                                      .height;
+                                              var width = MediaQuery.of(context)
+                                                  .size
+                                                  .width;
+
+                                              return InkWell(
+                                                onTap: ()async{
+                                              ReturnObj obj = await _pickFile();
+                                              Fluttertoast.showToast(msg: obj.message);
+                                              Navigator.of(context).pop();
+                                                },
+                                                child: Container(
+                                                  height: height - 800,
+                                                  width: width - 800,
+                                                  child: Column(
+                                                    children: [
+                                                      Icon(Icons.upload, color: Colors.blueGrey,weight: 40, size: 100,),
+                                                      Center(child: Text("Upload Files .." , style: TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold),)),
+                                                    ],
+                                                  ),
+                                                   decoration: BoxDecoration(
+                                                               color:  Colors.black26,
+                                                               
+                                                            border: Border.all(
+                                                              color:  Colors.black45,
+                                                              style: BorderStyle.solid,
+                                                              width: 2, // Adjust the width of the dotted border
+                                                            ),),
+                                                                                      
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ));
+                             
+                        },
+                        child: Container(
+                      
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                               SizedBox(height: 10,),
+                              Icon(Icons.attach_file_sharp, size: 35,            color: Color.fromARGB(117, 2, 2, 2),),
+                              SizedBox(height: 5,),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom:0.0),
+                                child: Text(
+                                    "Add new customers",
+                                    style: TextStyle(color: Colors.blueGrey),
+                                  ),
+                              )
+                            ],
+                          )),
+                      ):Container(),
+
+
                       stateController.headline.value == "Sub Admins"
                           ? MaterialButton(
                               onPressed: () {
@@ -279,41 +394,10 @@ class BaseUI extends StatelessWidget {
                                         CrossAxisAlignment.center,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      SizedBox(
+                                    const  SizedBox(
                                         height: 12,
                                       ),
-                                      // Stack(
-                                      //   children: [
-                                      //     const Icon(
-                                      //       Icons.notifications,
-                                      //       size: 40,
-                                      //       color: Color.fromARGB(117, 2, 2, 2),
-                                      //     ),
-                                      //     Positioned(
-                                      //       top: 0,
-                                      //       right: 0,
-                                      //       child: Container(
-                                      //         padding: EdgeInsets.all(5),
-                                      //         decoration: BoxDecoration(
-                                      //           shape: BoxShape.circle,
-                                      //           color: Colors.red,
-                                      //         ),
-                                      //         child: Text(
-                                      //           '3', // Replace with dynamic count variable
-                                      //           style: TextStyle(
-                                      //             color: Colors.white,
-                                      //             fontSize: 15,
-                                      //           ),
-                                      //         ),
-                                      //       ),
-                                      //     ),
-                                      //   ],
-                                      // ),
-                                      //  Text(
-                                      //   "Notifications",
-                                      //   style:
-                                      //       TextStyle(color: Colors.blueGrey),
-                                      // )
+                           
                                     ],
                                   ),
                                 ),
@@ -363,7 +447,7 @@ class BaseUI extends StatelessWidget {
               Divider(),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: child,
+                child: widget.child,
               ),
               Divider()
             ]),

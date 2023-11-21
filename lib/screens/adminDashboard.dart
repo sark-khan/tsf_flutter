@@ -49,13 +49,14 @@ class _SidebarPageState extends State<SidebarPage> {
       CollapsibleItem(
         text: 'Users',
         icon: Icons.people,
+             isSelected: true,
         onPressed: () =>
             setState(() => stateController.headline.value = 'Users'),
       ),
       CollapsibleItem(
         text: 'Sub Admins',
         icon: Icons.hdr_auto_sharp,
-        isSelected: true,
+   
         onPressed: () =>
             setState(() => stateController.headline.value = 'Sub Admins'),
       ),

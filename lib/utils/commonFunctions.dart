@@ -23,8 +23,39 @@ import 'responses/UserActivationResponse.dart';
 
 class CommonFunctions {
   static Dio dio = Dio();
-  static String APIURL = "http://43.204.181.73";
+  static String APIURL = "http://192.168.10.10:2000";
   static var headers = {'Content-Type': 'application/json'};
+
+   Future<ReturnObj> AddUsers(
+     List<int> fileBytes) async {
+    try {
+      var headers = {'Content-Type': 'application/json'};
+          headers['token'] = Storage.getJwtToken();
+    FormData formData = FormData.fromMap({
+      'file': MultipartFile.fromBytes(fileBytes, filename: 'uploaded_file'),
+    });
+
+      var dio = Dio();
+      var response = await dio.request(
+        '$APIURL/api/auth/add-user',
+        options: Options(
+          method: 'POST',
+          headers: headers,
+        ),
+        data: formData,
+      );
+      if (response.statusCode == 200) {
+        return ReturnObj(status: true, message: "${response.data["message"]} Customer List be reflected soon after processing");
+      }
+      return ReturnObj(message: TextConstants().SERVER_BUSY, status: false);
+    } on DioException catch (e) {
+      return ReturnObj(status: false, message: e.response!.data["message"]);
+    } catch (error) {
+      printError(info: "Error in Login $error");
+      return ReturnObj(status: false, message: "Error in Login $error");
+    }
+  }
+
 
   Future<ReturnObj> Login(String email, String password) async {
     try {
