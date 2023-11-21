@@ -32,3 +32,7 @@ hasConnectionWrapper(Function callback) {
     // });
   };
 }
+
+
+
+

@@ -7,11 +7,9 @@ import 'package:tsf/utils/commonFunctions.dart';
 class Buttons {
   Widget addCommentsButton(String text, BuildContext context, String orderId) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       child: ElevatedButton(
         onPressed: () {
-          var token = Storage.getJwtToken();
-          print("${token} hellooo");
           showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -19,16 +17,17 @@ class Buttons {
             },
           );
         },
-        child: Text(text),
+        child: Text(text, style: TextStyle(fontSize: 12),),
         style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors().buttonColorPurple),
+            backgroundColor: AppColors().buttonColorPurple)
+            ,
       ),
     );
   }
 
   Widget logoutButton(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(right: 20, top: 20, bottom: 20, left: 5),
+      padding: EdgeInsets.only(right: 20, top: 25, bottom: 20, left: 0),
       child: FloatingActionButton(
           heroTag: "logoutButton",
           elevation: 0,
@@ -42,14 +41,14 @@ class Buttons {
             Navigator.of(context).pushNamed("/login");
           },
           child: Column(
-            children: [Icon(Icons.logout), Text("Logout")],
+            children: [Icon(Icons.logout)],
           )),
     );
   }
 
   Widget notificationButton(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 25),
       child: FloatingActionButton(
           heroTag: "notifButton",
           elevation: 0,
@@ -62,7 +61,7 @@ class Buttons {
           child: const Column(
             children: [
               Icon(Icons.notifications_none_outlined),
-              Text("Notif...")
+
             ],
           )),
     );
@@ -75,7 +74,7 @@ class Buttons {
         borderRadius: BorderRadius.circular(20.0),
       ),
       child: Container(
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.only(top:12,left:20, right:20, bottom:20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -91,7 +90,7 @@ class Buttons {
                 ),
               ],
             ),
-            Divider(),
+
             TextFormField(
               controller: commentController,
               decoration: InputDecoration(
@@ -122,8 +121,11 @@ class Buttons {
                     .addComments(commentController.text, orderId);
                 // if(response.status){
                 Fluttertoast.showToast(msg: response.message);
-                Navigator.of(context)
-                    .pop(); // This will close the dialog box when the 'x' button is pressed
+                if(response.status){
+                  Navigator.of(context)
+                      .pop();
+                }
+                // This will close the dialog box when the 'x' button is pressed
 
                 // }
               },
@@ -131,7 +133,7 @@ class Buttons {
                 backgroundColor:
                     AppColors().buttonColorPurple, // Background color
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                    const EdgeInsets.symmetric(horizontal: 35, vertical: 12),
               ),
               child: Text(TextConstants().SUBMIT),
             ),

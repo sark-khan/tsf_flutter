@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tsf/components/WidgetStyle.dart';
 import 'package:tsf/components/background.dart';
 import 'package:tsf/components/customLoader.dart';
 import 'package:tsf/utils/AppConstants.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tsf/utils/Constants.dart';
 
 import '../utils/commonFunctions.dart';
 
@@ -18,6 +18,7 @@ class _LoginState extends State<Login> {
   TextEditingController? emailController;
   TextEditingController? passwordController;
   String? email;
+  bool isLoading=false;
 
   @override
   void initState() {
@@ -32,6 +33,8 @@ class _LoginState extends State<Login> {
   bool obscureText = true;
   bool userChecked = false;
 
+  bool toastShowingPassword=false;
+  bool toastShowing=false;
   @override
   void dispose() {
     emailController!.dispose(); // Don't forget to dispose of the controller
@@ -44,13 +47,15 @@ class _LoginState extends State<Login> {
       onWillPop: () async {
         return false;
       },
+
       child: Scaffold(
-        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInset: false,
         body: 
         
         
         Row(
           children: [
+            
             MediaQuery.of(context).size.width>600?
             Expanded(child: Image.asset("Toppann.png" ,
             // color: Colors.black,
@@ -190,15 +195,21 @@ class _LoginState extends State<Login> {
             
                               onPressed: hasConnectionWrapper(
                                 () async {
+                                  isLoading =true;
+                                  setState(() {
+                                    
+                                  });
                                   if (!userChecked) {
                                     email = emailController!.text;
                                     ReturnObj returnObj =
                                         await CommonFunctions().CheckUser(email!);
+                                               isLoading =false;
                                     // await CommonFunctions()
                                     //     .CheckUser("admin@gmail.com");
                                     Fluttertoast.showToast(msg: returnObj.message);
                                     if (returnObj.status) {
                                       setState(() {
+                                        
                                         isPasswordFieldVisible = true;
                                         buttonText = TextConstants().LOGIN;
                                         userChecked = !userChecked;
@@ -214,11 +225,19 @@ class _LoginState extends State<Login> {
                                       return Fluttertoast.showToast(
                                           msg: "Please enter Password");
                                     }
+                                        isLoading = true;
+                                    setState(() {
+                                      
+                                    });
                                     ReturnObj returnObj = await CommonFunctions()
                             
                                         .Login(emailController!.text,
                                             passwordController!.text);
                                     Fluttertoast.showToast(msg: returnObj.message);
+                                    isLoading = false;
+                                    setState(() {
+                                      
+                                    });
                                     if (returnObj.status) {
                                       getUserRole() == "Admin"
                                           ? Navigator.pushNamed(
@@ -226,6 +245,7 @@ class _LoginState extends State<Login> {
                                           : Navigator.pushNamed(context, "/home");
                                     }
                                   }
+
                                 },
                               ),
                               child: FittedBox(
@@ -244,11 +264,26 @@ class _LoginState extends State<Login> {
                         )
                       ]),
                     )
+                  ,isLoading ? _loadingOverlay() : SizedBox.shrink(),
                   ],
                 ),
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+  Widget _loadingOverlay() {
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      color: Colors.black.withOpacity(0.5),
+      child: Center(
+
+        child: SpinKitDoubleBounce(
+          color: Colors.blue,
+          size: 50.0,
         ),
       ),
     );

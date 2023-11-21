@@ -78,6 +78,8 @@ class _SidebarPageState extends State<SidebarPage> {
         isCollapsed: false,
         items: _items,
         title: 'TSF',
+        collapseOnBodyTap: false,
+        showToggleButton: false,
         bottomPadding: 0,
         body: _body(size, context),
         backgroundColor: Colors.black87,

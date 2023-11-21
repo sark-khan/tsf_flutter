@@ -27,7 +27,7 @@ class _NotificationState extends State<Notifications> {
             child: Text(TextConstants().NOTIFICATION),
           ),
           toolbarHeight: 80.0,
-          actions: [Buttons().logoutButton(context)]),
+          ),
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
       body: Stack(
@@ -81,7 +81,7 @@ class _NotificationState extends State<Notifications> {
                                       height: screenSize.height * 0.328947368,
                                     ),
                                     Text(
-                                      TextConstants().NOT_FOUND,
+                                      "No Notification Found",
                                       style: const TextStyle(
                                         fontSize: 20.0,
                                         fontWeight: FontWeight.bold,

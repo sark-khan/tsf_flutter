@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tsf/components/WidgetStyle.dart';
 import 'package:tsf/components/background.dart';
 import 'package:tsf/utils/AppConstants.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tsf/utils/commonFunctions.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
@@ -12,6 +14,7 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
+  TextEditingController forgotEmailController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,6 +62,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             5,
                             const Offset(0, 3)),
                         child: TextField(
+                          controller: forgotEmailController,
                           decoration: InputDecoration(
                             fillColor: AppColors().textFillColor,
                             filled: true,
@@ -89,7 +93,17 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
                           color: AppColors().gold,
-                          onPressed: () {},
+                          onPressed: () async {
+                            ReturnObj response = await CommonFunctions()
+                                .ForgotPassword(forgotEmailController.text);
+                            if (response.status) {
+                              Fluttertoast.showToast(
+                                  msg:
+                                      "Reset Password Link send to Your Registered Email");
+                            } else {
+                              Fluttertoast.showToast(msg: response.message);
+                            }
+                          },
                           child: FittedBox(
                             fit: BoxFit.fitHeight,
                             child: Padding(
