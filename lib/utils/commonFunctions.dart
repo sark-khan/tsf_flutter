@@ -21,7 +21,7 @@ import 'responses/UserActivationResponse.dart';
 
 class CommonFunctions {
   static Dio dio = Dio();
-  static String APIURL = "https://eager-rain-80700.pktriot.net";
+  static String APIURL = "http://192.168.10.10:2000";
   static var headers = {'Content-Type': 'application/json'};
 
   Future<ReturnObj> Login(String email, String password) async {
@@ -209,7 +209,7 @@ class CommonFunctions {
             message: "Unable to get Dispatch Details", status: false);
       }
     } catch (error) {
-      printError(info: "Error inn Order Details $error");
+      print("Error inn Order Details $error");
       return ReturnObj(message: "Server is Busy", status: false);
     }
   }
@@ -248,8 +248,10 @@ class CommonFunctions {
 
   Future<ReturnObj> addComments(String comment, String orderId) async {
     try {
-      if(comment.isEmpty){
-        return ReturnObj(message: "Enter your Comment before Pressing Submit", status: false);
+      if (comment.isEmpty) {
+        return ReturnObj(
+            message: "Enter your Comment before Pressing Submit",
+            status: false);
       }
       headers['token'] = Storage.getJwtToken();
       var data = json.encode({"orderId": orderId, "comment": comment});
@@ -311,7 +313,6 @@ class CommonFunctions {
         // data: data,
       );
       if (response.statusCode == 200) {
-        print("${response.data} hellloooo");
         DispatchListResponse dispatchList =
             DispatchListResponse.fromJson(response.data);
         return ReturnObj<List<DispatchList>>(
@@ -321,7 +322,7 @@ class CommonFunctions {
       }
       return ReturnObj(message: "Unable to get Dispatch List", status: false);
     } catch (error) {
-      printError(info: "Error in Dispatch List $error");
+      print("Error in Dispatch List $error");
       return ReturnObj(status: false, message: "Internal Server Error");
     }
   }

@@ -78,14 +78,14 @@ class HomeCard {
                 ),
               ),
               const SizedBox(height: 6),
-              Text(
-                date,
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w300,
-                  color: Colors.grey[1000],
-                ),
-              ),
+              // Text(
+              //   date,
+              //   style: TextStyle(
+              //     fontSize: 10,
+              //     fontWeight: FontWeight.w300,
+              //     color: Colors.grey[1000],
+              //   ),
+              // ),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -93,35 +93,33 @@ class HomeCard {
                   RichText(
                       text: TextSpan(
                           style: const TextStyle(
-                              fontWeight: FontWeight.w300,
+                              fontWeight: FontWeight.w500,
                               color: Colors.green,
                               fontSize: 10),
                           children: [
                         const TextSpan(text: "Promise Date: \n"),
                         TextSpan(
-                            text: arrivingTime,
+                            text: '${arrivingTime.toString().split("T")[0]}',
                             style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 12))
+                                fontWeight: FontWeight.w700, fontSize: 12))
                       ])),
-
-                  // RichText(
-                  //     textAlign: TextAlign.right,
-                  //     text: TextSpan(
-                  //         style: const TextStyle(
-                  //             fontWeight: FontWeight.w300,
-                  //             color: Colors.black,
-                  //             fontSize: 10),
-                  //         children: [
-                  //           TextSpan(text: "Priority \n"),
-                  //           TextSpan(
-                  //               text: priority,
-                  //               style: const TextStyle(
-                  //                 fontWeight: FontWeight.w600,
-                  //                 fontSize: 12,
-                  //                 color: Colors.red,
-                  //               ))
-                  //         ])),
-
+                  RichText(
+                      textAlign: TextAlign.right,
+                      text: TextSpan(
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black,
+                              fontSize: 10),
+                          children: [
+                            TextSpan(text: "Order Placed Date: \n"),
+                            TextSpan(
+                                text: '${date.toString().split("T")[0]}',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                ))
+                          ])),
                   // Row(
                   //   children: [
                   //     // Text(
@@ -152,7 +150,7 @@ class HomeCard {
     );
   }
 
-  Widget dispatchCard(String title, DateTime inventoryDate, DateTime soDate,
+  Widget dispatchCard(String title, String inventoryDate, String soDate,
       String id, BuildContext context) {
     // final ratio = MediaQuery.of(context).size.width <
     //         MediaQuery.of(context).size.height
@@ -190,14 +188,14 @@ class HomeCard {
                 ),
               ),
               const SizedBox(height: 6),
-              Text(
-                soDate.toString().split(" ")[0],
-                style:  TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w300,
-                  color: Colors.grey[1000],
-                ),
-              ),
+              // Text(
+              //   date,
+              //   style: TextStyle(
+              //     fontSize: 10,
+              //     fontWeight: FontWeight.w300,
+              //     color: Colors.grey[1000],
+              //   ),
+              // ),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -205,22 +203,116 @@ class HomeCard {
                   RichText(
                       text: TextSpan(
                           style: const TextStyle(
-                              fontWeight: FontWeight.w300,
+                              fontWeight: FontWeight.w500,
                               color: Colors.green,
                               fontSize: 10),
                           children: [
-                        const TextSpan(text: "Dispatched on \n"),
+                        const TextSpan(text: "So Date: \n"),
                         TextSpan(
-                            text: inventoryDate.toString().split(" ")[0],
+                            text: soDate.toString().split(" ")[0],
                             style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 12))
-                      ]))
+                                fontWeight: FontWeight.w700, fontSize: 12))
+                      ])),
+                  RichText(
+                      textAlign: TextAlign.right,
+                      text: TextSpan(
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black,
+                              fontSize: 10),
+                          children: [
+                            TextSpan(text: "Inventory Date: \n"),
+                            TextSpan(
+                                text: inventoryDate.toString().split(" ")[0],
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                ))
+                          ])),
+                  // Row(
+                  //   children: [
+                  //     // Text(
+                  //     //   "Priority: ",
+                  //     //   textScaleFactor: 0.8,
+                  //     //   style: TextStyle(
+                  //     //     fontWeight: FontWeight.w300,
+                  //     //     color: Colors.black,
+                  //     //   ),
+                  //     // ),
+                  //     SizedBox(width: 4),
+                  //     Text(
+                  //       priority,
+                  //       textScaleFactor: 0.8,
+                  //       style: TextStyle(
+                  //         fontWeight: FontWeight.w300,
+                  //         color: Colors.red,
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
             ],
           ),
         ),
       ),
+      // child: Card(
+      //   elevation: 3,
+      //   shape: RoundedRectangleBorder(
+      //     borderRadius: BorderRadius.circular(10),
+      //   ),
+      //   // margin: const EdgeInsets.only(
+      //   //   left: 20,
+      //   //   right: 10,
+      //   //   bottom: 10,
+      //   //   top: 0,
+      //   // ),
+      //   child: Padding(
+      //     padding: const EdgeInsets.all(15.0),
+      //     child: Column(
+      //       crossAxisAlignment: CrossAxisAlignment.start,
+      //       children: [
+      //         Text(
+      //           title,
+      //           style: TextStyle(
+      //             color: Colors.grey[700],
+      //             fontWeight: FontWeight.bold,
+      //             fontSize: 16,
+      //           ),
+      //         ),
+      //         const SizedBox(height: 6),
+      //         Text(
+      //           soDate.toString().split(" ")[0],
+      //           style: TextStyle(
+      //             fontSize: 10,
+      //             fontWeight: FontWeight.w300,
+      //             color: Colors.grey[1000],
+      //           ),
+      //         ),
+      //         const SizedBox(height: 10),
+      //         Row(
+      //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //           children: [
+      //             RichText(
+      //                 text: TextSpan(
+      //                     style: const TextStyle(
+      //                         fontWeight: FontWeight.w300,
+      //                         color: Colors.green,
+      //                         fontSize: 10),
+      //                     children: [
+      //                   const TextSpan(text: "Dispatched on \n"),
+      //                   TextSpan(
+      //                       text: inventoryDate.toString().split(" ")[0],
+      //                       style: TextStyle(
+      //                           fontWeight: FontWeight.w600, fontSize: 12))
+      //                 ]))
+      //           ],
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // ),
     );
   }
 }

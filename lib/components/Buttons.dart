@@ -17,17 +17,19 @@ class Buttons {
             },
           );
         },
-        child: Text(text, style: TextStyle(fontSize: 12),),
+        child: Text(
+          text,
+          style: TextStyle(fontSize: 12),
+        ),
         style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors().buttonColorPurple)
-            ,
+            backgroundColor: AppColors().buttonColorPurple),
       ),
     );
   }
 
   Widget logoutButton(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(right: 20, top: 25, bottom: 20, left: 0),
+      padding: EdgeInsets.only(right: 20, top: 20, bottom: 20, left: 0),
       child: FloatingActionButton(
           heroTag: "logoutButton",
           elevation: 0,
@@ -41,14 +43,14 @@ class Buttons {
             Navigator.of(context).pushNamed("/login");
           },
           child: Column(
-            children: [Icon(Icons.logout)],
+            children: [Icon(Icons.logout), Text("Logout")],
           )),
     );
   }
 
   Widget notificationButton(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 25),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
       child: FloatingActionButton(
           heroTag: "notifButton",
           elevation: 0,
@@ -60,8 +62,10 @@ class Buttons {
           },
           child: const Column(
             children: [
-              Icon(Icons.notifications_none_outlined),
-
+              Icon(
+                Icons.notifications_none_outlined,
+                size: 32,
+              ),
             ],
           )),
     );
@@ -74,7 +78,7 @@ class Buttons {
         borderRadius: BorderRadius.circular(20.0),
       ),
       child: Container(
-        padding: EdgeInsets.only(top:12,left:20, right:20, bottom:20),
+        padding: EdgeInsets.only(top: 12, left: 20, right: 20, bottom: 20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -90,7 +94,6 @@ class Buttons {
                 ),
               ],
             ),
-
             TextFormField(
               controller: commentController,
               decoration: InputDecoration(
@@ -121,9 +124,8 @@ class Buttons {
                     .addComments(commentController.text, orderId);
                 // if(response.status){
                 Fluttertoast.showToast(msg: response.message);
-                if(response.status){
-                  Navigator.of(context)
-                      .pop();
+                if (response.status) {
+                  Navigator.of(context).pop();
                 }
                 // This will close the dialog box when the 'x' button is pressed
 

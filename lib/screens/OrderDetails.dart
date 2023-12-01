@@ -127,12 +127,20 @@ class _OrderDetailsState extends State<OrderDetails> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: widget.isOrderPage!?Text(TextConstants().ORDER_DETAILS, style: TextStyle(fontSize: 19),): Text("Dispatch Details", style: TextStyle(fontSize: 19)),
+          title: widget.isOrderPage!
+              ? Text(
+                  TextConstants().ORDER_DETAILS,
+                  style: TextStyle(fontSize: 19),
+                )
+              : Text("Dispatch Details", style: TextStyle(fontSize: 19)),
           backgroundColor: Colors.blue,
           elevation: 4.0,
           toolbarHeight: 70.0,
           actions: widget.isOrderPage!
-              ? [Buttons().addCommentsButton("Add Comments", context, widget.orderId!)]
+              ? [
+                  Buttons().addCommentsButton(
+                      "Add Comments", context, widget.orderId!)
+                ]
               : null,
         ),
         body: Column(
@@ -167,11 +175,16 @@ class _OrderDetailsState extends State<OrderDetails> {
                           Map jsonVal = json.decode(json.encode(ret.data));
 
                           dynamic value = jsonVal[_orderUIKeys[1]];
+                          if (value == null || value == "") {
+                            return SizedBox.shrink();
+                          }
                           return Container(
                             // padding: const EdgeInsets.symmetric(
                             //     horizontal: 15.0, vertical: 10.0),
                             child: Container(
-                              color: index%2==0?Colors.lightBlue[99]: Colors.white,
+                              color: index % 2 == 0
+                                  ? Colors.lightBlue[99]
+                                  : Colors.white,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -179,16 +192,18 @@ class _OrderDetailsState extends State<OrderDetails> {
                                   Container(
                                     constraints: BoxConstraints(
                                       maxWidth:
-                                          MediaQuery.of(context).size.width * 0.4,
+                                          MediaQuery.of(context).size.width *
+                                              0.4,
                                     ),
                                     alignment: Alignment.centerLeft,
                                     padding: EdgeInsets.all(10),
                                     child: Padding(
-                                        padding: const EdgeInsets.only(left: 10, top: 10, bottom: 10),
+                                      padding: const EdgeInsets.only(
+                                          left: 10, top: 10, bottom: 10),
                                       child: Text(
                                         '${_orderUIKeys[0]}',
-                                        style:
-                                            TextStyle(fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
                                         textAlign: TextAlign.left,
                                       ),
                                     ),
@@ -196,18 +211,21 @@ class _OrderDetailsState extends State<OrderDetails> {
                                   Container(
                                     constraints: BoxConstraints(
                                       maxWidth:
-                                          MediaQuery.of(context).size.width * 0.3,
+                                          MediaQuery.of(context).size.width *
+                                              0.4,
                                     ),
                                     alignment: Alignment.centerLeft,
                                     padding: const EdgeInsets.all(10),
                                     child: Container(
-
-                          padding: const EdgeInsets.only(right: 5, left:10, top: 10, bottom: 10),
+                                      padding: const EdgeInsets.only(
+                                          right: 0,
+                                          left: 10,
+                                          top: 10,
+                                          bottom: 10),
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                        '$value',
+                                        '${value ?? ''}',
                                         style: const TextStyle(
-
                                             overflow: TextOverflow.clip),
                                         textAlign: TextAlign.left,
                                       ),

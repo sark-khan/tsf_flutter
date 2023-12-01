@@ -11,10 +11,10 @@ String singleDispatchDetailsToJson(SingleDispatchDetails data) =>
     json.encode(data.toJson());
 
 class SingleDispatchDetails {
-  DispatchDetails dispatchDetails;
+  DispatchDetails? dispatchDetails;
 
   SingleDispatchDetails({
-    required this.dispatchDetails,
+    this.dispatchDetails,
   });
 
   factory SingleDispatchDetails.fromJson(Map<String, dynamic> json) =>
@@ -23,77 +23,77 @@ class SingleDispatchDetails {
       );
 
   Map<String, dynamic> toJson() => {
-        "dispatchDetails": dispatchDetails.toJson(),
+        "dispatchDetails": dispatchDetails!.toJson(),
       };
 }
 
 class DispatchDetails {
-  String id;
-  String region;
-  String customerName;
-  String destination;
-  String inventoryNumber;
-  String inventoryDate;
-  String poNumber;
-  String soNumber;
-  String soDate;
-  String filmtype;
-  String coreInnerDiameter;
-  String rollOuterDiameter;
-  String width;
-  String dispatchQuantityInKg;
-  String vehicleNumber;
-  String userAccountNumber;
-  String mktSoNumber;
-  String dispatchQuantityInSqm;
-  String firstTransporter;
-  String tripNumber;
-  String lrNumber;
-  String secondTransporter;
-  String mobileNumber;
-  String saleCategory;
-  String collectorName;
-  String grade;
-  String value;
-  String packingType;
-  String consignee;
-  String createdAt;
-  String updatedAt;
-  int v;
+  String? id;
+  String? region;
+  String? customerName;
+  String? destination;
+  String? inventoryNumber;
+  String? inventoryDate;
+  String? poNumber;
+  String? soNumber;
+  String? soDate;
+  String? filmtype;
+  String? coreInnerDiameter;
+  String? rollOuterDiameter;
+  String? width;
+  String? dispatchQuantityInKg;
+  String? vehicleNumber;
+  String? userAccountNumber;
+  String? mktSoNumber;
+  String? dispatchQuantityInSqm;
+  String? firstTransporter;
+  String? tripNumber;
+  String? lrNumber;
+  String? secondTransporter;
+  String? mobileNumber;
+  String? saleCategory;
+  String? collectorName;
+  String? grade;
+  String? value;
+  String? packingType;
+  String? consignee;
+  String? createdAt;
+  String? updatedAt;
+  int? v;
 
   DispatchDetails({
-    required this.id,
-    required this.region,
-    required this.customerName,
-    required this.destination,
-    required this.inventoryNumber,
-    required this.inventoryDate,
-    required this.poNumber,
-    required this.soNumber,
-    required this.soDate,
-    required this.filmtype,
-    required this.coreInnerDiameter,
-    required this.rollOuterDiameter,
-    required this.width,
-    required this.dispatchQuantityInKg,
-    required this.vehicleNumber,
-    required this.userAccountNumber,
-    required this.mktSoNumber,
-    required this.dispatchQuantityInSqm,
-    required this.firstTransporter,
-    required this.tripNumber,
-    required this.lrNumber,
-    required this.secondTransporter,
-    required this.mobileNumber,
-    required this.saleCategory,
-    required this.collectorName,
-    required this.grade,
-    required this.value,
-    required this.packingType,
-    required this.consignee,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.v,
+    this.id,
+    this.region,
+    this.customerName,
+    this.destination,
+    this.inventoryNumber,
+    this.inventoryDate,
+    this.poNumber,
+    this.soNumber,
+    this.soDate,
+    this.filmtype,
+    this.coreInnerDiameter,
+    this.rollOuterDiameter,
+    this.width,
+    this.dispatchQuantityInKg,
+    this.vehicleNumber,
+    this.userAccountNumber,
+    this.mktSoNumber,
+    this.dispatchQuantityInSqm,
+    this.firstTransporter,
+    this.tripNumber,
+    this.lrNumber,
+    this.secondTransporter,
+    this.mobileNumber,
+    this.saleCategory,
+    this.collectorName,
+    this.grade,
+    this.value,
+    this.packingType,
+    this.consignee,
+    this.createdAt,
+    this.updatedAt,
+    this.v,
   });
 
   factory DispatchDetails.fromJson(Map<String, dynamic> json) =>
