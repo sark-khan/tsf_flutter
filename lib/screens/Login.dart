@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tsf/components/WidgetStyle.dart';
 import 'package:tsf/components/background.dart';
 import 'package:tsf/components/customLoader.dart';
 import 'package:tsf/utils/AppConstants.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tsf/utils/Constants.dart';
 
 import '../utils/commonFunctions.dart';
 
@@ -18,6 +18,7 @@ class _LoginState extends State<Login> {
   TextEditingController? emailController;
   TextEditingController? passwordController;
   String? email;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -31,7 +32,9 @@ class _LoginState extends State<Login> {
   String buttonText = TextConstants().SUBMIT;
   bool obscureText = true;
   bool userChecked = false;
-
+  bool _isLoading = false;
+  bool toastShowingPassword = false;
+  bool toastShowing = false;
   @override
   void dispose() {
     emailController!.dispose(); // Don't forget to dispose of the controller
@@ -45,7 +48,7 @@ class _LoginState extends State<Login> {
         return false;
       },
       child: Scaffold(
-        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInset: false,
         body: SingleChildScrollView(
           child: Stack(
             children: [
@@ -86,7 +89,7 @@ class _LoginState extends State<Login> {
                         fillColor: AppColors().textFillColor,
                         filled: true,
                         // enabled: !isPasswordFieldVisible,
-                        hintText: TextConstants().EMAIL,
+                        hintText: TextConstants().ACCOUNT_NUMBER,
                         prefixIcon: const Padding(
                           padding: EdgeInsets.all(15.0),
                           child: Icon(Icons.email),
@@ -175,46 +178,59 @@ class _LoginState extends State<Login> {
                             borderRadius: BorderRadius.circular(10)),
                         color: AppColors().gold,
 
-                        onPressed: hasConnectionWrapper(
-                          () async {
-                            if (!userChecked) {
-                              email = emailController!.text;
-                              ReturnObj returnObj =
-                                  await CommonFunctions().CheckUser(email!);
-                              // await CommonFunctions()
-                              //     .CheckUser("admin@gmail.com");
-                              Fluttertoast.showToast(msg: returnObj.message);
-                              if (returnObj.status) {
-                                setState(() {
-                                  isPasswordFieldVisible = true;
-                                  buttonText = TextConstants().LOGIN;
-                                  userChecked = !userChecked;
-                                  // Set to true or false as needed
-                                });
-                              }
+                        onPressed: () async {
+                          _isLoading = true;
+                          setState(() {});
+                          if (!userChecked) {
+                            email = emailController!.text;
+                            ReturnObj returnObj =
+                            await CommonFunctions().CheckUser(email!);
+                            // await CommonFunctions()
+                            //     .CheckUser("admin@gmail.com");
+
+                            if (returnObj.status) {
+                              setState(() {
+                                isPasswordFieldVisible = true;
+                                buttonText = TextConstants().LOGIN;
+                                userChecked = !userChecked;
+                                // Set to true or false as needed
+                              });
                             } else {
-                              if (emailController!.text == "") {
-                                return Fluttertoast.showToast(
-                                    msg: "Please enter the email");
-                              }
-                              if (passwordController!.text == "") {
-                                return Fluttertoast.showToast(
-                                    msg: "Please enter Password");
-                              }
-                              ReturnObj returnObj = await CommonFunctions()
-                      
-                                  .Login(emailController!.text,
-                                      passwordController!.text);
                               Fluttertoast.showToast(msg: returnObj.message);
-                              if (returnObj.status) {
-                                getUserRole() == "Admin"
-                                    ? Navigator.pushNamed(
-                                        context, "/admin-dashboard")
-                                    : Navigator.pushNamed(context, "/home");
-                              }
                             }
-                          },
-                        ),
+                          } else {
+                            if (emailController!.text == "") {
+                              _isLoading = false;
+                              Fluttertoast.showToast(
+                                  msg: "Please enter the email");
+                              return;
+                            }
+                            if (passwordController!.text == "") {
+                              _isLoading = false;
+                              if (!toastShowing) {
+                                toastShowing = true;
+                                bool? done = await Fluttertoast.showToast(
+                                    msg: "Please enter Password");
+
+                              }
+                              return;
+                            }
+                            ReturnObj returnObj = await CommonFunctions()
+                            // .Login("admin@gmail.com", "Wpadmin123#");
+                                .Login(emailController!.text,
+                                passwordController!.text);
+                            Fluttertoast.showToast(msg: returnObj.message);
+                            if (returnObj.status) {
+                              getUserRole() == "Admin" ||  getUserRole()== "Subadmin"
+                                  ? Navigator.pushNamed(
+                                  context, "/admin-dashboard")
+                                  : Navigator.pushNamed(context, "/home");
+                            }
+                          }
+                          _isLoading = false;
+                          setState(() {});
+                        },
+
                         child: FittedBox(
                           fit: BoxFit.fitHeight,
                           child: Padding(
@@ -230,8 +246,26 @@ class _LoginState extends State<Login> {
                     ),
                   )
                 ]),
-              )
+              ),
+              _isLoading ? _loadingOverlay() : SizedBox.shrink(),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _loadingOverlay() {
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      color: Colors.black.withOpacity(0.5),
+      child: AbsorbPointer(
+        absorbing: true,
+        child: Center(
+          child: SpinKitDoubleBounce(
+            color: Colors.blue,
+            size: 50.0,
           ),
         ),
       ),

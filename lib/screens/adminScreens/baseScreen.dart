@@ -132,35 +132,35 @@ class BaseUI extends StatelessWidget {
                                                               ),
                                                             ),
                                
-                                                            Padding(
-                                                              padding: const EdgeInsets.all(12),
-                                                              child: TextFormField(
-                                                                controller:
-                                                                    _roleController,
-                                                                                                                      
-                                                                       decoration: InputDecoration(
-                                                                                    fillColor: AppColors().textFillColor,
-                                                                                    filled: true,
-                                                                                    hintText: "ROLE",
-                                                                                    prefixIcon: const Padding(
-                                                                                      padding: EdgeInsets.all(15.0),
-                                                                                      child: Icon(Icons.email),
-                                                                                    ),
-                                                                                    border: OutlineInputBorder(
-                                                                                        borderRadius: BorderRadius.circular(10)),
-                                                                                  ),
-                                                                validator:
-                                                                    (value) {
-                                                                  if (value ==
-                                                                          null ||
-                                                                      value
-                                                                          .isEmpty) {
-                                                                    return 'Role is required';
-                                                                  }
-                                                                  return null;
-                                                                },
-                                                              ),
-                                                            ),
+                                                            // Padding(
+                                                            //   padding: const EdgeInsets.all(12),
+                                                            //   child: TextFormField(
+                                                            //     controller:
+                                                            //         _roleController,
+                                                            //
+                                                            //            decoration: InputDecoration(
+                                                            //                         fillColor: AppColors().textFillColor,
+                                                            //                         filled: true,
+                                                            //                         hintText: "ROLE",
+                                                            //                         prefixIcon: const Padding(
+                                                            //                           padding: EdgeInsets.all(15.0),
+                                                            //                           child: Icon(Icons.email),
+                                                            //                         ),
+                                                            //                         border: OutlineInputBorder(
+                                                            //                             borderRadius: BorderRadius.circular(10)),
+                                                            //                       ),
+                                                            //     validator:
+                                                            //         (value) {
+                                                            //       if (value ==
+                                                            //               null ||
+                                                            //           value
+                                                            //               .isEmpty) {
+                                                            //         return 'Role is required';
+                                                            //       }
+                                                            //       return null;
+                                                            //     },
+                                                            //   ),
+                                                            // ),
                                                             
                                                             Padding(
                                                               padding: const EdgeInsets.all(12),
@@ -173,7 +173,7 @@ class BaseUI extends StatelessWidget {
                                                                                     hintText: "Name",
                                                                                     prefixIcon: const Padding(
                                                                                       padding: EdgeInsets.all(15.0),
-                                                                                      child: Icon(Icons.email),
+                                                                                      child: Icon(Icons.drive_file_rename_outline),
                                                                                     ),
                                                                                     border: OutlineInputBorder(
                                                                                         borderRadius: BorderRadius.circular(10)),
@@ -202,7 +202,7 @@ class BaseUI extends StatelessWidget {
                                                                                     hintText: TextConstants().PASSWORD,
                                                                                     prefixIcon: const Padding(
                                                                                       padding: EdgeInsets.all(15.0),
-                                                                                      child: Icon(Icons.email),
+                                                                                      child: Icon(Icons.password),
                                                                                     ),
                                                                                     border: OutlineInputBorder(
                                                                                         borderRadius: BorderRadius.circular(10)),

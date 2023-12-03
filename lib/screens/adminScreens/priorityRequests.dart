@@ -27,8 +27,10 @@ class _PriorityRequestsState extends State<PriorityRequests> {
 
   getUserComments() async {
     try {
+      print("reached here");
       ReturnObj returnObj = await CommonFunctions().getComments();
       commentsList = returnObj.data;
+      print("heelo ${commentsList}");
       _isScreenLoading = false;
       getterStatus = returnObj.status;
       setState(() {});
@@ -57,10 +59,11 @@ class _PriorityRequestsState extends State<PriorityRequests> {
                           child: Table(
                               columnWidths: {
                                 0: FlexColumnWidth(10),
-                                1: FlexColumnWidth(10),
+                                1:FlexColumnWidth(10),
                                 2: FlexColumnWidth(10),
-                                3: FlexColumnWidth(20),
-                                4: FlexColumnWidth(5)
+                                3: FlexColumnWidth(10),
+                                4: FlexColumnWidth(20),
+                                5: FlexColumnWidth(5)
                               },
                               defaultVerticalAlignment:
                                   TableCellVerticalAlignment.bottom,
@@ -71,6 +74,16 @@ class _PriorityRequestsState extends State<PriorityRequests> {
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
                                       'Order ID',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Order Line Number',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18,
@@ -135,11 +148,15 @@ class _PriorityRequestsState extends State<PriorityRequests> {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(commentsDetail.order),
+            child: Text(commentsDetail.order.soNumber),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(commentsDetail.sender.name),
+            child: Text(commentsDetail.order.salesOrderLineNumber),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(commentsDetail.sender.partyName),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),

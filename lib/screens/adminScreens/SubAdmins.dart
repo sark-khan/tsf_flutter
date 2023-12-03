@@ -43,7 +43,7 @@ class _SubAdminsState extends State<SubAdmins> {
     // bool _isLoading
     return Scaffold(
         body: BaseUI(
-            headline: "USER REQUESTS",
+            headline: "Sub Admins",
             child: Column(
               children: [
                 const SizedBox(

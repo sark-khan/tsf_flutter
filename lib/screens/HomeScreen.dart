@@ -14,7 +14,6 @@ import 'package:tsf/utils/responses/OrdersResponse.dart';
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
-
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -36,9 +35,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size screenSize= MediaQuery.of(context).size;
+    Size screenSize = MediaQuery.of(context).size;
     return WillPopScope(
-      onWillPop: ()async {
+      onWillPop: () async {
         return false;
       },
       child: Scaffold(
@@ -47,10 +46,10 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           title: Padding(
-            padding: EdgeInsets.symmetric(horizontal: screenSize.width*0.01),
+            padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.01),
             child: Text(TextConstants().HOME),
           ),
-          toolbarHeight: screenSize.height*0.1087,
+          toolbarHeight: screenSize.height * 0.1087,
           actions: [
             Buttons().notificationButton(context),
             Buttons().logoutButton(context),
@@ -63,13 +62,13 @@ class _HomeScreenState extends State<HomeScreen> {
             Background(context, BackgroundImagePath().INNERBACKGROUND),
             Column(
               children: [
-                SizedBox(height: screenSize.height*0.151315789),
+                SizedBox(height: screenSize.height * 0.151315789),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ToggleSwitch(
                       minWidth: MediaQuery.of(context).size.width,
-                      minHeight: screenSize.height*0.0592105263,
+                      minHeight: screenSize.height * 0.0592105263,
                       initialLabelIndex: toggleIndex,
                       cornerRadius: 5.0,
                       activeFgColor: AppColors().white,
@@ -78,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       totalSwitches: 2,
                       labels: const ["Sales Order", "Dispatch Summary"],
                       borderWidth: 2.0,
-                      borderColor: [Colors.blueGrey],
+                      // borderColor: [Colors.blueGrey],
                       activeBgColors: [
                         [AppColors().activeTogleButton],
                         [AppColors().activeTogleButton],
@@ -91,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
                 SizedBox(
-                  height: screenSize.height*0.0131578947,
+                  height: screenSize.height * 0.0131578947,
                 ),
                 Expanded(
                   child: FutureBuilder(
@@ -106,28 +105,28 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Text("Error: ${snapshot.error}"),
                         );
                       } else {
-                        ReturnObj? ret= snapshot.data;
-                        if(!ret!.status){
-                           return Center(
+                        ReturnObj? ret = snapshot.data;
+                        if (!ret!.status) {
+                          return Center(
                             child: Text(ret.message),
                           );
                         }
                         List<dynamic>? orders = ret!.data as List<dynamic>;
 
-
                         if (orders.isEmpty) {
                           return Center(
                             child: Padding(
-                              padding: EdgeInsets.symmetric(vertical: screenSize.height*0.0789473684),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: screenSize.height * 0.0789473684),
                               child: Column(
                                 children: [
                                   Lottie.asset(
                                     'assets/NotFound.json',
-                                    width: screenSize.width*0.694444444,
-                                    height: screenSize.height*0.328947368,
+                                    width: screenSize.width * 0.694444444,
+                                    height: screenSize.height * 0.328947368,
                                   ),
-                                   Text(
-                                    TextConstants().NOT_FOUND,
+                                  Text(
+                                    toggleIndex==0?"No Sales Order Found":"No Dispatch Order Found" ,
                                     style: const TextStyle(
                                       fontSize: 20.0,
                                       fontWeight: FontWeight.bold,
@@ -144,20 +143,23 @@ class _HomeScreenState extends State<HomeScreen> {
                           itemCount: orders.length,
                           itemBuilder: (context, index) {
                             return Padding(
-                              padding: EdgeInsets.symmetric(horizontal: screenSize.width*0.0333333333),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: screenSize.width * 0.0333333333),
                               child: toggleIndex == 0
                                   ? HomeCard().homeCard(
-                                      orders[index].region!,
+                                      orders[index].soNumber!,
                                       orders[index].promiseDate!,
                                       orders[index].requestDate!,
                                       orders[index].soDate!,
                                       orders[index].id!,
+                                      orders[index].salesOrderLineNumber,
                                       context)
                                   : HomeCard().dispatchCard(
-                                      orders[index].region!,
+                                      orders[index].soNumber!,
                                       orders[index].inventoryDate!,
                                       orders[index].soDate!,
                                       orders[index].id!,
+                                      "orders[index].salesOrderLinerNumber",
                                       context),
                             );
                           },

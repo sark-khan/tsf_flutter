@@ -23,7 +23,7 @@ class NotificationCard {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w100,
-                color: AppColors().lightGrey,
+                color: Colors.grey[1000],
               ),
             ),
           ),
@@ -46,9 +46,8 @@ class NotificationCard {
 }
 
 class HomeCard {
-  Widget homeCard(String title, String arrivingTime, String date,
-      String priority, String id, BuildContext context) {
-
+  Widget homeCard(String title, String promiseDate, String requestDate,
+      String soDate, String id, String salesOrderNumber, BuildContext context) {
     return InkWell(
       onTap: () {
         Navigator.of(context).pushNamed("/order-details",
@@ -71,20 +70,20 @@ class HomeCard {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                title,
+                "Order ID: ${title}",
                 style: TextStyle(
-                  color: Colors.grey,
+                  color: Colors.grey[700],
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
               ),
               const SizedBox(height: 6),
               Text(
-                date,
+                "Sales line Number: ${salesOrderNumber}",
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w300,
-                  color: Colors.grey,
+                  color: Colors.grey[1000],
                 ),
               ),
               const SizedBox(height: 10),
@@ -94,35 +93,33 @@ class HomeCard {
                   RichText(
                       text: TextSpan(
                           style: const TextStyle(
-                              fontWeight: FontWeight.w300,
+                              fontWeight: FontWeight.w500,
                               color: Colors.green,
                               fontSize: 10),
                           children: [
-                        const TextSpan(text: "Estimated Delivery on \n"),
+                        const TextSpan(text: "Promise Date: \n"),
                         TextSpan(
-                            text: arrivingTime,
+                            text: '${promiseDate.toString().split("T")[0]}',
                             style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 12))
+                                fontWeight: FontWeight.w700, fontSize: 12))
                       ])),
-
                   RichText(
                       textAlign: TextAlign.right,
                       text: TextSpan(
                           style: const TextStyle(
-                              fontWeight: FontWeight.w300,
+                              fontWeight: FontWeight.w500,
                               color: Colors.black,
                               fontSize: 10),
                           children: [
-                            TextSpan(text: "Priority \n"),
+                            TextSpan(text: "Order Placed Date: \n"),
                             TextSpan(
-                                text: priority,
+                                text: '${soDate.toString().split("T")[0]}',
                                 style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.w700,
                                   fontSize: 12,
-                                  color: Colors.red,
+                                  color: Colors.black,
                                 ))
                           ])),
-
                   // Row(
                   //   children: [
                   //     // Text(
@@ -153,8 +150,8 @@ class HomeCard {
     );
   }
 
-  Widget dispatchCard(String title, DateTime inventoryDate, DateTime soDate,
-      String id, BuildContext context) {
+  Widget dispatchCard(String title, String inventoryDate, String soDate,
+      String id,String salesOrderLineNumber, BuildContext context) {
     // final ratio = MediaQuery.of(context).size.width <
     //         MediaQuery.of(context).size.height
     //     ? MediaQuery.of(context).size.width / MediaQuery.of(context).size.height
@@ -183,20 +180,20 @@ class HomeCard {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                title,
-                style: const TextStyle(
-                  color: Colors.grey,
+                "Order Id: ${title}",
+                style: TextStyle(
+                  color: Colors.grey[700],
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
               ),
               const SizedBox(height: 6),
               Text(
-                soDate.toString().split(" ")[0],
-                style: const TextStyle(
+                "Sales Line Number: ${salesOrderLineNumber}",
+                style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w300,
-                  color: Colors.grey,
+                  color: Colors.grey[1000],
                 ),
               ),
               const SizedBox(height: 10),
@@ -206,22 +203,116 @@ class HomeCard {
                   RichText(
                       text: TextSpan(
                           style: const TextStyle(
-                              fontWeight: FontWeight.w300,
+                              fontWeight: FontWeight.w500,
                               color: Colors.green,
                               fontSize: 10),
                           children: [
-                        const TextSpan(text: "Estimated Delivery on \n"),
+                        const TextSpan(text: "So Date: \n"),
                         TextSpan(
-                            text: inventoryDate.toString().split(" ")[0],
+                            text: soDate.toString().split(" ")[0],
                             style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 12))
-                      ]))
+                                fontWeight: FontWeight.w700, fontSize: 12))
+                      ])),
+                  RichText(
+                      textAlign: TextAlign.right,
+                      text: TextSpan(
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black,
+                              fontSize: 10),
+                          children: [
+                            TextSpan(text: "Inventory Date: \n"),
+                            TextSpan(
+                                text: inventoryDate.toString().split(" ")[0],
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                ))
+                          ])),
+                  // Row(
+                  //   children: [
+                  //     // Text(
+                  //     //   "Priority: ",
+                  //     //   textScaleFactor: 0.8,
+                  //     //   style: TextStyle(
+                  //     //     fontWeight: FontWeight.w300,
+                  //     //     color: Colors.black,
+                  //     //   ),
+                  //     // ),
+                  //     SizedBox(width: 4),
+                  //     Text(
+                  //       priority,
+                  //       textScaleFactor: 0.8,
+                  //       style: TextStyle(
+                  //         fontWeight: FontWeight.w300,
+                  //         color: Colors.red,
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
             ],
           ),
         ),
       ),
+      // child: Card(
+      //   elevation: 3,
+      //   shape: RoundedRectangleBorder(
+      //     borderRadius: BorderRadius.circular(10),
+      //   ),
+      //   // margin: const EdgeInsets.only(
+      //   //   left: 20,
+      //   //   right: 10,
+      //   //   bottom: 10,
+      //   //   top: 0,
+      //   // ),
+      //   child: Padding(
+      //     padding: const EdgeInsets.all(15.0),
+      //     child: Column(
+      //       crossAxisAlignment: CrossAxisAlignment.start,
+      //       children: [
+      //         Text(
+      //           title,
+      //           style: TextStyle(
+      //             color: Colors.grey[700],
+      //             fontWeight: FontWeight.bold,
+      //             fontSize: 16,
+      //           ),
+      //         ),
+      //         const SizedBox(height: 6),
+      //         Text(
+      //           soDate.toString().split(" ")[0],
+      //           style: TextStyle(
+      //             fontSize: 10,
+      //             fontWeight: FontWeight.w300,
+      //             color: Colors.grey[1000],
+      //           ),
+      //         ),
+      //         const SizedBox(height: 10),
+      //         Row(
+      //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //           children: [
+      //             RichText(
+      //                 text: TextSpan(
+      //                     style: const TextStyle(
+      //                         fontWeight: FontWeight.w300,
+      //                         color: Colors.green,
+      //                         fontSize: 10),
+      //                     children: [
+      //                   const TextSpan(text: "Dispatched on \n"),
+      //                   TextSpan(
+      //                       text: inventoryDate.toString().split(" ")[0],
+      //                       style: TextStyle(
+      //                           fontWeight: FontWeight.w600, fontSize: 12))
+      //                 ]))
+      //           ],
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // ),
     );
   }
 }

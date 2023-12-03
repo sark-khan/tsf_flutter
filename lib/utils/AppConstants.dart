@@ -20,6 +20,7 @@ class TextConstants {
   String LOGIN = "Log In";
   String PASSWORD = "Password";
   String EMAIL = "Email";
+  String ACCOUNT_NUMBER= "Account Number";
   String FORGOTPASSWORD = "Forgot Password?";
   String FORGOTPASSWORDSCREENTEXT = "Forgot Password";
   String SUBMIT = "Submit";

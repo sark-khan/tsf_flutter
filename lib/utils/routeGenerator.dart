@@ -12,10 +12,9 @@ import 'package:tsf/screens/adminScreens/NotificationScreen.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
+    print("here =? ${settings.name}");
     final args = settings.arguments as Map<String, dynamic>?;
     switch (settings.name) {
-      case '/':
-        return FadeRoute(page: ResetPassword());
       case '/login':
         return FadeRoute(
           page: Login(),
@@ -27,21 +26,23 @@ class RouteGenerator {
       case '/forgot-password':
         return FadeRoute(page: const ForgotPassword());
       case '/order-details':
-        return FadeRoute(
-            page: OrderDetails(
-          orderId: args!["orderId"],
-          isOrderPage: args["isOrderPage"],
-        ));
+        return MaterialPageRoute(
+            builder: (_) => OrderDetails(
+                  orderId: args!["orderId"],
+                  isOrderPage: args["isOrderPage"],
+                ));
       case '/home':
         return FadeRoute(page: HomeScreen());
       case '/notification':
         return FadeRoute(page: const Notifications());
       case '/admin-notifications':
         return MaterialPageRoute(builder: (_) => AdminNotifications());
-      case "/reset-password":
+      case '/reset-password':
         return MaterialPageRoute(builder: (_) => ResetPassword());
       case "/reset-password-success":
         return MaterialPageRoute(builder: (_) => const ResetPasswordSuccess());
+      case '/splash-screen':
+        return FadeRoute(page: SplashScreen());
     }
     return _errorRoute();
   }

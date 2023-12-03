@@ -1,29 +1,28 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/utils.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 
-import 'dart:html' as html;
+// ignore: avoid_web_libraries_in_flutter
+// import 'dart:html' as html;
 import 'package:tsf/utils/AppConstants.dart';
 import 'package:tsf/utils/Storage.dart';
 import 'package:tsf/utils/responses/CheckUser.dart';
 import 'package:tsf/utils/responses/DispatchListResponse.dart';
-import 'package:tsf/utils/responses/GetComments.dart';
+import 'package:tsf/utils/responses/GetComments.dart' as GetComments;
+import 'package:tsf/utils/responses/ForgotPasswordResponse.dart';
 import 'package:tsf/utils/responses/LoginResponse.dart';
 import 'package:tsf/utils/responses/NotificationResponse.dart';
 import 'package:tsf/utils/responses/SingleDispatchDetails.dart';
 import 'package:tsf/utils/responses/SingleOrderDetailsResponse.dart';
 import 'package:tsf/utils/responses/OrdersResponse.dart';
 import 'package:tsf/utils/responses/SubadminResponse.dart';
-
 import 'responses/UserActivationResponse.dart';
 
 class CommonFunctions {
   static Dio dio = Dio();
-  static String APIURL = "http://192.168.10.10:2000";
+  static String APIURL = "https://eager-rain-80700.pktriot.net";
   static var headers = {'Content-Type': 'application/json'};
 
   Future<ReturnObj> Login(String email, String password) async {
@@ -46,12 +45,12 @@ class CommonFunctions {
         Storage.addJwtToken(loginResponse.token);
         return ReturnObj(status: true, message: "Logged in Successfully");
       }
-      return ReturnObj(message: TextConstants().SERVER_BUSY, status: false);
+      return ReturnObj(message: response!.data["message"], status: false);
     } on DioException catch (e) {
-      if (e.response!.statusCode == 401) {
-        return ReturnObj(status: false, message: "Password did not Match");
-      }
-      return ReturnObj(message: TextConstants().SERVER_BUSY, status: false);
+      // if (e.response!.statusCode == 401) {
+      //   return ReturnObj(status: false, message: "Password did not Match");
+      // // }
+      return ReturnObj(message: e.response!.data["message"], status: false);
     } catch (error) {
       printError(info: "Error in Login $error");
       return ReturnObj(status: false, message: "Login UnSuccessfull");
@@ -142,9 +141,10 @@ class CommonFunctions {
     }
   }
 
-  Future<ReturnObj> getOrderDetails(String? orderId) async {
+  Future<ReturnObj> getOrderDetails(String orderId) async {
     try {
-      if (orderId!.isEmpty) {
+      print({orderId});
+      if (orderId.isEmpty) {
         return ReturnObj(
             message: "Error in get Particular Details", status: false);
       }
@@ -153,8 +153,9 @@ class CommonFunctions {
 
       headers['token'] = Storage.getJwtToken();
       var data = json.encode({"orderId": orderId});
+      print({data});
       var response = await dio.request(
-        '$APIURL/api/order/get-order-details',
+        '$APIURL/api/order/get-order-details?orderId=$orderId',
         options: Options(
           method: 'GET',
           headers: headers,
@@ -189,7 +190,7 @@ class CommonFunctions {
 
       var data = json.encode({"orderId": orderId});
       var response = await dio.request(
-        '$APIURL/api/order/get-dispatch-details',
+        '$APIURL/api/order/get-dispatch-details?orderId=$orderId',
         options: Options(
           method: 'GET',
           headers: headers,
@@ -209,7 +210,7 @@ class CommonFunctions {
             message: "Unable to get Dispatch Details", status: false);
       }
     } catch (error) {
-      printError(info: "Error inn Order Details $error");
+      print("Error inn Order Details $error");
       return ReturnObj(message: "Server is Busy", status: false);
     }
   }
@@ -226,8 +227,8 @@ class CommonFunctions {
       );
 
       if (response.statusCode == 200) {
-        GetCommentsResponse commentsMap = GetCommentsResponse.fromJson(response.data);
-        return ReturnObj<List<GetOrderCommentsDetail>>(
+        GetComments.GetCommentsResponse commentsMap = GetComments.GetCommentsResponse.fromJson(response.data);
+        return ReturnObj<List<GetComments.GetOrderCommentsDetail>>(
             message: "Comments Received Successfully",
             status: true,
             data: commentsMap.getOrderCommentsDetails);
@@ -276,6 +277,11 @@ class CommonFunctions {
 
   Future<ReturnObj> addComments(String comment, String orderId) async {
     try {
+      if (comment.isEmpty) {
+        return ReturnObj(
+            message: "Enter your Comment before Pressing Submit",
+            status: false);
+      }
       headers['token'] = Storage.getJwtToken();
       var data = json.encode({"orderId": orderId, "comment": comment});
 
@@ -334,7 +340,6 @@ class CommonFunctions {
         // data: data,
       );
       if (response.statusCode == 200) {
-        print("${response.data} hellloooo");
         DispatchListResponse dispatchList =
             DispatchListResponse.fromJson(response.data);
         return ReturnObj<List<DispatchList>>(
@@ -344,7 +349,7 @@ class CommonFunctions {
       }
       return ReturnObj(message: "Unable to get Dispatch List", status: false);
     } catch (error) {
-      printError(info: "Error in Dispatch List $error");
+      print("Error in Dispatch List $error");
       return ReturnObj(status: false, message: "Internal Server Error");
     }
   }
@@ -464,9 +469,9 @@ class CommonFunctions {
   Future<ReturnObj> ResetPassword(
       String password, String confirmPassword) async {
     try {
-      if (kIsWeb) {
-        headers['token'] = getIdFromQueryParameter();
-      }
+      // if (kIsWeb) {
+      //   headers['token'] = getIdFromQueryParameter();
+      // }
       var data = json
           .encode({"password": password, "confirmPassword": confirmPassword});
 
@@ -489,6 +494,39 @@ class CommonFunctions {
       return ReturnObj(status: false, message: "Server is Busy");
     }
   }
+
+  Future<ReturnObj> ForgotPassword(String email) async {
+    try {
+      var headers = {'Content-Type': 'application/json'};
+      if (email.isEmpty) {
+        return ReturnObj(message: "Please fill the Email Field", status: false);
+      }
+      var data = json.encode({"accountNumberOrEmail": email.toLowerCase()});
+      var dio = Dio();
+      var response = await dio.request(
+        '$APIURL/api/auth/forgot-password',
+        options: Options(
+          method: 'POST',
+          headers: headers,
+        ),
+        data: data,
+      );
+
+      if (response.statusCode == 200) {
+        ForgotPasswordResponse forgotPasswordResponse =
+            ForgotPasswordResponse.fromJson(response.data);
+        return ReturnObj(status: true, message: forgotPasswordResponse.message);
+      }
+      return ReturnObj(message: TextConstants().SERVER_BUSY, status: false);
+    } on DioException catch (e) {
+      // if (e.response!.statusCode == 401) {
+      return ReturnObj(status: false, message: e.response!.data["message"]);
+      // }
+    } catch (error) {
+      printError(info: "Error in Login $error");
+      return ReturnObj(status: false, message: "Login UnSuccessfull");
+    }
+  }
 }
 
 class ReturnObj<T> {
@@ -500,7 +538,18 @@ class ReturnObj<T> {
 
 String getUserRole() => Jwt.parseJwt(Storage.getJwtToken())['role'];
 
-String getIdFromQueryParameter() {
-  Uri uri = Uri.parse(html.window.location.href);
-  return uri.queryParameters['id'].toString() ?? '';
-}
+// String getIdFromQueryParameter() {
+//   // if (kIsWeb) {
+//   //   Uri uri = Uri.parse(html.window.location.href);
+//   //   // Debugging: print the URI
+//   //   print('Current URI: $uri');
+
+//   //   String? id = uri.queryParameters['id'];
+//   //   // Debugging: print the retrieved ID
+//   //   print('Retrieved ID: $id');
+
+//   //   return id ?? ''; // Using null-aware operator
+//   // }
+//   // // Fallback for non-web platforms
+//   // return "";
+// }

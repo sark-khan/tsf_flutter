@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:collapsible_sidebar/collapsible_sidebar.dart';
 import 'package:get/get.dart';
-import 'package:tsf/screens/Notifications.dart';
 import 'package:tsf/screens/adminScreens/NotificationScreen.dart';
 import 'package:tsf/screens/adminScreens/dashboard.dart';
 import 'package:tsf/screens/adminScreens/priorityRequests.dart';
 import 'package:tsf/screens/adminScreens/userRequests.dart';
+import 'package:tsf/utils/Constants.dart';
+import 'package:tsf/utils/commonFunctions.dart';
 import 'package:tsf/utils/stateController.dart';
 
 import 'adminScreens/SubAdmins.dart';
@@ -42,20 +43,22 @@ class _SidebarPageState extends State<SidebarPage> {
     return [
       CollapsibleItem(
         text: 'User Comments',
+        isSelected: true,
         icon: Icons.assessment,
         onPressed: () => setState(
             () => stateController.headline.value = 'User Comments'),
       ),
-      CollapsibleItem(
+      if (getUserRole() == "Admin") CollapsibleItem(
         text: 'Users',
         icon: Icons.people,
         onPressed: () =>
             setState(() => stateController.headline.value = 'Users'),
       ),
+      // if(getUserRole()=="Admin")
       CollapsibleItem(
         text: 'Sub Admins',
         icon: Icons.hdr_auto_sharp,
-        isSelected: true,
+
         onPressed: () =>
             setState(() => stateController.headline.value = 'Sub Admins'),
       ),
@@ -116,13 +119,19 @@ class _SidebarPageState extends State<SidebarPage> {
           context: context,
         );
       case "Users":
-        return UserRequests();
+        if(getUserRole()=="Admin"){
+          return UserRequests();
+        }
+        break;
       case "Dashboard":
         return Dashboard(
           context: context,
         );
       case "Sub Admins":
-        return SubAdmins();
+        // if(getUserRole()=="Admin"){
+          return SubAdmins();
+        // }
+        break;
       case "Notifications":
         return AdminNotifications(
           context: context,

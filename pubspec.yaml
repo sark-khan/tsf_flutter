@@ -44,6 +44,8 @@ dependencies:
   lottie:
   page_transition:
   intl: ^0.17.0
+  url_strategy: ^0.2.0
+  flutter_svg:
 dev_dependencies:
   flutter_test:
     sdk: flutter
