@@ -46,8 +46,8 @@ class NotificationCard {
 }
 
 class HomeCard {
-  Widget homeCard(String title, String arrivingTime, String date,
-      String priority, String id, BuildContext context) {
+  Widget homeCard(String title, String promiseDate, String requestDate,
+      String soDate, String id, String salesOrderNumber, BuildContext context) {
     return InkWell(
       onTap: () {
         Navigator.of(context).pushNamed("/order-details",
@@ -70,7 +70,7 @@ class HomeCard {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                title,
+                "Order ID: ${title}",
                 style: TextStyle(
                   color: Colors.grey[700],
                   fontWeight: FontWeight.bold,
@@ -78,14 +78,14 @@ class HomeCard {
                 ),
               ),
               const SizedBox(height: 6),
-              // Text(
-              //   date,
-              //   style: TextStyle(
-              //     fontSize: 10,
-              //     fontWeight: FontWeight.w300,
-              //     color: Colors.grey[1000],
-              //   ),
-              // ),
+              Text(
+                "Sales line Number: ${salesOrderNumber}",
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w300,
+                  color: Colors.grey[1000],
+                ),
+              ),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -99,7 +99,7 @@ class HomeCard {
                           children: [
                         const TextSpan(text: "Promise Date: \n"),
                         TextSpan(
-                            text: '${arrivingTime.toString().split("T")[0]}',
+                            text: '${promiseDate.toString().split("T")[0]}',
                             style: TextStyle(
                                 fontWeight: FontWeight.w700, fontSize: 12))
                       ])),
@@ -113,7 +113,7 @@ class HomeCard {
                           children: [
                             TextSpan(text: "Order Placed Date: \n"),
                             TextSpan(
-                                text: '${date.toString().split("T")[0]}',
+                                text: '${soDate.toString().split("T")[0]}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 12,
@@ -151,7 +151,7 @@ class HomeCard {
   }
 
   Widget dispatchCard(String title, String inventoryDate, String soDate,
-      String id, BuildContext context) {
+      String id,String salesOrderLineNumber, BuildContext context) {
     // final ratio = MediaQuery.of(context).size.width <
     //         MediaQuery.of(context).size.height
     //     ? MediaQuery.of(context).size.width / MediaQuery.of(context).size.height
@@ -180,7 +180,7 @@ class HomeCard {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                title,
+                "Order Id: ${title}",
                 style: TextStyle(
                   color: Colors.grey[700],
                   fontWeight: FontWeight.bold,
@@ -188,14 +188,14 @@ class HomeCard {
                 ),
               ),
               const SizedBox(height: 6),
-              // Text(
-              //   date,
-              //   style: TextStyle(
-              //     fontSize: 10,
-              //     fontWeight: FontWeight.w300,
-              //     color: Colors.grey[1000],
-              //   ),
-              // ),
+              Text(
+                "Sales Line Number: ${salesOrderLineNumber}",
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w300,
+                  color: Colors.grey[1000],
+                ),
+              ),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

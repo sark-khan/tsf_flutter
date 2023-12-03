@@ -89,7 +89,7 @@ class _LoginState extends State<Login> {
                         fillColor: AppColors().textFillColor,
                         filled: true,
                         // enabled: !isPasswordFieldVisible,
-                        hintText: TextConstants().EMAIL,
+                        hintText: TextConstants().ACCOUNT_NUMBER,
                         prefixIcon: const Padding(
                           padding: EdgeInsets.all(15.0),
                           child: Icon(Icons.email),

@@ -152,12 +152,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                       orders[index].requestDate!,
                                       orders[index].soDate!,
                                       orders[index].id!,
+                                      orders[index].salesOrderLineNumber,
                                       context)
                                   : HomeCard().dispatchCard(
                                       orders[index].soNumber!,
                                       orders[index].inventoryDate!,
                                       orders[index].soDate!,
                                       orders[index].id!,
+                                      "orders[index].salesOrderLinerNumber",
                                       context),
                             );
                           },
