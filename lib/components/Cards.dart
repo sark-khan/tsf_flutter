@@ -151,7 +151,7 @@ class HomeCard {
   }
 
   Widget dispatchCard(String title, String inventoryDate, String soDate,
-      String id,String salesOrderLineNumber, BuildContext context) {
+      String id, String salesOrderLineNumber, BuildContext context) {
     // final ratio = MediaQuery.of(context).size.width <
     //         MediaQuery.of(context).size.height
     //     ? MediaQuery.of(context).size.width / MediaQuery.of(context).size.height
@@ -187,15 +187,15 @@ class HomeCard {
                   fontSize: 16,
                 ),
               ),
-              const SizedBox(height: 6),
-              Text(
-                "Sales Line Number: ${salesOrderLineNumber}",
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w300,
-                  color: Colors.grey[1000],
-                ),
-              ),
+              // const SizedBox(height: 6),
+              // Text(
+              //   "Sales Line Number: ${salesOrderLineNumber}",
+              //   style: TextStyle(
+              //     fontSize: 10,
+              //     fontWeight: FontWeight.w300,
+              //     color: Colors.grey[1000],
+              //   ),
+              // ),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -207,9 +207,9 @@ class HomeCard {
                               color: Colors.green,
                               fontSize: 10),
                           children: [
-                        const TextSpan(text: "So Date: \n"),
+                        const TextSpan(text: "Inventory Date: \n"),
                         TextSpan(
-                            text: soDate.toString().split(" ")[0],
+                            text: inventoryDate.toString().split(" ")[0],
                             style: TextStyle(
                                 fontWeight: FontWeight.w700, fontSize: 12))
                       ])),
@@ -221,9 +221,9 @@ class HomeCard {
                               color: Colors.black,
                               fontSize: 10),
                           children: [
-                            TextSpan(text: "Inventory Date: \n"),
+                            TextSpan(text: "So Date: \n"),
                             TextSpan(
-                                text: inventoryDate.toString().split(" ")[0],
+                                text: soDate.toString().split(" ")[0],
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 12,

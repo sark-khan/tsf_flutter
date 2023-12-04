@@ -21,7 +21,7 @@ import 'responses/UserActivationResponse.dart';
 
 class CommonFunctions {
   static Dio dio = Dio();
-  static String APIURL = "https://eager-rain-80700.pktriot.net";
+  static String APIURL = "http://43.204.181.73";
   static var headers = {'Content-Type': 'application/json'};
 
   Future<ReturnObj> Login(String email, String password) async {
