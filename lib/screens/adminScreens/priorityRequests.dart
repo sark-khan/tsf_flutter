@@ -54,12 +54,15 @@ class _PriorityRequestsState extends State<PriorityRequests> {
                   height: 600,
                   width: double.infinity,
                   child: _isScreenLoading
-                      ? Center(child: CircularProgressIndicator(color: Colors.blueGrey,))
+                      ? Center(
+                          child: CircularProgressIndicator(
+                          color: Colors.blueGrey,
+                        ))
                       : SingleChildScrollView(
                           child: Table(
                               columnWidths: {
                                 0: FlexColumnWidth(10),
-                                1:FlexColumnWidth(10),
+                                1: FlexColumnWidth(10),
                                 2: FlexColumnWidth(10),
                                 3: FlexColumnWidth(10),
                                 4: FlexColumnWidth(20),
@@ -138,8 +141,8 @@ class _PriorityRequestsState extends State<PriorityRequests> {
 
   TableRow _tableRow(int index) {
     GetOrderCommentsDetail commentsDetail = commentsList[index];
-     DateTime timestamp = DateTime.parse(commentsDetail.updatedAt.toString());
-      String formattedTimestamp = DateFormat.yMd().add_Hms().format(timestamp);
+    DateTime timestamp = DateTime.parse(commentsDetail.updatedAt.toString());
+    String formattedTimestamp = DateFormat.yMd().add_Hms().format(timestamp);
 
     return TableRow(
         decoration: !(index % 2 == 0)
@@ -156,7 +159,8 @@ class _PriorityRequestsState extends State<PriorityRequests> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(commentsDetail.sender.partyName),
+            child: Text(commentsDetail.sender.partyName ??
+                commentsDetail.order.customerName),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -168,7 +172,13 @@ class _PriorityRequestsState extends State<PriorityRequests> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-             child: Wrap(children: [Text(formattedTimestamp, style: TextStyle(color: Colors.blueGrey , fontWeight: FontWeight.bold),)]),
+            child: Wrap(children: [
+              Text(
+                formattedTimestamp,
+                style: TextStyle(
+                    color: Colors.blueGrey, fontWeight: FontWeight.bold),
+              )
+            ]),
           ),
         ]);
   }

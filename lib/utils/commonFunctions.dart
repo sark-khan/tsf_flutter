@@ -22,7 +22,7 @@ import 'responses/UserActivationResponse.dart';
 
 class CommonFunctions {
   static Dio dio = Dio();
-  static String APIURL = "https://eager-rain-80700.pktriot.net";
+  static String APIURL = "http://43.204.181.73";
   static var headers = {'Content-Type': 'application/json'};
 
   Future<ReturnObj> Login(String email, String password) async {
@@ -215,7 +215,7 @@ class CommonFunctions {
     }
   }
 
-    Future<ReturnObj> getComments() async {
+  Future<ReturnObj> getComments() async {
     try {
       headers['token'] = Storage.getJwtToken();
       var response = await dio.request(
@@ -227,21 +227,20 @@ class CommonFunctions {
       );
 
       if (response.statusCode == 200) {
-        GetComments.GetCommentsResponse commentsMap = GetComments.GetCommentsResponse.fromJson(response.data);
+        GetComments.GetCommentsResponse commentsMap =
+            GetComments.GetCommentsResponse.fromJson(response.data);
         return ReturnObj<List<GetComments.GetOrderCommentsDetail>>(
             message: "Comments Received Successfully",
             status: true,
             data: commentsMap.getOrderCommentsDetails);
-
       } else {
         return ReturnObj(message: "Server is Busy", status: false);
       }
     } catch (error) {
-      printError(info: "Error In getOrders $error");
+      print("Error In getOrders $error");
       return ReturnObj(status: false, message: "Internal Server Error");
     }
   }
-
 
   Future<ReturnObj> getOrders() async {
     try {
@@ -408,13 +407,10 @@ class CommonFunctions {
     }
   }
 
-    Future<ReturnObj> assignSubadmin(String userID , String subadminId) async {
+  Future<ReturnObj> assignSubadmin(String userID, String subadminId) async {
     try {
       headers['token'] = Storage.getJwtToken();
-      var data = json.encode({
-  "userId":userID,
-  "subadminId": subadminId
-});
+      var data = json.encode({"userId": userID, "subadminId": subadminId});
       var response = await dio.request(
         '$APIURL/api/auth/add-subadmin-to-user',
         options: Options(
@@ -424,18 +420,19 @@ class CommonFunctions {
         data: data,
       );
       if (response.statusCode == 200) {
-
         return ReturnObj(
-            message: response.data["message"],
-            status: true,
-          );
+          message: response.data["message"],
+          status: true,
+        );
       }
       return ReturnObj(
-             message: response.data["message"], status: false, data: []);
+          message: response.data["message"], status: false, data: []);
     } catch (error) {
       printError(info: "Unable to get Activation List $error");
       return ReturnObj(
-          status: false, message: "Internal Server Error", );
+        status: false,
+        message: "Internal Server Error",
+      );
     }
   }
 
