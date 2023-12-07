@@ -21,7 +21,7 @@ import 'responses/UserActivationResponse.dart';
 
 class CommonFunctions {
   static Dio dio = Dio();
-  static String APIURL = "http://43.204.181.73";
+  static String APIURL = "https://eager-rain-80700.pktriot.net";
   static var headers = {'Content-Type': 'application/json'};
 
   Future<ReturnObj> Login(String email, String password) async {
@@ -147,14 +147,11 @@ class CommonFunctions {
         return ReturnObj(
             message: "Error in get Particular Details", status: false);
       }
-      // headers['token'] =
-      // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNhcmlrLnNhay5raGFuQGdtYWlsLmNvbSIsIm5hbWUiOiJzYXJpa19sb2NhbCIsInJvbGUiOiJVc2VyIiwidXNlcklkIjoiNjUyM2E2ZGMxNTYwODEyMTg0MGRkMmZlIiwiYWNjb3VudE51bWJlciI6IkFMVS0xMjMiLCJpYXQiOjE2OTk3MDAzMjl9.Q-kM19JFfPX8OgGHk6O0P8acA2o1Yse7dbHSS7py_T0";
-
       headers['token'] = Storage.getJwtToken();
       var data = json.encode({"orderId": orderId});
       print({data});
       var response = await dio.request(
-        '$APIURL/api/order/get-order-details?orderId=$orderId',
+        '$APIURL/api/order/get-order-details?soNumber=$orderId',
         options: Options(
           method: 'GET',
           headers: headers,
@@ -164,11 +161,10 @@ class CommonFunctions {
       if (response.statusCode == 200) {
         SingleOrderDetailsResponse orderDetailsResponse =
             SingleOrderDetailsResponse.fromJson(response.data);
-        return ReturnObj<SingleOrderDetails>(
+        return ReturnObj<List<SingleOrderDetail>>(
             message: "Received Successfully",
             status: true,
             data: orderDetailsResponse.singleOrderDetails);
-        // {"orderDetails": orderDetailsResponse.singleOrderDetails};
       } else {
         return ReturnObj(
             message: "Unable to get the Dispatch Details", status: false);
@@ -229,6 +225,7 @@ class CommonFunctions {
 
       if (response.statusCode == 200) {
         OrderListResponse ordersMap = OrderListResponse.fromJson(response.data);
+        print("helloooooo ${ordersMap.orders}");
         return ReturnObj<List<Order>>(
             message: "Order Received Successfully",
             status: true,

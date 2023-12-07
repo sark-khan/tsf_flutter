@@ -46,8 +46,8 @@ class NotificationCard {
 }
 
 class HomeCard {
-  Widget homeCard(String title, String promiseDate, String requestDate,
-      String soDate, String id, String salesOrderNumber, BuildContext context) {
+  Widget homeCard(String id, DateTime promiseDate, DateTime requestDate,
+      DateTime soDate, String customerPoNumber, BuildContext context) {
     return InkWell(
       onTap: () {
         Navigator.of(context).pushNamed("/order-details",
@@ -70,7 +70,7 @@ class HomeCard {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Order ID: ${title}",
+                "Order ID: ${id}",
                 style: TextStyle(
                   color: Colors.grey[700],
                   fontWeight: FontWeight.bold,
@@ -79,7 +79,7 @@ class HomeCard {
               ),
               const SizedBox(height: 6),
               Text(
-                "Sales line Number: ${salesOrderNumber}",
+                "Customer Po Number: ${customerPoNumber}",
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w300,
@@ -99,7 +99,7 @@ class HomeCard {
                           children: [
                         const TextSpan(text: "Promise Date: \n"),
                         TextSpan(
-                            text: '${promiseDate.toString().split("T")[0]}',
+                            text: '${promiseDate.toString().split("T")[0].split(" ")[0]}',
                             style: TextStyle(
                                 fontWeight: FontWeight.w700, fontSize: 12))
                       ])),
@@ -113,7 +113,7 @@ class HomeCard {
                           children: [
                             TextSpan(text: "Order Placed Date: \n"),
                             TextSpan(
-                                text: '${soDate.toString().split("T")[0]}',
+                                text: '${soDate.toString().split("T")[0].split(" ")[0]}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 12,
@@ -150,8 +150,8 @@ class HomeCard {
     );
   }
 
-  Widget dispatchCard(String title, String inventoryDate, String soDate,
-      String id, String salesOrderLineNumber, BuildContext context) {
+  Widget dispatchCard(String invoiceNumber, String promiseDate, String orderId,
+       String customerPoNumber, BuildContext context) {
     // final ratio = MediaQuery.of(context).size.width <
     //         MediaQuery.of(context).size.height
     //     ? MediaQuery.of(context).size.width / MediaQuery.of(context).size.height
@@ -161,7 +161,7 @@ class HomeCard {
     return InkWell(
       onTap: () {
         Navigator.of(context).pushNamed("/order-details",
-            arguments: {"orderId": id, "isOrderPage": false});
+            arguments: {"orderId": orderId, "isOrderPage": false});
       },
       child: Card(
         elevation: 3,
@@ -180,22 +180,22 @@ class HomeCard {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Order Id: ${title}",
+                "Invoice Number: ${invoiceNumber}",
                 style: TextStyle(
                   color: Colors.grey[700],
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
               ),
-              // const SizedBox(height: 6),
-              // Text(
-              //   "Sales Line Number: ${salesOrderLineNumber}",
-              //   style: TextStyle(
-              //     fontSize: 10,
-              //     fontWeight: FontWeight.w300,
-              //     color: Colors.grey[1000],
-              //   ),
-              // ),
+              const SizedBox(height: 6),
+              Text(
+                "Customer Po Number : ${customerPoNumber}",
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w300,
+                  color: Colors.grey[1000],
+                ),
+              ),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -207,9 +207,9 @@ class HomeCard {
                               color: Colors.green,
                               fontSize: 10),
                           children: [
-                        const TextSpan(text: "Inventory Date: \n"),
+                        const TextSpan(text: "Promise Date: \n"),
                         TextSpan(
-                            text: inventoryDate.toString().split(" ")[0],
+                            text: promiseDate.toString().split(" ")[0],
                             style: TextStyle(
                                 fontWeight: FontWeight.w700, fontSize: 12))
                       ])),
@@ -221,9 +221,9 @@ class HomeCard {
                               color: Colors.black,
                               fontSize: 10),
                           children: [
-                            TextSpan(text: "So Date: \n"),
+                            TextSpan(text: "Order ID: \n"),
                             TextSpan(
-                                text: soDate.toString().split(" ")[0],
+                                text: "${orderId.toString().split(" ")[0]}",
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 12,

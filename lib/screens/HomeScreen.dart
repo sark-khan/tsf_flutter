@@ -106,6 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       } else {
                         ReturnObj? ret = snapshot.data;
+                        print("qwerty");
                         if (!ret!.status) {
                           return Center(
                             child: Text(ret.message),
@@ -138,28 +139,29 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           );
                         }
+                        print("reached here123 ${orders.length}");
                         return ListView.builder(
                           padding: EdgeInsets.zero,
                           itemCount: orders.length,
                           itemBuilder: (context, index) {
+                            print("hellllll ${orders[index].id!}");
                             return Padding(
                               padding: EdgeInsets.symmetric(
                                   horizontal: screenSize.width * 0.0333333333),
                               child: toggleIndex == 0
                                   ? HomeCard().homeCard(
-                                      orders[index].soNumber!,
-                                      orders[index].promiseDate!,
-                                      orders[index].requestDate!,
-                                      orders[index].soDate!,
                                       orders[index].id!,
-                                      orders[index].salesOrderLineNumber,
+                                      orders[index].promiseDate[0]!,
+                                      orders[index].requestDate[0]!,
+                                      orders[index].orderPlacedDate[0]!,
+
+                                      orders[index].customerPoNumbers[0],
                                       context)
                                   : HomeCard().dispatchCard(
-                                      orders[index].soNumber!,
-                                      orders[index].inventoryDate!,
-                                      orders[index].soDate!,
+                                      orders[index].invoiceNumber[0]!,
+                                      orders[index].promiseDate[0]!,
                                       orders[index].id!,
-                                      "orders[index].salesOrderLinerNumber",
+                                      orders[index].customerPoNumbers[0],
                                       context),
                             );
                           },

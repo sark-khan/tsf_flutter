@@ -45,6 +45,7 @@ dependencies:
   page_transition:
   url_strategy: ^0.2.0
   flutter_svg:
+  linked_scroll_controller:
 dev_dependencies:
   flutter_test:
     sdk: flutter
