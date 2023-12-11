@@ -99,7 +99,8 @@ class HomeCard {
                           children: [
                         const TextSpan(text: "Promise Date: \n"),
                         TextSpan(
-                            text: '${promiseDate.toString().split("T")[0].split(" ")[0]}',
+                            text:
+                                '${promiseDate.toString().split("T")[0].split(" ")[0]}',
                             style: TextStyle(
                                 fontWeight: FontWeight.w700, fontSize: 12))
                       ])),
@@ -113,7 +114,8 @@ class HomeCard {
                           children: [
                             TextSpan(text: "Order Placed Date: \n"),
                             TextSpan(
-                                text: '${soDate.toString().split("T")[0].split(" ")[0]}',
+                                text:
+                                    '${soDate.toString().split("T")[0].split(" ")[0]}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 12,
@@ -151,13 +153,7 @@ class HomeCard {
   }
 
   Widget dispatchCard(String invoiceNumber, String promiseDate, String orderId,
-       String customerPoNumber, BuildContext context) {
-    // final ratio = MediaQuery.of(context).size.width <
-    //         MediaQuery.of(context).size.height
-    //     ? MediaQuery.of(context).size.width / MediaQuery.of(context).size.height
-    //     : MediaQuery.of(context).size.height /
-    //         MediaQuery.of(context).size.width;
-
+      String customerPoNumber, BuildContext context) {
     return InkWell(
       onTap: () {
         Navigator.of(context).pushNamed("/order-details",
@@ -168,12 +164,6 @@ class HomeCard {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
-        // margin: const EdgeInsets.only(
-        //   left: 20,
-        //   right: 10,
-        //   bottom: 10,
-        //   top: 0,
-        // ),
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Column(
@@ -207,7 +197,7 @@ class HomeCard {
                               color: Colors.green,
                               fontSize: 10),
                           children: [
-                        const TextSpan(text: "Promise Date: \n"),
+                        const TextSpan(text: "Invoice Date: \n"),
                         TextSpan(
                             text: promiseDate.toString().split(" ")[0],
                             style: TextStyle(

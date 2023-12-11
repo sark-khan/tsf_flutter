@@ -4,8 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:get/utils.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 
-// ignore: avoid_web_libraries_in_flutter
-// import 'dart:html' as html;
 import 'package:tsf/utils/AppConstants.dart';
 import 'package:tsf/utils/Storage.dart';
 import 'package:tsf/utils/responses/CheckUser.dart';
@@ -21,7 +19,7 @@ import 'responses/UserActivationResponse.dart';
 
 class CommonFunctions {
   static Dio dio = Dio();
-  static String APIURL = "https://eager-rain-80700.pktriot.net";
+  static String APIURL = "http://43.204.181.73";
   static var headers = {'Content-Type': 'application/json'};
 
   Future<ReturnObj> Login(String email, String password) async {
@@ -142,14 +140,12 @@ class CommonFunctions {
 
   Future<ReturnObj> getOrderDetails(String orderId) async {
     try {
-      print({orderId});
       if (orderId.isEmpty) {
         return ReturnObj(
             message: "Error in get Particular Details", status: false);
       }
       headers['token'] = Storage.getJwtToken();
       var data = json.encode({"orderId": orderId});
-      print({data});
       var response = await dio.request(
         '$APIURL/api/order/get-order-details?soNumber=$orderId',
         options: Options(
@@ -195,7 +191,7 @@ class CommonFunctions {
       if (response.statusCode == 200) {
         SingleDispatchDetails dispatchDetailsResponse =
             SingleDispatchDetails.fromJson(response.data);
-        return ReturnObj<DispatchDetails>(
+        return ReturnObj<List<DispatchDetails>>(
             message: "Received Successfully",
             status: true,
             data: dispatchDetailsResponse.dispatchDetails);
