@@ -71,27 +71,27 @@ class Order {
   String id;
   String customerName;
   String soNumber;
-  String salesOrderLineNumber;
+  String customerPoNo;
 
   Order({
     required this.id,
     required this.customerName,
     required this.soNumber,
-    required this.salesOrderLineNumber,
+    required this.customerPoNo,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
         id: json["_id"],
         customerName: json["customerName"],
         soNumber: json["soNumber"],
-        salesOrderLineNumber: json["salesOrderLineNumber"],
+        customerPoNo: json["customerPoNo"],
       );
 
   Map<String, dynamic> toJson() => {
         "_id": id,
         "customerName": customerName,
         "soNumber": soNumber,
-        "salesOrderLineNumber": salesOrderLineNumber,
+        "customerPoNo": customerPoNo,
       };
 }
 
