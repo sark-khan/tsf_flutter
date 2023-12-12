@@ -183,6 +183,11 @@ class _LoginState extends State<Login> {
                           setState(() {});
                           if (!userChecked) {
                             email = emailController!.text;
+                            if (email!.isEmpty) {
+                              Fluttertoast.showToast(
+                                  msg: "Please Enter the accountNumber");
+                              return;
+                            }
                             ReturnObj returnObj =
                                 await CommonFunctions().CheckUser(email!);
                             // await CommonFunctions()
@@ -202,16 +207,15 @@ class _LoginState extends State<Login> {
                             if (emailController!.text == "") {
                               _isLoading = false;
                               Fluttertoast.showToast(
-                                  msg: "Please enter the email");
+                                  msg: "Please enter the accountNumber");
                               return;
                             }
                             if (passwordController!.text == "") {
                               _isLoading = false;
                               if (!toastShowing) {
                                 toastShowing = true;
-                                bool? done = await Fluttertoast.showToast(
+                                Fluttertoast.showToast(
                                     msg: "Please enter Password");
-                                print("hello $done");
                               }
                               return;
                             }
