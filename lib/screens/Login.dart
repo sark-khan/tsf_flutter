@@ -192,7 +192,7 @@ class _LoginState extends State<Login> {
                                 await CommonFunctions().CheckUser(email!);
                             // await CommonFunctions()
                             //     .CheckUser("admin@gmail.com");
-
+                            print("${returnObj.message} hello");
                             if (returnObj.status) {
                               setState(() {
                                 isPasswordFieldVisible = true;
@@ -202,6 +202,9 @@ class _LoginState extends State<Login> {
                               });
                             } else {
                               Fluttertoast.showToast(msg: returnObj.message);
+                              _isLoading = false;
+                              setState(() {});
+                              return;
                             }
                           } else {
                             if (emailController!.text == "") {

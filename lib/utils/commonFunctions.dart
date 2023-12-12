@@ -19,7 +19,7 @@ import 'responses/UserActivationResponse.dart';
 
 class CommonFunctions {
   static Dio dio = Dio();
-  static String APIURL = "http://43.204.181.73";
+  static String APIURL = "https://autumn-shadow-88639.pktriot.net";
   static var headers = {'Content-Type': 'application/json'};
 
   Future<ReturnObj> Login(String email, String password) async {
@@ -93,7 +93,6 @@ class CommonFunctions {
       }
       var bodyData = json
           .encode({"accountNumberOrEmail": accountNumberOrEmail.toLowerCase()});
-      print("here in check User");
       var response = await dio.request(
         "$APIURL/api/auth/check-user",
         options: Options(
@@ -102,7 +101,6 @@ class CommonFunctions {
         ),
         data: bodyData,
       );
-      print("${response.data} helloooooo status");
       if (response.statusCode == 200) {
         CheckUserResponse checkUserResponse =
             CheckUserResponse.fromJson(response.data);
@@ -110,7 +108,7 @@ class CommonFunctions {
           return ReturnObj(status: true, message: "Enter Password");
         }
         if (checkUserResponse.accountRejected) {
-          return ReturnObj(message: "Account is ", status: false);
+          return ReturnObj(message: "Account is Deactivated", status: false);
         }
         if (checkUserResponse.activationRequested) {
           return ReturnObj(status: false, message: "Activation Request Sent");
@@ -124,14 +122,13 @@ class CommonFunctions {
       }
       return ReturnObj(status: false, message: "Server is Busy");
     } on DioException catch (e) {
-      print("${e.response} helloooooo status check");
       if (e.response!.statusCode == 401) {
         return ReturnObj(status: false, message: "Your account is Rejected");
       }
       if (e.response!.statusCode == 404) {
         return ReturnObj(status: false, message: "User not Found");
       }
-      return ReturnObj(status: false, message: TextConstants().SERVER_BUSY);
+      return ReturnObj(status: false, message: e.response!.data["message"]);
     } catch (error) {
       print("Error inn CheckUser $error");
       return ReturnObj(message: TextConstants().SERVER_BUSY, status: false);
