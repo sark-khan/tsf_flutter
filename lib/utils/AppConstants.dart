@@ -20,11 +20,12 @@ class TextConstants {
   String LOGIN = "Log In";
   String PASSWORD = "Password";
   String EMAIL = "Email";
-  String ACCOUNT_NUMBER= "Account Number";
+  String ACCOUNT_NUMBER = "Account Number";
   String FORGOTPASSWORD = "Forgot Password?";
   String FORGOTPASSWORDSCREENTEXT = "Forgot Password";
   String SUBMIT = "Submit";
   String ORDER_DETAILS = "Order Details";
+  String DISPATCH_DETAILS = "Dispatch Details";
   String HOME = "Home";
   String NOTIFICATION = "Notifications";
   String SERVER_BUSY = "Server is Busy";

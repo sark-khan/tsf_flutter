@@ -183,8 +183,16 @@ class _LoginState extends State<Login> {
                           setState(() {});
                           if (!userChecked) {
                             email = emailController!.text;
+                            if (email!.isEmpty) {
+                              Fluttertoast.showToast(
+                                  msg: "Please Enter the accountNumber");
+                              //  Fluttertoast.showToast(msg: returnObj.message);
+                              _isLoading = false;
+                              setState(() {});
+                              return;
+                            }
                             ReturnObj returnObj =
-                            await CommonFunctions().CheckUser(email!);
+                                await CommonFunctions().CheckUser(email!);
                             // await CommonFunctions()
                             //     .CheckUser("admin@gmail.com");
 
@@ -197,33 +205,36 @@ class _LoginState extends State<Login> {
                               });
                             } else {
                               Fluttertoast.showToast(msg: returnObj.message);
+                              _isLoading = false;
+                              setState(() {});
+                              return;
                             }
                           } else {
                             if (emailController!.text == "") {
                               _isLoading = false;
                               Fluttertoast.showToast(
-                                  msg: "Please enter the email");
+                                  msg: "Please enter the accountNumber");
                               return;
                             }
                             if (passwordController!.text == "") {
                               _isLoading = false;
                               if (!toastShowing) {
                                 toastShowing = true;
-                                bool? done = await Fluttertoast.showToast(
+                                Fluttertoast.showToast(
                                     msg: "Please enter Password");
-
                               }
                               return;
                             }
                             ReturnObj returnObj = await CommonFunctions()
-                            // .Login("admin@gmail.com", "Wpadmin123#");
+                                // .Login("admin@gmail.com", "Wpadmin123#");
                                 .Login(emailController!.text,
-                                passwordController!.text);
+                                    passwordController!.text);
                             Fluttertoast.showToast(msg: returnObj.message);
                             if (returnObj.status) {
-                              getUserRole() == "Admin" ||  getUserRole()== "Subadmin"
+                              getUserRole() == "Admin" ||
+                                      getUserRole() == "Subadmin"
                                   ? Navigator.pushNamed(
-                                  context, "/admin-dashboard")
+                                      context, "/admin-dashboard")
                                   : Navigator.pushNamed(context, "/home");
                             }
                           }

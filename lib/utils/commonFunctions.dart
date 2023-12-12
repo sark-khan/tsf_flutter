@@ -4,8 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:get/utils.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 
-// ignore: avoid_web_libraries_in_flutter
-// import 'dart:html' as html;
 import 'package:tsf/utils/AppConstants.dart';
 import 'package:tsf/utils/Storage.dart';
 import 'package:tsf/utils/responses/CheckUser.dart';
@@ -22,7 +20,9 @@ import 'responses/UserActivationResponse.dart';
 
 class CommonFunctions {
   static Dio dio = Dio();
+
   static String APIURL = "http://43.204.181.73";
+  // static String APIURL = "https://autumn-shadow-88639.pktriot.net";
   static var headers = {'Content-Type': 'application/json'};
 
   Future<ReturnObj> Login(String email, String password) async {
@@ -96,7 +96,6 @@ class CommonFunctions {
       }
       var bodyData = json
           .encode({"accountNumberOrEmail": accountNumberOrEmail.toLowerCase()});
-      print("here in check User");
       var response = await dio.request(
         "$APIURL/api/auth/check-user",
         options: Options(
@@ -105,7 +104,6 @@ class CommonFunctions {
         ),
         data: bodyData,
       );
-      print("${response.data} helloooooo status");
       if (response.statusCode == 200) {
         CheckUserResponse checkUserResponse =
             CheckUserResponse.fromJson(response.data);
@@ -113,7 +111,7 @@ class CommonFunctions {
           return ReturnObj(status: true, message: "Enter Password");
         }
         if (checkUserResponse.accountRejected) {
-          return ReturnObj(message: "Account is ", status: false);
+          return ReturnObj(message: "Account is Deactivated", status: false);
         }
         if (checkUserResponse.activationRequested) {
           return ReturnObj(status: false, message: "Activation Request Sent");
@@ -127,14 +125,13 @@ class CommonFunctions {
       }
       return ReturnObj(status: false, message: "Server is Busy");
     } on DioException catch (e) {
-      print("${e.response} helloooooo status check");
       if (e.response!.statusCode == 401) {
-        return ReturnObj(status: false, message: "Your account is Rejected");
+        return ReturnObj(status: false, message: "Your account is Deactivated");
       }
       if (e.response!.statusCode == 404) {
         return ReturnObj(status: false, message: "User not Found");
       }
-      return ReturnObj(status: false, message: TextConstants().SERVER_BUSY);
+      return ReturnObj(status: false, message: e.response!.data["message"]);
     } catch (error) {
       print("Error inn CheckUser $error");
       return ReturnObj(message: TextConstants().SERVER_BUSY, status: false);
@@ -143,19 +140,14 @@ class CommonFunctions {
 
   Future<ReturnObj> getOrderDetails(String orderId) async {
     try {
-      print({orderId});
       if (orderId.isEmpty) {
         return ReturnObj(
             message: "Error in get Particular Details", status: false);
       }
-      // headers['token'] =
-      // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNhcmlrLnNhay5raGFuQGdtYWlsLmNvbSIsIm5hbWUiOiJzYXJpa19sb2NhbCIsInJvbGUiOiJVc2VyIiwidXNlcklkIjoiNjUyM2E2ZGMxNTYwODEyMTg0MGRkMmZlIiwiYWNjb3VudE51bWJlciI6IkFMVS0xMjMiLCJpYXQiOjE2OTk3MDAzMjl9.Q-kM19JFfPX8OgGHk6O0P8acA2o1Yse7dbHSS7py_T0";
-
       headers['token'] = Storage.getJwtToken();
       var data = json.encode({"orderId": orderId});
-      print({data});
       var response = await dio.request(
-        '$APIURL/api/order/get-order-details?orderId=$orderId',
+        '$APIURL/api/order/get-order-details?soNumber=$orderId',
         options: Options(
           method: 'GET',
           headers: headers,
@@ -165,11 +157,10 @@ class CommonFunctions {
       if (response.statusCode == 200) {
         SingleOrderDetailsResponse orderDetailsResponse =
             SingleOrderDetailsResponse.fromJson(response.data);
-        return ReturnObj<SingleOrderDetails>(
+        return ReturnObj<List<SingleOrderDetail>>(
             message: "Received Successfully",
             status: true,
             data: orderDetailsResponse.singleOrderDetails);
-        // {"orderDetails": orderDetailsResponse.singleOrderDetails};
       } else {
         return ReturnObj(
             message: "Unable to get the Dispatch Details", status: false);
@@ -200,7 +191,7 @@ class CommonFunctions {
       if (response.statusCode == 200) {
         SingleDispatchDetails dispatchDetailsResponse =
             SingleDispatchDetails.fromJson(response.data);
-        return ReturnObj<DispatchDetails>(
+        return ReturnObj<List<DispatchDetails>>(
             message: "Received Successfully",
             status: true,
             data: dispatchDetailsResponse.dispatchDetails);
@@ -257,6 +248,7 @@ class CommonFunctions {
 
       if (response.statusCode == 200) {
         OrderListResponse ordersMap = OrderListResponse.fromJson(response.data);
+        print("helloooooo ${ordersMap.orders}");
         return ReturnObj<List<Order>>(
             message: "Order Received Successfully",
             status: true,

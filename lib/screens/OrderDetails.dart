@@ -1,253 +1,401 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
+import 'package:get/utils.dart';
+import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:tsf/components/Buttons.dart';
 import 'package:tsf/utils/AppConstants.dart';
+// import 'package:horizontal_data_table/scroll/linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:tsf/utils/commonFunctions.dart';
 
+final List orderDetails = [
+  // [
+  //   'Customer Name',
+  //   'customerName',
+  // ],
+  // [
+  //   'Destination',
+  //   'destination',
+  // ],
+  // [
+  //   'Customer PO No',
+  //   'customerPoNo',
+  // ],
+  [
+    'So Number',
+    'soNumber',
+  ],
+  [
+    'So Date',
+    'soDate',
+  ],
+  [
+    'Film Type',
+    'filmType',
+  ],
+  [
+    'Width (MM)',
+    'widthMm',
+  ],
+  [
+    'Core ID (Mm)',
+    'coreIdMm',
+  ],
+  [
+    'Roll OD (Mm)',
+    'length',
+  ],
+  [
+    'Order Quantity (kg)',
+    'soQuantity',
+  ],
+  [
+    'Dispatched Quantity (Kg)',
+    'despQty',
+  ],
+  [
+    'Total Ready Stock (kg)',
+    'pendToDespatchQty',
+  ],
+  [
+    'Pending for Production (kg)',
+    'toProduceSoQty',
+  ],
+  [
+    'Request Date',
+    'requestDate',
+  ],
+  [
+    'Promise Date',
+    'promiseDate',
+  ],
+  ['Remark', 'remark'],
+  ['Consignee', 'consignee']
+];
+
+final dispatchDetailsOrder = [
+  // ["Customer Name -", "customerName"],
+  // // ["Region -", "region"],
+  // ["Destination -", "destination"],
+  // ["Invoice Number -", "inventoryNumber"],
+  // ["Invoice Date -", "inventoryDate"],
+  ["PO Number", "poNumber"],
+  ["SO Number", "soNumber"],
+  ["SO Date", "soDate"],
+  ["Film Type", "filmtype"],
+  ["Width (mm)", "width"],
+  ["Core ID", "coreInnerDiameter"],
+  ["Roll OD", "rollOuterDiameter"],
+
+  ["Dispatch Quantity (kg)", "dispatchQuantityInKg"],
+  ["Vehicle Number", "vehicleNumber"],
+  // ["Customer Account Code -", "customerAccountCode"],
+  // ["MKT SO Number -", "mktSoNumber"],
+  // ["Dispatch Quantity In Sqm -", "dispatchQuantityInSqm"],
+  ["First Transporter", "firstTransporter"],
+  // ["Trip Number -", "tripNumber"],
+  // ["LR Number -", "lrNumber"],
+  // ["Second Transporter -", "secondTransporter"],
+  ["Mobile Number", "mobileNumber"],
+  // ["Sale Category -", "saleCategory"],
+  ["Collector Name", "collectorName"],
+  // ["Grade -", "grade"],
+  // ["Value -", "value"],
+  // ["Packing Type -", "packingType"],
+  ["Consignee", "consignee"],
+];
+
+Map<String, double> columnWidths = {
+  'soNumber': 150.0,
+  'soDate': 150.0,
+  'filmType': 100.0,
+  'widthMm': 100.0,
+  'coreIdMm': 100.0,
+  'length': 100.0,
+  'soQuantity': 100.0,
+  'despQty': 100.0,
+  'pendToDespatchQty': 100.0,
+  'toProduceSoQty': 100.0,
+  'requestDate': 100.0,
+  'promiseDate': 100.0,
+  'remark': 100.0,
+  'consignee': 100.0,
+  'poNumber': 100.0,
+  "width": 100.0,
+  "coreInnerDiameter": 100.0,
+  "rollOuterDiameter": 100.0,
+  "dispatchQuantityInKg": 100.0,
+  "vehicleNumber": 100.0,
+  "firstTransporter": 150.0,
+  "mobileNumber": 150.0,
+  "collectorName": 100.0,
+};
+
 class OrderDetails extends StatefulWidget {
-  String? orderId;
-  bool? isOrderPage;
-  OrderDetails({this.orderId, super.key, this.isOrderPage});
+  final String? orderId;
+  final bool? isOrderPage;
+  OrderDetails({this.orderId, this.isOrderPage, Key? key}) : super(key: key);
 
   @override
-  State createState() => _OrderDetailsState();
+  _OrderDetailsState createState() => _OrderDetailsState();
 }
 
 class _OrderDetailsState extends State<OrderDetails> {
-  String selectedItem = "High";
-  final List orderDetails = [
-    [
-      'Customer Name-',
-      'customerName',
-    ],
-    [
-      'Destination-',
-      'destination',
-    ],
-    [
-      'Customer PO No-',
-      'customerPoNo',
-    ],
-    [
-      'So Number-',
-      'soNumber',
-    ],
-    [
-      'So Date-',
-      'soDate',
-    ],
-    [
-      'Film Type-',
-      'filmType',
-    ],
-    [
-      'core Id Mm-',
-      'coreIdMm',
-    ],
-    [
-      'Roll outer Dia (mm)-',
-      'length',
-    ],
-    [
-      'Width (MM)-',
-      'widthMm',
-    ],
-    [
-      'Order Quantity (kg)-',
-      'soQuantity',
-    ],
-    [
-      'Dispatched Quantity (Kg)-',
-      'despQty',
-    ],
-    [
-      'Total Ready Stock/Finished Goods Quantity (kg)-',
-      'pendToDespatchQty',
-    ],
-    [
-      'Pending for Production (kg)-',
-      'toProduceSoQty',
-    ],
-    [
-      'Request Date-',
-      'requestDate',
-    ],
-    [
-      'Promise Date-',
-      'promiseDate',
-    ],
-  ];
+  LinkedScrollControllerGroup? _controllers;
+  ScrollController? _headerScrollController;
+  ScrollController? _bodyScrollController;
+  String poNumber = "";
+  String destination = "";
+  String invoiceNumber = "";
+  String invoiceDate = "";
 
-  final dispatchDetailsOrder = [
-    ["Customer Name -", "customerName"],
-    ["Region -", "region"],
-    ["Destination -", "destination"],
-    ["Inventory Number -", "inventoryNumber"],
-    ["Inventory Date -", "inventoryDate"],
-    ["PO Number -", "poNumber"],
-    ["SO Number -", "soNumber"],
-    ["SO Date -", "soDate"],
-    ["Film Type -", "filmtype"],
-    ["Core Inner Diameter -", "coreInnerDiameter"],
-    ["Roll Outer Diameter -", "rollOuterDiameter"],
-    ["Width -", "width"],
-    ["Dispatch Quantity In Kg -", "dispatchQuantityInKg"],
-    ["Vehicle Number -", "vehicleNumber"],
-    ["Customer Account Code -", "customerAccountCode"],
-    ["MKT SO Number -", "mktSoNumber"],
-    ["Dispatch Quantity In Sqm -", "dispatchQuantityInSqm"],
-    ["First Transporter -", "firstTransporter"],
-    ["Trip Number -", "tripNumber"],
-    ["LR Number -", "lrNumber"],
-    ["Second Transporter -", "secondTransporter"],
-    ["Mobile Number -", "mobileNumber"],
-    ["Sale Category -", "saleCategory"],
-    ["Collector Name -", "collectorName"],
-    ["Grade -", "grade"],
-    ["Value -", "value"],
-    ["Packing Type -", "packingType"],
-    ["Consignee -", "consignee"],
-  ];
-
+  bool dataProcessed = false;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    _controllers = LinkedScrollControllerGroup();
+    _headerScrollController = _controllers!.addAndGet();
+    _bodyScrollController = _controllers!.addAndGet();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+    ]);
   }
 
-  // getOrderDetails() async {
-  //   // _orderDetails = await CommonFunctions().getOrderDetails(widget.orderId);
-  //   setState(() {});
-  // }
+  @override
+  void dispose() {
+    _headerScrollController!.dispose();
+    _bodyScrollController!.dispose();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    super.dispose();
+  }
+
+  Map<String, String> createHeaderMap() {
+    Map<String, String> headerMap = {};
+    if (widget.isOrderPage!) {
+      for (var detail in orderDetails) {
+        headerMap[detail[1]] = detail[0];
+      }
+      return headerMap;
+    } else {
+      for (var detail in dispatchDetailsOrder) {
+        headerMap[detail[1]] = detail[0];
+      }
+      return headerMap;
+    }
+  }
+
+  Widget _buildHeader() {
+    Map<String, String> headerMap = createHeaderMap();
+
+    return Container(
+      color: Colors.grey[350],
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        controller: _headerScrollController,
+        child: Row(
+          children: headerMap.entries.map((entry) {
+            double columnWidth = columnWidths[entry.key] ??
+                100.0; // Default width if not specified
+            return Container(
+              width: columnWidth,
+              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+              child: Text(entry.value,
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRow(Map<String, dynamic> item, int index) {
+    Map<String, String> headerMap = createHeaderMap();
+
+    // Alternating row color
+    Color rowColor = index % 2 == 0 ? Colors.grey[200]! : Colors.white;
+
+    return Container(
+      color: rowColor,
+      child: Row(
+        children: headerMap.keys.map((apiHeader) {
+          var value = item[apiHeader];
+          if (value == null || value.toString().isEmpty) {
+            value = 'N/A';
+          }
+          if (apiHeader == "promiseDate" ||
+              apiHeader == "requestDate" ||
+              apiHeader == "soDate") {
+            value = value.split("T")[0];
+          }
+          double columnWidth = columnWidths[apiHeader] ??
+              100.0; // Default width if not specified
+          return Container(
+            width: columnWidth,
+            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+            child: Text(value.toString()),
+          );
+        }).toList(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          title: widget.isOrderPage!
-              ? Text(
-                  TextConstants().ORDER_DETAILS,
-                  style: TextStyle(fontSize: 19),
-                )
-              : Text("Dispatch Details", style: TextStyle(fontSize: 19)),
-          backgroundColor: Colors.blue,
-          elevation: 4.0,
-          toolbarHeight: 70.0,
-          actions: widget.isOrderPage!
-              ? [
-                  Buttons().addCommentsButton(
-                      "Add Comments", context, widget.orderId!)
-                ]
-              : null,
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-            // TopLayer().topLayerWidget("Home", context, visiblity: true),
-            FutureBuilder(
-              future: widget.isOrderPage!
-                  ? CommonFunctions().getOrderDetails(widget.orderId!)
-                  : CommonFunctions().getDispatchDetails(widget.orderId),
-              builder: (context, snapshot) {
-                if (snapshot.hasData &&
-                    snapshot.connectionState == ConnectionState.done) {
-                  ReturnObj ret = snapshot.data!;
-                  if (!ret!.status) {
-                    return Center(
-                      child: Text(ret.message),
-                    );
+      appBar: AppBar(
+        title: widget.isOrderPage!
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    TextConstants().ORDER_DETAILS,
+                    style: TextStyle(fontSize: 15),
+                  ),
+                  SizedBox(width: 25),
+                  Column(
+                    children: [
+                      Text("Po Number :", style: TextStyle(fontSize: 12)),
+                      Text(
+                        poNumber,
+                        style: TextStyle(fontSize: 10),
+                      )
+                    ],
+                  ),
+                  SizedBox(width: 15),
+                  Column(children: [
+                    Text("Destination :", style: TextStyle(fontSize: 12)),
+                    Text(
+                      destination,
+                      style: TextStyle(fontSize: 10),
+                    )
+                  ])
+                ],
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    TextConstants().DISPATCH_DETAILS,
+                    style: TextStyle(fontSize: 15),
+                  ),
+                  SizedBox(width: 25),
+                  Column(
+                    children: [
+                      Text("INV. #:", style: TextStyle(fontSize: 12)),
+                      Text(
+                        invoiceNumber,
+                        style: TextStyle(fontSize: 10),
+                      )
+                    ],
+                  ),
+                  SizedBox(width: 15),
+                  Column(
+                    children: [
+                      Text("Inv. Date", style: TextStyle(fontSize: 12)),
+                      Text(
+                        invoiceDate,
+                        style: TextStyle(fontSize: 10),
+                      )
+                    ],
+                  ),
+                  SizedBox(width: 15),
+                  Column(children: [
+                    Text("Destination :", style: TextStyle(fontSize: 12)),
+                    Text(
+                      destination,
+                      style: TextStyle(fontSize: 10),
+                    )
+                  ])
+                ],
+              ),
+        backgroundColor: Colors.blue,
+        elevation: 4.0,
+        toolbarHeight: 70.0,
+        actions: widget.isOrderPage!
+            ? [
+                Buttons()
+                    .addCommentsButton("Add Comments", context, widget.orderId!)
+              ]
+            : null,
+      ),
+      body: FutureBuilder(
+        future: widget.isOrderPage!
+            ? CommonFunctions().getOrderDetails(widget.orderId!)
+            : CommonFunctions().getDispatchDetails(widget.orderId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasData) {
+              ReturnObj response = snapshot.data!;
+
+              var data = json.decode(json.encode(response.data));
+              // print('hellooooooo${data[0]["customerPoNo"]}');
+              // // print('heeeeeee${data[0]}'); // Assuming 'data' is a JSON array
+              if (widget.isOrderPage!) {
+                var tempPoNumber = data[0]["customerPoNo"];
+                var tempDestination = data[0]["destination"];
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (!dataProcessed) {
+                    setState(() {
+                      poNumber = tempPoNumber;
+                      destination = tempDestination;
+                    });
+                    dataProcessed = true;
                   }
-                  return Expanded(
-                    child: ListView.builder(
-                        itemCount: widget.isOrderPage!
-                            ? orderDetails.length
-                            : dispatchDetailsOrder.length,
-                        itemBuilder: (context, index) {
-                          List _orderUIKeys = widget.isOrderPage!
-                              ? orderDetails[index]
-                              : dispatchDetailsOrder[index];
+                });
+              } else {
+                var tempInvoiceNumber = data[0]["inventoryNumber"];
+                var tempinvoiceDate = data[0]["inventoryDate"];
+                var tempDestination = data[0]["destination"];
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (!dataProcessed) {
+                    setState(() {
+                      invoiceNumber = tempInvoiceNumber;
+                      invoiceDate = tempinvoiceDate;
+                      destination = tempDestination;
+                    });
+                    dataProcessed = true;
+                  }
+                });
+              }
+              List<String> headers = data.isNotEmpty
+                  ? data.first.keys.cast<String>().toList()
+                  : [];
 
-                          Map jsonVal = json.decode(json.encode(ret.data));
-
-                          dynamic value = jsonVal[_orderUIKeys[1]];
-                          if (value == null || value == "") {
-                            return SizedBox.shrink();
-                          }
-                          return Container(
-                            // padding: const EdgeInsets.symmetric(
-                            //     horizontal: 15.0, vertical: 10.0),
-                            child: Container(
-                              color: index % 2 == 0
-                                  ? Colors.lightBlue[99]
-                                  : Colors.white,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    constraints: BoxConstraints(
-                                      maxWidth:
-                                          MediaQuery.of(context).size.width *
-                                              0.4,
-                                    ),
-                                    alignment: Alignment.centerLeft,
-                                    padding: EdgeInsets.all(10),
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 10, top: 10, bottom: 10),
-                                      child: Text(
-                                        '${_orderUIKeys[0]}',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                        textAlign: TextAlign.left,
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    constraints: BoxConstraints(
-                                      maxWidth:
-                                          MediaQuery.of(context).size.width *
-                                              0.4,
-                                    ),
-                                    alignment: Alignment.centerLeft,
-                                    padding: const EdgeInsets.all(10),
-                                    child: Container(
-                                      padding: const EdgeInsets.only(
-                                          right: 0,
-                                          left: 10,
-                                          top: 10,
-                                          bottom: 10),
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        '${value ?? ''}',
-                                        style: const TextStyle(
-                                            overflow: TextOverflow.clip),
-                                        textAlign: TextAlign.left,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        }),
-                  );
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text(TextConstants().SERVER_BUSY),
-                  );
-                } else {
-                  return const Center(
-                      child: CircularProgressIndicator(color: Colors.blue));
-                }
-              },
-            )
-          ],
-        ));
+              return Column(
+                children: [
+                  _buildHeader(),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          controller: _bodyScrollController,
+                          child: Column(
+                            children: data.asMap().entries.map<Widget>((entry) {
+                              int index = entry.key;
+                              Map<String, dynamic> item = entry.value;
+                              return _buildRow(item, index);
+                            }).toList(),
+                          )),
+                    ),
+                  ),
+                ],
+              );
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            }
+          }
+          return Center(child: CircularProgressIndicator());
+        },
+      ),
+    );
   }
 }
+
+void main() =>
+    runApp(MaterialApp(home: OrderDetails(isOrderPage: true, orderId: '123')));
