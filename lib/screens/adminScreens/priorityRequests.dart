@@ -27,10 +27,8 @@ class _PriorityRequestsState extends State<PriorityRequests> {
 
   getUserComments() async {
     try {
-      print("reached here");
       ReturnObj returnObj = await CommonFunctions().getComments();
       commentsList = returnObj.data;
-      print("heelo ${commentsList}");
       _isScreenLoading = false;
       getterStatus = returnObj.status;
       setState(() {});
@@ -76,7 +74,7 @@ class _PriorityRequestsState extends State<PriorityRequests> {
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
-                                      'Order ID',
+                                      'So Number',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18,
@@ -86,7 +84,7 @@ class _PriorityRequestsState extends State<PriorityRequests> {
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
-                                      'Order Line Number',
+                                      'Customer Po Number',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18,
@@ -155,7 +153,7 @@ class _PriorityRequestsState extends State<PriorityRequests> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(commentsDetail.order.salesOrderLineNumber),
+            child: Text(commentsDetail.order.customerPoNo),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
