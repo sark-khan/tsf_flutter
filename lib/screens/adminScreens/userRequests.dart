@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tsf/screens/adminScreens/baseScreen.dart';
@@ -8,7 +6,7 @@ import 'package:tsf/utils/responses/SubadminResponse.dart';
 import 'package:tsf/utils/responses/UserActivationResponse.dart';
 
 class UserRequests extends StatefulWidget {
-  const UserRequests({super.key});
+  const UserRequests({Key? key}) : super(key: key);
 
   @override
   State<UserRequests> createState() => _UserRequestsState();
@@ -16,17 +14,16 @@ class UserRequests extends StatefulWidget {
 
 class _UserRequestsState extends State<UserRequests> {
   List<Request> userActivationRequestList = [];
-    List<Subadmins> subAdminsList = [];
+  List<Subadmins> subAdminsList = [];
   List<String> subAdminNames = [];
   bool _isScreenLoading = true;
   bool? getterStatus;
- 
+
   @override
   void initState() {
     super.initState();
     getActivationRequests();
   }
-
 
   getActivationRequests() async {
     try {
@@ -34,12 +31,18 @@ class _UserRequestsState extends State<UserRequests> {
       ReturnObj returnObj = await CommonFunctions().getUserActivationRequests();
       userActivationRequestList = returnObj.data;
       subAdminsList = returnObj2.data;
-      subAdminNames =  subAdminsList.map((subadmin) => subadmin.name.toString()).toList();
+      subAdminNames = subAdminsList.map((subadmin) => subadmin.name.toString()).toSet().toList();
+
       _isScreenLoading = false;
       getterStatus = returnObj.status;
-      userActivationRequestList.forEach((element) {
-        element.selectedSubAdmin = subAdminsList[0].name;
-      });
+      for (int i = 0; i < userActivationRequestList.length; i++) {
+        if (i < subAdminsList.length) {
+          userActivationRequestList[i].selectedSubAdmin = userActivationRequestList[i].assignedSubadmin!.name;
+        } else {
+          // Handle the case where there are more requests than subadmins
+          userActivationRequestList[i].selectedSubAdmin = 'N/A'; // or any default value
+        }
+      }
       setState(() {});
     } catch (_) {
       _isScreenLoading = getterStatus = false;
@@ -49,252 +52,251 @@ class _UserRequestsState extends State<UserRequests> {
 
   @override
   Widget build(BuildContext context) {
-    // bool _isLoading
     return Scaffold(
-        body: BaseUI(
-            headline: "USER REQUESTS",
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 20,
-                ),
-                _isScreenLoading
-                    ? Center(
-                        child: CircularProgressIndicator(
-                        color: Colors.grey,
-                      ))
-                    : !getterStatus!
-                        ? Center(child: Text("Something Went Wrong! :/"))
-                        : Container(
-                            height: MediaQuery.of(context).size.height * 0.75,
-                            width: double.infinity,
-                            child: SingleChildScrollView(
-                              child: Table(
-                                  columnWidths: {
-                                    0: FlexColumnWidth(5),
-                                    1: FlexColumnWidth(5),
-                                    2: FlexColumnWidth(5),
-                                    3: FlexColumnWidth(5),
-                                    4: FlexColumnWidth(8  ),
-                                    5:FlexColumnWidth(5)
-                                  },
-                                  defaultVerticalAlignment:
-                                      TableCellVerticalAlignment.bottom,
-                                  border: TableBorder.all(),
-                                  children: [
-                                    TableRow(children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          'Customer Code',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          'User Name',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text('Email',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18)),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          'Activation Status',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          'Assign Subadmin',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18),
-                                        ),
-                                      ), 
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          'Action (Activate/Deactivate)',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18),
-                                        ),
-                                      ),
-                                          
-      
-                                    
-                                    ]),
-                                    ...List.generate(
-                                      userActivationRequestList.length,
-                                      (index) => _tableRow(
-                                          index,
-                                          userActivationRequestList[index]
-                                                  .requestCreatedBy.accountNumber,
-                                          "Ankit04",
-                                          "ankit@webmobsoft.com",
-                                          !userActivationRequestList[index]
-                                                  .isResponded
-                                              ? "PENDING"
-                                              : userActivationRequestList[index]
-                                                      .isApproved
-                                                  ? 'ACTIVATED'
-                                                  : 'DEACTIVATED'),
-                                    )
-                                  ]),
-                            ),
-                          ),
-              ],
-            )));
+      body: BaseUI(
+        headline: "USER REQUESTS",
+        child: _buildUserRequestContent(),
+      ),
+    );
   }
 
-  TableRow _tableRow(int index, String name, String userName,
-      String CustomerCode, String Status) {
+  Widget _buildUserRequestContent() {
+    if (_isScreenLoading) {
+      return Center(child: CircularProgressIndicator(color: Colors.grey));
+    } else if (!getterStatus!) {
+      return Center(child: Text("Something Went Wrong! :/"));
+    } else {
+      return Expanded(
+        child: SingleChildScrollView(
+          child: Table(
+            columnWidths: {
+              0: FlexColumnWidth(5),
+              1: FlexColumnWidth(5),
+              2: FlexColumnWidth(5),
+              3: FlexColumnWidth(5),
+              4: FlexColumnWidth(8),
+              5: FlexColumnWidth(5)
+            },
+            defaultVerticalAlignment: TableCellVerticalAlignment.bottom,
+            border: TableBorder.all(),
+            children: [
+              _buildTableHeader(),
+              ...List.generate(
+                userActivationRequestList.length,
+                    (index) => _tableRow(
+                    index,
+                    userActivationRequestList[index].requestCreatedBy.accountNumber,
+                    "Ankit04",  // Replace with actual data
+                    "ankit@webmobsoft.com",  // Replace with actual data
+                    !userActivationRequestList[index].isResponded
+                        ? "PENDING"
+                        : userActivationRequestList[index].isApproved
+                        ? 'ACTIVATED'
+                        : 'DEACTIVATED'
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+  }
 
+  TableRow _buildTableHeader() {
     return TableRow(
-        decoration: !(index % 2 == 0)
-            ? BoxDecoration(color: Colors.blueGrey[50])
-            : const BoxDecoration(color: Colors.white),
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(name , style: TextStyle(color: Colors.black , fontSize: 15 , fontWeight: FontWeight.w800),),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(userName , style: TextStyle(color: Colors.black , fontSize: 15 , fontWeight: FontWeight.w800),),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(CustomerCode , style: TextStyle(color: Colors.grey[600] , fontSize: 15 , fontWeight: FontWeight.w800),),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              Status,
-              style: TextStyle(
-                  color: Status == "PENDING"
-                      ? Colors.yellow[900]
-                      : Status == "ACTIVATED"
-                          ? Colors.green
-                          : Colors.redAccent,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold),
+      children: [
+        _buildHeaderCell('Customer Code'),
+        _buildHeaderCell('User Name'),
+        _buildHeaderCell('Email'),
+        _buildHeaderCell('Activation Status'),
+        _buildHeaderCell('Assign Subadmin'),
+        _buildHeaderCell('Action (Activate/Deactivate)'),
+      ],
+    );
+  }
+
+  Padding _buildHeaderCell(String title) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        title,
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+      ),
+    );
+  }
+
+  TableRow _tableRow(int index, String name, String userName, String customerCode, String status) {
+    return TableRow(
+      decoration: BoxDecoration(
+        color: index % 2 == 0 ? Colors.white : Colors.blueGrey[50],
+      ),
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(name, style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.w800)),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(userName, style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.w800)),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(customerCode, style: TextStyle(color: Colors.grey[600], fontSize: 15, fontWeight: FontWeight.w800)),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            status,
+            style: TextStyle(
+              color: status == "PENDING" ? Colors.yellow[900] : status == "ACTIVATED" ? Colors.green : Colors.redAccent,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          userActivationRequestList[index].assignedSubadmin != null ?
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(child: Text("${userActivationRequestList[index].assignedSubadmin?.name.toString()}"  , style: TextStyle(color: Colors.blueGrey, fontSize: 15, fontWeight: FontWeight.bold),)),
-          ):
- Padding(
-          padding: const EdgeInsets.only(left:20.0, right:20),
-          child: DropdownButton( 
-            key:Key(userActivationRequestList[index].id.toString()) ,
-                value: userActivationRequestList[index].selectedSubAdmin, 
-                icon: const Icon(Icons.keyboard_arrow_down),    
-     
-                items: subAdminNames.map((String item) { 
-                  return DropdownMenuItem( 
-                    value: item, 
-                    child: Text(item), 
-                  ); 
-                }).toList(), 
-        
-                onChanged: (String? newValue)async {  
-                
-                   Subadmins sb =  subAdminsList.firstWhere((element) => element.name == newValue);
-
-                    ReturnObj obj =   await  CommonFunctions().assignSubadmin(userActivationRequestList[index].requestCreatedBy.id, sb.sId.toString());
-                    Fluttertoast.showToast(msg: obj.message);
-                    getActivationRequests();
-                    setState(() {
-                      
-                    });
-                }, 
-              ),
-        ), 
-          userActivationRequestList[index].isStatusLoading == true
-              ? Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Center(child: CircularProgressIndicator()),
-                )
-              : Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Center(
-                    child: Wrap(
-                      spacing: 1,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      alignment: WrapAlignment.center ,
-                      children: [
-                           !(Status == "ACTIVATED")?
-                        RawMaterialButton(
-                          
-                        onPressed:  () async {
-                            userActivationRequestList[index].isStatusLoading =
-                                true;
-                                     setState(() {});
-                            ReturnObj res = await CommonFunctions()
-                                .activateUser(
-                                    isApproved: true,
-                                    authRequestId:
-                                        userActivationRequestList[index].id);
-                            getActivationRequests();
-                            Fluttertoast.showToast(msg: res.message);
-                          },
-                          elevation: 2.0,
-                          fillColor: Colors.green,
-                          child: Icon(
-                            Icons.check,
-                            size: 15.0,
-                          ),
-                          padding: EdgeInsets.all(15.0),
-                          shape: const CircleBorder(),
-                        ):Container(),
-                         !( Status == "DEACTIVATED")?
-                        RawMaterialButton(
-                          onPressed:  () async {
-                            userActivationRequestList[index].isStatusLoading =
-                                true;
-                                     setState(() {});
-                            ReturnObj res = await CommonFunctions()
-                                .activateUser(
-                                    isApproved: false,
-                                    authRequestId:
-                                        userActivationRequestList[index].id);
-                            getActivationRequests();
-                              Fluttertoast.showToast(msg: res.message);
-                          },
-                          elevation: 2.0,
-                          fillColor: Colors.redAccent,
-                          child: Icon(
-                            Icons.close,
-                            size: 15.0,
-                          ),
-                          padding: EdgeInsets.all(15.0),
-                          shape: const CircleBorder(),
-                        ): Container()
-                      ],
-                    ),
-                  ),
-                ),
-       
-        
-        ]);
+        ),
+        _buildAssignSubadminCell(index,status),
+        _buildActionCell(index, status),
+      ],
+    );
   }
+
+  Widget _buildAssignSubadminCell(int index, String status) {
+    Request request = userActivationRequestList[index];
+    bool isDropdownEnabled = status != "ACTIVATED" && status != "DEACTIVATED";
+
+    // Ensuring the selectedSubAdmin is in the list of subAdminNames
+    String? dropdownValue = subAdminNames.contains(request.selectedSubAdmin)
+        ? request.selectedSubAdmin
+        : null;
+
+    // If subAdminNames is empty, or selectedSubAdmin is not in subAdminNames, set to null.
+    if (subAdminNames.isEmpty || dropdownValue == null) {
+      dropdownValue = null;
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      child: DropdownButton<String>(
+        isExpanded: true,
+        value: dropdownValue,
+        icon: const Icon(Icons.keyboard_arrow_down),
+        items: subAdminNames.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            key:UniqueKey(),
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+        onChanged: isDropdownEnabled ? (String? newValue) {
+          if (newValue != null) {
+            setState(() {
+              userActivationRequestList[index].selectedSubAdmin = newValue;
+            });
+            _assignSubadminToRequest(request.requestCreatedBy.id, newValue);
+          }
+        } : null,
+        hint: dropdownValue == null ? Text('Select Subadmin') : null,
+      ),
+    );
+  }
+
+  Widget _buildActionCell(int index, String status) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Wrap(
+        spacing: 8,
+        children: [
+          if (status != "ACTIVATED")
+            IconButton(
+              icon: Icon(Icons.check, color: Colors.green),
+              onPressed: () => _activateUser(index),
+            ),
+          if (status != "DEACTIVATED")
+            IconButton(
+              icon: Icon(Icons.close, color: Colors.redAccent),
+              onPressed: () => _deactivateUser(index),
+            ),
+        ],
+      ),
+    );
+  }
+
+  void _activateUser(int index) async {
+    // Assuming each request has a unique identifier
+    String requestId = userActivationRequestList[index].requestCreatedBy.id;
+
+    try {
+      // Call the function to activate the user
+      ReturnObj result = await CommonFunctions().activateUser(isApproved: true,
+          authRequestId:
+          requestId); // Replace with your actual method
+
+      // Show a toast with the result
+      Fluttertoast.showToast(msg: result.message);
+
+      // Refresh the data to reflect the changes
+      await getActivationRequests();
+    } catch (e) {
+      // Handle any errors here
+      Fluttertoast.showToast(msg: "Error: $e");
+    }
+  }
+
+
+  void _deactivateUser(int index) async {
+    // Assuming each request has a unique identifier
+    String requestId = userActivationRequestList[index].id;
+
+    try {
+      // Call the function to deactivate the user
+      ReturnObj result = await CommonFunctions().activateUser(isApproved: false,
+          authRequestId:
+          requestId); // Adjust this method as per your implementation
+
+      // Show a toast with the result
+      Fluttertoast.showToast(msg: result.message);
+
+      // Refresh the data to reflect the changes
+      await getActivationRequests();
+    } catch (e) {
+      // Handle any errors here
+      Fluttertoast.showToast(msg: "Error: $e");
+    }
+  }
+
+
+
+  Future<void> _assignSubadminToRequest(String requestId, String subadminName) async {
+    // Find the subadmin's ID based on the name
+    String? subadminId = subAdminsList.firstWhere(
+            (subadmin) => subadmin.name == subadminName,
+
+    )?.sId;
+
+    if (subadminId != null) {
+      try {
+        // Assuming you have a function in CommonFunctions to assign the subadmin
+        ReturnObj result = await CommonFunctions().assignSubadmin(requestId, subadminId);
+
+        // Display the result message
+        Fluttertoast.showToast(msg: result.message);
+
+        // Refresh the data if necessary
+        await getActivationRequests();
+      } catch (e) {
+        // Handle any errors here
+        Fluttertoast.showToast(msg: "Error: $e");
+      }
+    } else {
+      // Handle the case where the subadmin is not found
+      Fluttertoast.showToast(msg: "Subadmin not found");
+    }
+  }
+
+
+
+
+
+// Additional methods like _buildAssignSubadminCell and _buildActionCell
+  // ...
 }

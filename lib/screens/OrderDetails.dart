@@ -2,11 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/utils.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:tsf/components/Buttons.dart';
 import 'package:tsf/utils/AppConstants.dart';
-// import 'package:horizontal_data_table/scroll/linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:tsf/utils/commonFunctions.dart';
 
 final List orderDetails = [

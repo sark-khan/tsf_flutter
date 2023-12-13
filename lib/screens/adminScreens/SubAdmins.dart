@@ -56,9 +56,9 @@ class _SubAdminsState extends State<SubAdmins> {
                       ))
                     : !getterStatus!
                         ? Center(child: Text("Something Went Wrong! :/"))
-                        : Container(
-                            height: MediaQuery.of(context).size.height * 0.75,
-                            width: double.infinity,
+                        : Expanded(
+                            // height: MediaQuery.of(context).size.height * 0.75,
+                            // width: double.infinity,
                             child: SingleChildScrollView(
                               child: Table(
                                   columnWidths: {

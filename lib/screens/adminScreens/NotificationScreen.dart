@@ -53,11 +53,11 @@ class _AdminNotificationsState extends State<AdminNotifications> {
                       ))
                     : !getterStatus!
                         ? Center(child: Text("Something Went Wrong! :/"))
-                        : 
-            Container(
-              height: 600,
-              width: double.infinity,
-            
+                        :
+            Expanded(
+              // height: 600,
+              // width: double.infinity,
+
               child: ListView.builder(
                 itemCount: notifications.length,
                 itemBuilder: (BuildContext context, int index){
@@ -65,7 +65,7 @@ class _AdminNotificationsState extends State<AdminNotifications> {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
-                    
+
                           decoration: BoxDecoration(
                        color: index%2==0? Colors.blueGrey[100]: Colors.white,
     borderRadius: BorderRadius.all(Radius.circular(10))
@@ -76,35 +76,46 @@ class _AdminNotificationsState extends State<AdminNotifications> {
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                                Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(notif.notificationText , style: TextStyle(color: Colors.black , fontSize: 18),),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(notif.notificationText.split(" has ")[0].toString(),  style: TextStyle(color: Colors.blueGrey , fontSize: 15),),
-                                    ),
-                                  ],
+                                Expanded(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(notif.notificationText , style: TextStyle(color: Colors.black , fontSize: 18),),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(notif.notificationText.split(" has ")[0].toString(),  style: TextStyle(color: Colors.blueGrey , fontSize: 15),),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                Padding(
+                              Expanded(
+                                child: Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text(notif.createdAt,  style: TextStyle(color: Colors.grey[900] , fontSize: 15),),
+                                  child: Text(
+                                    notif.createdAt,
+                                    style: TextStyle(
+                                      color: Colors.grey[900],
+                                      fontSize: 15,
+                                      overflow: TextOverflow.ellipsis, // Change this line
+                                    ),
+                                  ),
                                 ),
-                               
-                                
+                              ),
+
+
                           ],),
                         ),
                       ),
                     );
                 }),
-                
+
                 ),
 
-            
+
           ],
         )
         

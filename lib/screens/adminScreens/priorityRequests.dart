@@ -41,6 +41,7 @@ class _PriorityRequestsState extends State<PriorityRequests> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
         body: BaseUI(
             headline: "USER COMMENTS",
             child: Column(
@@ -48,9 +49,9 @@ class _PriorityRequestsState extends State<PriorityRequests> {
                 const SizedBox(
                   height: 20,
                 ),
-                Container(
-                  height: 600,
-                  width: double.infinity,
+                Expanded(
+                  // height: 600,
+                  // width: double.infinity,
                   child: _isScreenLoading
                       ? Center(
                           child: CircularProgressIndicator(
@@ -64,7 +65,7 @@ class _PriorityRequestsState extends State<PriorityRequests> {
                                 2: FlexColumnWidth(10),
                                 3: FlexColumnWidth(10),
                                 4: FlexColumnWidth(20),
-                                5: FlexColumnWidth(5)
+                                5: FlexColumnWidth(10)
                               },
                               defaultVerticalAlignment:
                                   TableCellVerticalAlignment.bottom,
