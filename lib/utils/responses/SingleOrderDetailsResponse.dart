@@ -1,12 +1,10 @@
-// To parse this JSON data, do
-//
-//     final singleOrderDetailsResponse = singleOrderDetailsResponseFromJson(jsonString);
-
 import 'dart:convert';
 
-SingleOrderDetailsResponse singleOrderDetailsResponseFromJson(String str) => SingleOrderDetailsResponse.fromJson(json.decode(str));
+SingleOrderDetailsResponse singleOrderDetailsResponseFromJson(String str) =>
+    SingleOrderDetailsResponse.fromJson(json.decode(str));
 
-String singleOrderDetailsResponseToJson(SingleOrderDetailsResponse data) => json.encode(data.toJson());
+String singleOrderDetailsResponseToJson(SingleOrderDetailsResponse data) =>
+    json.encode(data.toJson());
 
 class SingleOrderDetailsResponse {
   List<SingleOrderDetail> singleOrderDetails;
@@ -15,13 +13,17 @@ class SingleOrderDetailsResponse {
     required this.singleOrderDetails,
   });
 
-  factory SingleOrderDetailsResponse.fromJson(Map<String, dynamic> json) => SingleOrderDetailsResponse(
-    singleOrderDetails: List<SingleOrderDetail>.from(json["singleOrderDetails"].map((x) => SingleOrderDetail.fromJson(x))),
-  );
+  factory SingleOrderDetailsResponse.fromJson(Map<String, dynamic> json) =>
+      SingleOrderDetailsResponse(
+        singleOrderDetails: List<SingleOrderDetail>.from(
+            json["singleOrderDetails"]
+                .map((x) => SingleOrderDetail.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "singleOrderDetails": List<dynamic>.from(singleOrderDetails.map((x) => x.toJson())),
-  };
+        "singleOrderDetails":
+            List<dynamic>.from(singleOrderDetails.map((x) => x.toJson())),
+      };
 }
 
 class SingleOrderDetail {
@@ -37,13 +39,14 @@ class SingleOrderDetail {
   String totalAvailableStockFgPack;
   String despQty;
   String toProduceSoQty;
-  DateTime requestDate;
-  DateTime soDate;
-  DateTime promiseDate;
+  String requestDate;
+  String soDate;
+  String promiseDate;
   String customerPoNo;
   String destination;
   String consigneeDetails;
   String remarks;
+  String uom;
 
   SingleOrderDetail({
     required this.id,
@@ -65,49 +68,53 @@ class SingleOrderDetail {
     required this.destination,
     required this.consigneeDetails,
     required this.remarks,
+    required this.uom,
   });
 
-  factory SingleOrderDetail.fromJson(Map<String, dynamic> json) => SingleOrderDetail(
-    id: json["_id"],
-    customerName: json["customerName"],
-    filmType: json["filmType"],
-    soNumber: json["soNumber"],
-    soQuantity: json["soQuantity"],
-    widthMm: json["widthMm"],
-    salesOrderLineNumber: json["salesOrderLineNumber"],
-    coreIdMm: json["coreIdMm"],
-    odMm: json["odMm"],
-    totalAvailableStockFgPack: json["totalAvailableStockFgPack"],
-    despQty: json["despQty"],
-    toProduceSoQty: json["toProduceSoQty"],
-    requestDate: DateTime.parse(json["requestDate"]),
-    soDate: DateTime.parse(json["soDate"]),
-    promiseDate: DateTime.parse(json["promiseDate"]),
-    customerPoNo: json["customerPoNo"],
-    destination: json["destination"],
-    consigneeDetails: json["consigneeDetails"],
-    remarks: json["remarks"],
-  );
+  factory SingleOrderDetail.fromJson(Map<String, dynamic> json) =>
+      SingleOrderDetail(
+        id: json["_id"],
+        customerName: json["customerName"],
+        filmType: json["filmType"],
+        soNumber: json["soNumber"],
+        soQuantity: json["soQuantity"],
+        widthMm: json["widthMm"],
+        salesOrderLineNumber: json["salesOrderLineNumber"],
+        coreIdMm: json["coreIdMm"],
+        odMm: json["odMm"],
+        totalAvailableStockFgPack: json["totalAvailableStockFgPack"],
+        despQty: json["despQty"],
+        toProduceSoQty: json["toProduceSoQty"],
+        requestDate: json["requestDate"],
+        soDate: json["soDate"],
+        promiseDate: json["promiseDate"],
+        customerPoNo: json["customerPoNo"],
+        destination: json["destination"],
+        consigneeDetails: json["consigneeDetails"],
+        remarks: json["remarks"],
+        uom: json["uom"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "_id": id,
-    "customerName": customerName,
-    "filmType": filmType,
-    "soNumber": soNumber,
-    "soQuantity": soQuantity,
-    "widthMm": widthMm,
-    "salesOrderLineNumber": salesOrderLineNumber,
-    "coreIdMm": coreIdMm,
-    "odMm": odMm,
-    "totalAvailableStockFgPack": totalAvailableStockFgPack,
-    "despQty": despQty,
-    "toProduceSoQty": toProduceSoQty,
-    "requestDate": requestDate.toIso8601String(),
-    "soDate": soDate.toIso8601String(),
-    "promiseDate": promiseDate.toIso8601String(),
-    "customerPoNo": customerPoNo,
-    "destination": destination,
-    "consigneeDetails": consigneeDetails,
-    "remarks": remarks,
-  };
+        "_id": id,
+        "customerName": customerName,
+        "filmType": filmType,
+        "soNumber": soNumber,
+        "soQuantity": soQuantity,
+        "widthMm": widthMm,
+        "salesOrderLineNumber": salesOrderLineNumber,
+        "coreIdMm": coreIdMm,
+        "odMm": odMm,
+        "totalAvailableStockFgPack": totalAvailableStockFgPack,
+        "despQty": despQty,
+        "toProduceSoQty": toProduceSoQty,
+        "requestDate": requestDate,
+        "soDate": soDate,
+        "promiseDate": promiseDate,
+        "customerPoNo": customerPoNo,
+        "destination": destination,
+        "consigneeDetails": consigneeDetails,
+        "remarks": remarks,
+        "uom": uom,
+      };
 }

@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-OrderListResponse orderListResponseFromJson(String str) => OrderListResponse.fromJson(json.decode(str));
+OrderListResponse orderListResponseFromJson(String str) =>
+    OrderListResponse.fromJson(json.decode(str));
 
-String orderListResponseToJson(OrderListResponse data) => json.encode(data.toJson());
+String orderListResponseToJson(OrderListResponse data) =>
+    json.encode(data.toJson());
 
 class OrderListResponse {
   List<Order> orders;
@@ -15,21 +17,22 @@ class OrderListResponse {
     required this.orders,
   });
 
-  factory OrderListResponse.fromJson(Map<String, dynamic> json) => OrderListResponse(
-    orders: List<Order>.from(json["orders"].map((x) => Order.fromJson(x))),
-  );
+  factory OrderListResponse.fromJson(Map<String, dynamic> json) =>
+      OrderListResponse(
+        orders: List<Order>.from(json["orders"].map((x) => Order.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "orders": List<dynamic>.from(orders.map((x) => x.toJson())),
-  };
+        "orders": List<dynamic>.from(orders.map((x) => x.toJson())),
+      };
 }
 
 class Order {
   String id;
   List<String> customerPoNumbers;
-  List<DateTime> orderPlacedDate;
-  List<DateTime> promiseDate;
-  List<DateTime> requestDate;
+  List<String> orderPlacedDate;
+  List<String> promiseDate;
+  List<String> requestDate;
 
   Order({
     required this.id,
@@ -40,18 +43,21 @@ class Order {
   });
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
-    id: json["_id"],
-    customerPoNumbers: List<String>.from(json["customerPoNumbers"].map((x) => x)),
-    orderPlacedDate: List<DateTime>.from(json["orderPlacedDate"].map((x) => DateTime.parse(x))),
-    promiseDate: List<DateTime>.from(json["promiseDate"].map((x) => DateTime.parse(x))),
-    requestDate: List<DateTime>.from(json["requestDate"].map((x) => DateTime.parse(x))),
-  );
+        id: json["_id"],
+        customerPoNumbers:
+            List<String>.from(json["customerPoNumbers"].map((x) => x)),
+        orderPlacedDate:
+            List<String>.from(json["orderPlacedDate"].map((x) => x)),
+        promiseDate: List<String>.from(json["promiseDate"].map((x) => x)),
+        requestDate: List<String>.from(json["requestDate"].map((x) => x)),
+      );
 
   Map<String, dynamic> toJson() => {
-    "_id": id,
-    "customerPoNumbers": List<dynamic>.from(customerPoNumbers.map((x) => x)),
-    "orderPlacedDate": List<dynamic>.from(orderPlacedDate.map((x) => x.toIso8601String())),
-    "promiseDate": List<dynamic>.from(promiseDate.map((x) => x.toIso8601String())),
-    "requestDate": List<dynamic>.from(requestDate.map((x) => x.toIso8601String())),
-  };
+        "_id": id,
+        "customerPoNumbers":
+            List<dynamic>.from(customerPoNumbers.map((x) => x)),
+        "orderPlacedDate": List<dynamic>.from(orderPlacedDate.map((x) => x)),
+        "promiseDate": List<dynamic>.from(promiseDate.map((x) => x)),
+        "requestDate": List<dynamic>.from(requestDate.map((x) => x)),
+      };
 }

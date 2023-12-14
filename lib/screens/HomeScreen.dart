@@ -127,7 +127,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     height: screenSize.height * 0.328947368,
                                   ),
                                   Text(
-                                    toggleIndex==0?"No Sales Order Found":"No Dispatch Order Found" ,
+                                    toggleIndex == 0
+                                        ? "No Sales Order Found"
+                                        : "No Dispatch Order Found",
                                     style: const TextStyle(
                                       fontSize: 20.0,
                                       fontWeight: FontWeight.bold,
@@ -154,7 +156,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                       orders[index].promiseDate[0]!,
                                       orders[index].requestDate[0]!,
                                       orders[index].orderPlacedDate[0]!,
-
                                       orders[index].customerPoNumbers[0],
                                       context)
                                   : HomeCard().dispatchCard(

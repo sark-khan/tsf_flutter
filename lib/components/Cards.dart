@@ -46,8 +46,8 @@ class NotificationCard {
 }
 
 class HomeCard {
-  Widget homeCard(String id, DateTime promiseDate, DateTime requestDate,
-      DateTime soDate, String customerPoNumber, BuildContext context) {
+  Widget homeCard(String id, String promiseDate, String requestDate,
+      String soDate, String customerPoNumber, BuildContext context) {
     return InkWell(
       onTap: () {
         Navigator.of(context).pushNamed("/order-details",

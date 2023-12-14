@@ -20,9 +20,9 @@ import 'responses/UserActivationResponse.dart';
 
 class CommonFunctions {
   static Dio dio = Dio();
-
+  static String APIURL = "http://192.168.10.10:2000";
   // static String APIURL = "http://43.204.181.73";
-  static String APIURL = "https://eager-rain-80700.pktriot.net";
+  // static String APIURL = "https://eager-rain-80700.pktriot.net";
   static var headers = {'Content-Type': 'application/json'};
 
   Future<ReturnObj> Login(String email, String password) async {
@@ -108,28 +108,28 @@ class CommonFunctions {
         CheckUserResponse checkUserResponse =
             CheckUserResponse.fromJson(response.data);
         if (checkUserResponse.userVerified) {
-          return ReturnObj(status: true, message: "Enter Password");
+          return ReturnObj(status: true, message: "Enter password");
         }
         if (checkUserResponse.accountRejected) {
-          return ReturnObj(message: "Account is Deactivated", status: false);
+          return ReturnObj(message: "Account is deactivated", status: false);
         }
         if (checkUserResponse.activationRequested) {
-          return ReturnObj(status: false, message: "Activation Request Sent");
+          return ReturnObj(status: false, message: "Activation request sent");
         }
         if (checkUserResponse.isRequestSent) {
-          return ReturnObj(status: false, message: "Waiting for Approval");
+          return ReturnObj(status: false, message: "Waiting for approval");
         }
         if (checkUserResponse.insertNewPassword) {
           return ReturnObj(message: response.data['message'], status: true);
         }
       }
-      return ReturnObj(status: false, message: "Server is Busy");
+      return ReturnObj(status: false, message: "Server is busy");
     } on DioException catch (e) {
       if (e.response!.statusCode == 401) {
-        return ReturnObj(status: false, message: "Your account is Deactivated");
+        return ReturnObj(status: false, message: "Your account is deactivated");
       }
       if (e.response!.statusCode == 404) {
-        return ReturnObj(status: false, message: "User not Found");
+        return ReturnObj(status: false, message: "User not found");
       }
       return ReturnObj(status: false, message: e.response!.data["message"]);
     } catch (error) {

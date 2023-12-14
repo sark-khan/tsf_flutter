@@ -33,7 +33,7 @@ final List orderDetails = [
     'filmType',
   ],
   [
-    'Width (MM)',
+    'Width (mm)',
     'widthMm',
   ],
   [
@@ -45,19 +45,20 @@ final List orderDetails = [
     'length',
   ],
   [
-    'Order Quantity (kg)',
+    'Order Quantity',
     'soQuantity',
   ],
   [
-    'Dispatched Quantity (Kg)',
+    'Dispatched Quantity',
     'despQty',
   ],
   [
-    'Total Ready Stock (kg)',
+    'Total Ready Stock',
     'pendToDespatchQty',
   ],
+  ['Unit', 'uom'],
   [
-    'Pending for Production (kg)',
+    'Pending for Production',
     'toProduceSoQty',
   ],
   [
@@ -105,12 +106,12 @@ final dispatchDetailsOrder = [
 ];
 
 Map<String, double> columnWidths = {
-  'soNumber': 150.0,
-  'soDate': 150.0,
+  'soNumber': 100.0,
+  'soDate': 100.0,
   'filmType': 100.0,
-  'widthMm': 100.0,
-  'coreIdMm': 100.0,
-  'length': 100.0,
+  'widthMm': 80.0,
+  'coreIdMm': 80.0,
+  'length': 80.0,
   'soQuantity': 100.0,
   'despQty': 100.0,
   'pendToDespatchQty': 100.0,
@@ -120,9 +121,9 @@ Map<String, double> columnWidths = {
   'remark': 100.0,
   'consignee': 100.0,
   'poNumber': 100.0,
-  "width": 100.0,
+  "width": 50.0,
   "coreInnerDiameter": 100.0,
-  "rollOuterDiameter": 100.0,
+  "rollOuterDiameter": 50.0,
   "dispatchQuantityInKg": 100.0,
   "vehicleNumber": 100.0,
   "firstTransporter": 150.0,
