@@ -31,21 +31,20 @@ class _UserRequestsState extends State<UserRequests> {
       ReturnObj returnObj = await CommonFunctions().getUserActivationRequests();
       userActivationRequestList = returnObj.data;
       subAdminsList = returnObj2.data;
-      subAdminNames = subAdminsList.map((subadmin) => subadmin.name.toString()).toSet().toList();
+      subAdminNames = subAdminsList
+          .map((subadmin) => subadmin.name.toString())
+          .toSet()
+          .toList();
 
       _isScreenLoading = false;
       getterStatus = returnObj.status;
-      for (int i = 0; i < userActivationRequestList.length; i++) {
-        if (i < subAdminsList.length) {
-          userActivationRequestList[i].selectedSubAdmin = userActivationRequestList[i].assignedSubadmin!.name;
-        } else {
-          // Handle the case where there are more requests than subadmins
-          userActivationRequestList[i].selectedSubAdmin = 'N/A'; // or any default value
-        }
-      }
+      userActivationRequestList.forEach((element) {
+        element.selectedSubAdmin = subAdminsList[0].name;
+      });
       setState(() {});
-    } catch (_) {
+    } catch (e) {
       _isScreenLoading = getterStatus = false;
+      print("Error is ${e}");
       setState(() {});
     }
   }
@@ -83,17 +82,18 @@ class _UserRequestsState extends State<UserRequests> {
               _buildTableHeader(),
               ...List.generate(
                 userActivationRequestList.length,
-                    (index) => _tableRow(
+                (index) => _tableRow(
                     index,
-                    userActivationRequestList[index].requestCreatedBy.accountNumber,
-                    "Ankit04",  // Replace with actual data
-                    "ankit@webmobsoft.com",  // Replace with actual data
+                    userActivationRequestList[index]
+                        .requestCreatedBy
+                        .accountNumber,
+                    "Ankit04", // Replace with actual data
+                    "ankit@webmobsoft.com", // Replace with actual data
                     !userActivationRequestList[index].isResponded
                         ? "PENDING"
                         : userActivationRequestList[index].isApproved
-                        ? 'ACTIVATED'
-                        : 'DEACTIVATED'
-                ),
+                            ? 'ACTIVATED'
+                            : 'DEACTIVATED'),
               ),
             ],
           ),
@@ -125,7 +125,8 @@ class _UserRequestsState extends State<UserRequests> {
     );
   }
 
-  TableRow _tableRow(int index, String name, String userName, String customerCode, String status) {
+  TableRow _tableRow(int index, String name, String userName,
+      String customerCode, String status) {
     return TableRow(
       decoration: BoxDecoration(
         color: index % 2 == 0 ? Colors.white : Colors.blueGrey[50],
@@ -133,28 +134,44 @@ class _UserRequestsState extends State<UserRequests> {
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(name, style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.w800)),
+          child: Text(name,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w800)),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(userName, style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.w800)),
+          child: Text(userName,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w800)),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(customerCode, style: TextStyle(color: Colors.grey[600], fontSize: 15, fontWeight: FontWeight.w800)),
+          child: Text(customerCode,
+              style: TextStyle(
+                  color: Colors.grey[600],
+                  fontSize: 15,
+                  fontWeight: FontWeight.w800)),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
             status,
             style: TextStyle(
-              color: status == "PENDING" ? Colors.yellow[900] : status == "ACTIVATED" ? Colors.green : Colors.redAccent,
+              color: status == "PENDING"
+                  ? Colors.yellow[900]
+                  : status == "ACTIVATED"
+                      ? Colors.green
+                      : Colors.redAccent,
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
           ),
         ),
-        _buildAssignSubadminCell(index,status),
+        _buildAssignSubadminCell(index, status),
         _buildActionCell(index, status),
       ],
     );
@@ -182,19 +199,23 @@ class _UserRequestsState extends State<UserRequests> {
         icon: const Icon(Icons.keyboard_arrow_down),
         items: subAdminNames.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
-            key:UniqueKey(),
+            key: UniqueKey(),
             value: value,
             child: Text(value),
           );
         }).toList(),
-        onChanged: isDropdownEnabled ? (String? newValue) {
-          if (newValue != null) {
-            setState(() {
-              userActivationRequestList[index].selectedSubAdmin = newValue;
-            });
-            _assignSubadminToRequest(request.requestCreatedBy.id, newValue);
-          }
-        } : null,
+        onChanged: isDropdownEnabled
+            ? (String? newValue) {
+                if (newValue != null) {
+                  setState(() {
+                    userActivationRequestList[index].selectedSubAdmin =
+                        newValue;
+                  });
+                  _assignSubadminToRequest(
+                      request.requestCreatedBy.id, newValue);
+                }
+              }
+            : null,
         hint: dropdownValue == null ? Text('Select Subadmin') : null,
       ),
     );
@@ -227,9 +248,9 @@ class _UserRequestsState extends State<UserRequests> {
 
     try {
       // Call the function to activate the user
-      ReturnObj result = await CommonFunctions().activateUser(isApproved: true,
-          authRequestId:
-          requestId); // Replace with your actual method
+      ReturnObj result = await CommonFunctions().activateUser(
+          isApproved: true,
+          authRequestId: requestId); // Replace with your actual method
 
       // Show a toast with the result
       Fluttertoast.showToast(msg: result.message);
@@ -241,7 +262,6 @@ class _UserRequestsState extends State<UserRequests> {
       Fluttertoast.showToast(msg: "Error: $e");
     }
   }
-
 
   void _deactivateUser(int index) async {
     // Assuming each request has a unique identifier
@@ -249,9 +269,10 @@ class _UserRequestsState extends State<UserRequests> {
 
     try {
       // Call the function to deactivate the user
-      ReturnObj result = await CommonFunctions().activateUser(isApproved: false,
+      ReturnObj result = await CommonFunctions().activateUser(
+          isApproved: false,
           authRequestId:
-          requestId); // Adjust this method as per your implementation
+              requestId); // Adjust this method as per your implementation
 
       // Show a toast with the result
       Fluttertoast.showToast(msg: result.message);
@@ -264,19 +285,20 @@ class _UserRequestsState extends State<UserRequests> {
     }
   }
 
-
-
-  Future<void> _assignSubadminToRequest(String requestId, String subadminName) async {
+  Future<void> _assignSubadminToRequest(
+      String requestId, String subadminName) async {
     // Find the subadmin's ID based on the name
-    String? subadminId = subAdminsList.firstWhere(
-            (subadmin) => subadmin.name == subadminName,
-
-    )?.sId;
+    String? subadminId = subAdminsList
+        .firstWhere(
+          (subadmin) => subadmin.name == subadminName,
+        )
+        ?.sId;
 
     if (subadminId != null) {
       try {
         // Assuming you have a function in CommonFunctions to assign the subadmin
-        ReturnObj result = await CommonFunctions().assignSubadmin(requestId, subadminId);
+        ReturnObj result =
+            await CommonFunctions().assignSubadmin(requestId, subadminId);
 
         // Display the result message
         Fluttertoast.showToast(msg: result.message);
@@ -292,10 +314,6 @@ class _UserRequestsState extends State<UserRequests> {
       Fluttertoast.showToast(msg: "Subadmin not found");
     }
   }
-
-
-
-
 
 // Additional methods like _buildAssignSubadminCell and _buildActionCell
   // ...

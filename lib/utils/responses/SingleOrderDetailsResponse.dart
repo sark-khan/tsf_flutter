@@ -47,6 +47,8 @@ class SingleOrderDetail {
   String consigneeDetails;
   String remarks;
   String uom;
+  String grade;
+  String length;
 
   SingleOrderDetail({
     required this.id,
@@ -69,6 +71,8 @@ class SingleOrderDetail {
     required this.consigneeDetails,
     required this.remarks,
     required this.uom,
+    required this.grade,
+    required this.length,
   });
 
   factory SingleOrderDetail.fromJson(Map<String, dynamic> json) =>
@@ -93,6 +97,8 @@ class SingleOrderDetail {
         consigneeDetails: json["consigneeDetails"],
         remarks: json["remarks"],
         uom: json["uom"],
+        grade: json["grade"],
+        length: json["length"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -116,5 +122,7 @@ class SingleOrderDetail {
         "consigneeDetails": consigneeDetails,
         "remarks": remarks,
         "uom": uom,
+        "grade": grade,
+        "length": length
       };
 }

@@ -19,9 +19,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int toggleIndex = 0;
   Future<ReturnObj>? futureData;
+  String customerName = "Home";
 
   void initState() {
     super.initState();
+    customerName = getUserName();
     futureData = CommonFunctions().getOrders(); // Default data
   }
 
@@ -47,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
           elevation: 0,
           title: Padding(
             padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.01),
-            child: Text(TextConstants().HOME),
+            child: Text(customerName),
           ),
           toolbarHeight: screenSize.height * 0.1087,
           actions: [
@@ -106,7 +108,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       } else {
                         ReturnObj? ret = snapshot.data;
-                        print("qwerty");
                         if (!ret!.status) {
                           return Center(
                             child: Text(ret.message),
@@ -141,12 +142,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           );
                         }
-                        print("reached here123 ${orders.length}");
+
                         return ListView.builder(
                           padding: EdgeInsets.zero,
                           itemCount: orders.length,
                           itemBuilder: (context, index) {
-                            print("hellllll ${orders[index].id!}");
                             return Padding(
                               padding: EdgeInsets.symmetric(
                                   horizontal: screenSize.width * 0.0333333333),

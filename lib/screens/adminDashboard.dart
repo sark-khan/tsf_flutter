@@ -45,20 +45,20 @@ class _SidebarPageState extends State<SidebarPage> {
         text: 'User Comments',
         isSelected: true,
         icon: Icons.assessment,
-        onPressed: () => setState(
-            () => stateController.headline.value = 'User Comments'),
-      ),
-      if (getUserRole() == "Admin") CollapsibleItem(
-        text: 'Users',
-        icon: Icons.people,
         onPressed: () =>
-            setState(() => stateController.headline.value = 'Users'),
+            setState(() => stateController.headline.value = 'User Comments'),
       ),
+      if (getUserRole() == "Admin")
+        CollapsibleItem(
+          text: 'Users',
+          icon: Icons.people,
+          onPressed: () =>
+              setState(() => stateController.headline.value = 'Users'),
+        ),
       // if(getUserRole()=="Admin")
       CollapsibleItem(
         text: 'Sub Admins',
         icon: Icons.hdr_auto_sharp,
-
         onPressed: () =>
             setState(() => stateController.headline.value = 'Sub Admins'),
       ),
@@ -119,7 +119,7 @@ class _SidebarPageState extends State<SidebarPage> {
           context: context,
         );
       case "Users":
-        if(getUserRole()=="Admin"){
+        if (getUserRole() == "Admin") {
           return UserRequests();
         }
         break;
@@ -129,9 +129,8 @@ class _SidebarPageState extends State<SidebarPage> {
         );
       case "Sub Admins":
         // if(getUserRole()=="Admin"){
-          return SubAdmins();
-        // }
-        break;
+        return SubAdmins();
+      // }
       case "Notifications":
         return AdminNotifications(
           context: context,

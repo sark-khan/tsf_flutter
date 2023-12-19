@@ -1,3 +1,5 @@
+import 'package:file_selector/file_selector.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tsf/utils/Storage.dart';
 
 import 'package:flutter/material.dart';
@@ -8,70 +10,124 @@ import 'package:tsf/utils/commonFunctions.dart';
 
 import '../../utils/stateController.dart';
 
-class BaseUI extends StatelessWidget {
+class BaseUI extends StatefulWidget {
   final Widget child;
   final String headline;
+  const BaseUI({required this.child, required this.headline, Key? key})
+      : super(key: key);
+  @override
+  State<BaseUI> createState() => _BaseUIState();
+  // final _formKey = GlobalKey<FormState>();
+}
+
+class _BaseUIState extends State<BaseUI> {
   final _formKey = GlobalKey<FormState>();
+  XFile? selectedFile;
   final _emailController = TextEditingController();
-  final _roleController = TextEditingController();
+  // final _roleController = TextEditingController();
   final _nameController = TextEditingController();
   final _passwordController = TextEditingController();
-
-  BaseUI({required this.child, required this.headline, Key? key}) : super(key: key);
+  bool _isLoading = false;
 
   final StateController stateController = Get.find<StateController>();
+  Future<ReturnObj> _pickFile(BuildContext context) async {
+    try {
+      final typeGroup = XTypeGroup();
+      final file = await openFile(acceptedTypeGroups: [typeGroup]);
+      if (file != null) {
+        selectedFile = file;
+        List<int> fileBytes = await selectedFile!.readAsBytes();
+        _isLoading = true;
+        Navigator.of(context).pop();
+        setState(() {});
+        ReturnObj obj = await CommonFunctions().AddUsers(fileBytes);
+        _isLoading = false;
+        setState(() {});
+        return obj;
+      } else {
+        Navigator.of(context).pop();
+        return ReturnObj(message: "No File Selected", status: false);
+      }
+    } catch (Exception) {
+      Navigator.of(context).pop();
+      return ReturnObj(message: "No File Selected", status: false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    Widget _loadingOverlay() {
+      return Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        color: Colors.black.withOpacity(0.5),
+        child: AbsorbPointer(
+          absorbing: true,
+          child: Center(
+            child: SpinKitDoubleBounce(
+              color: Colors.blue,
+              size: 50.0,
+            ),
+          ),
+        ),
+      );
+    }
+
     double screenWidth = MediaQuery.of(context).size.width;
 
-    return Container(
-      width: screenWidth,
-      color: Colors.grey[300],
-      child: Padding(
-        padding: EdgeInsets.only(
-          left: screenWidth < 500 ? 20 : 220,
-          top: 50,
-          right: 20,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildHeaderRow(context, screenWidth),
-            Divider(),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: child,
-              ),
+    return Stack(
+      children: [
+        Container(
+          width: screenWidth,
+          color: Colors.grey[300],
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: screenWidth < 500 ? 20 : 220,
+              top: 50,
+              right: 20,
             ),
-            Divider(),
-          ],
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildHeaderRow(context, screenWidth),
+                const Divider(),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: widget.child,
+                  ),
+                ),
+                const Divider(),
+              ],
+            ),
+          ),
         ),
-      ),
+        _isLoading ? _loadingOverlay() : SizedBox.shrink()
+      ],
     );
   }
 
   Widget _buildHeaderRow(BuildContext context, double screenWidth) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Flexible(
-          child: Text(
-            headline,
-            style: TextStyle(
-              fontSize: 40,
-              color: Colors.grey[700],
-              fontWeight: FontWeight.bold,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            child: Text(
+              widget.headline,
+              style: TextStyle(
+                fontSize: 40,
+                color: Colors.grey[700],
+                fontWeight: FontWeight.bold,
+              ),
+              overflow: TextOverflow.ellipsis,
             ),
-            overflow: TextOverflow.ellipsis,
           ),
-        ),
-        screenWidth < 600 ? _buildSmallScreenActions(context) : _buildWideScreenActions(context),
-      ],
-    );
+          screenWidth < 600
+              ? _buildSmallScreenActions(context)
+              : _buildWideScreenActions(context),
+        ]);
   }
 
   Widget _buildSmallScreenActions(BuildContext context) {
@@ -89,9 +145,30 @@ class BaseUI extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        if (stateController.headline.value == "Sub Admins") _addSubAdminButton(context),
+        // Check if headline is "User" and display relevant UI components
+        if (stateController.headline.value == "User")
+          _addUserButton(context), // This is a new method you need to define
+
+        // Existing conditions
+        if (stateController.headline.value == "Sub Admins")
+          _addSubAdminButton(context),
         _logoutButton(context),
       ],
+    );
+  }
+
+// Define a new method for "Add User" button (customize as needed)
+  Widget _addUserButton(BuildContext context) {
+    return MaterialButton(
+      onPressed: () {
+        // Implement your logic for adding a user
+      },
+      color: Colors.blueGrey,
+      height: 50,
+      child: Text(
+        "Add User",
+        style: TextStyle(color: Colors.white),
+      ),
     );
   }
 
@@ -111,7 +188,8 @@ class BaseUI extends StatelessWidget {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10.0))),
         title: Text("Add Sub-Admin"),
         content: Form(
           key: _formKey,
@@ -136,14 +214,17 @@ class BaseUI extends StatelessWidget {
           ),
           TextButton(
             child: Text("Add"),
-            onPressed: () async{
+            onPressed: () async {
               if (_formKey.currentState!.validate()) {
-                ReturnObj res =   await CommonFunctions().AddSubAdmin(_emailController.text, _passwordController.text, _nameController.text);
+                ReturnObj res = await CommonFunctions().AddSubAdmin(
+                    _emailController.text,
+                    _passwordController.text,
+                    _nameController.text);
                 Fluttertoast.showToast(msg: res.message);
                 _passwordController.text = '';
-                _emailController.text='';
-                _nameController.text='';
-                if(res.status){
+                _emailController.text = '';
+                _nameController.text = '';
+                if (res.status) {
                   // _passwordController.text = '';
                   return Navigator.of(context).pop();
                 }
@@ -157,7 +238,8 @@ class BaseUI extends StatelessWidget {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String label, IconData icon) {
+  Widget _buildTextField(
+      TextEditingController controller, String label, IconData icon) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextFormField(
@@ -179,12 +261,12 @@ class BaseUI extends StatelessWidget {
     );
   }
 
-
   Widget _logoutButton(BuildContext context) {
     return InkWell(
       onTap: () {
         Storage.clearUser();
-        Navigator.of(context).pushNamed("/login"); // Placeholder for actual logout action
+        Navigator.of(context)
+            .pushNamed("/login"); // Placeholder for actual logout action
         // For example, you might want to navigate to the login screen or clear user data
       },
       child: const Padding(

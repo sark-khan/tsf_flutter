@@ -25,6 +25,38 @@ class CommonFunctions {
   // static String APIURL = "https://eager-rain-80700.pktriot.net";
   static var headers = {'Content-Type': 'application/json'};
 
+  Future<ReturnObj> AddUsers(List<int> fileBytes) async {
+    try {
+      var headers = {'Content-Type': 'application/json'};
+      headers['token'] = Storage.getJwtToken();
+      FormData formData = FormData.fromMap({
+        'file': MultipartFile.fromBytes(fileBytes, filename: 'uploaded_file'),
+      });
+
+      var dio = Dio();
+      var response = await dio.request(
+        '$APIURL/api/auth/add-user',
+        options: Options(
+          method: 'POST',
+          headers: headers,
+        ),
+        data: formData,
+      );
+      if (response.statusCode == 200) {
+        return ReturnObj(
+            status: true,
+            message:
+                "${response.data["message"]} Customer List be reflected soon after processing");
+      }
+      return ReturnObj(message: TextConstants().SERVER_BUSY, status: false);
+    } on DioException catch (e) {
+      return ReturnObj(status: false, message: e.response!.data["message"]);
+    } catch (error) {
+      printError(info: "Error in Login $error");
+      return ReturnObj(status: false, message: "Error in Login $error");
+    }
+  }
+
   Future<ReturnObj> Login(String email, String password) async {
     try {
       var headers = {'Content-Type': 'application/json'};
@@ -108,16 +140,16 @@ class CommonFunctions {
         CheckUserResponse checkUserResponse =
             CheckUserResponse.fromJson(response.data);
         if (checkUserResponse.userVerified) {
-          return ReturnObj(status: true, message: "Enter password");
+          return ReturnObj(status: true, message: response.data["message"]);
         }
         if (checkUserResponse.accountRejected) {
-          return ReturnObj(message: "Account is deactivated", status: false);
+          return ReturnObj(message: response.data["message"], status: false);
         }
         if (checkUserResponse.activationRequested) {
-          return ReturnObj(status: false, message: "Activation request sent");
+          return ReturnObj(status: false, message: response.data["message"]);
         }
         if (checkUserResponse.isRequestSent) {
-          return ReturnObj(status: false, message: "Waiting for approval");
+          return ReturnObj(status: false, message: response.data["message"]);
         }
         if (checkUserResponse.insertNewPassword) {
           return ReturnObj(message: response.data['message'], status: true);
@@ -526,6 +558,7 @@ class ReturnObj<T> {
 }
 
 String getUserRole() => Jwt.parseJwt(Storage.getJwtToken())['role'];
+String getUserName() => Jwt.parseJwt(Storage.getJwtToken())['name'];
 
 // String getIdFromQueryParameter() {
 //   // if (kIsWeb) {

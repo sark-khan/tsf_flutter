@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -193,13 +194,11 @@ class _LoginState extends State<Login> {
                             ReturnObj returnObj =
                                 await CommonFunctions().CheckUser(email!);
 
-
                             if (returnObj.status) {
                               setState(() {
                                 isPasswordFieldVisible = true;
                                 buttonText = TextConstants().LOGIN;
                                 userChecked = !userChecked;
-
                               });
                             } else {
                               Fluttertoast.showToast(msg: returnObj.message);
@@ -223,17 +222,29 @@ class _LoginState extends State<Login> {
                               }
                               return;
                             }
-                            ReturnObj returnObj = await CommonFunctions()
-
-                                .Login(emailController!.text,
-                                    passwordController!.text);
+                            ReturnObj returnObj = await CommonFunctions().Login(
+                                emailController!.text,
+                                passwordController!.text);
                             Fluttertoast.showToast(msg: returnObj.message);
                             if (returnObj.status) {
-                              getUserRole() == "Admin" ||
-                                      getUserRole() == "Subadmin"
-                                  ? Navigator.pushNamed(
-                                      context, "/admin-dashboard")
-                                  : Navigator.pushNamed(context, "/home");
+                              if (getUserRole() == "Admin" ||
+                                  getUserRole() == "Subadmin") {
+                                if (kIsWeb) {
+                                  // If it's a web platform, navigate to the admin dashboard
+                                  Navigator.pushNamed(
+                                      context, "/admin-dashboard");
+                                } else {
+                                  // If it's not a web platform, show a toast message
+                                  Fluttertoast.showToast(
+                                    msg:
+                                        "You must be on a web interface to perform this operation",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER,
+                                  );
+                                }
+                              } else {
+                                Navigator.pushNamed(context, "/home");
+                              }
                             }
                           }
                           _isLoading = false;

@@ -46,45 +46,46 @@ class DispatchDetails {
   String firstTransporter;
   String mobileNumber;
   String consignee;
+  String dispatchQuantityInSqm;
 
-  DispatchDetails({
-    required this.id,
-    required this.customerName,
-    required this.destination,
-    required this.inventoryNumber,
-    required this.inventoryDate,
-    required this.poNumber,
-    required this.soNumber,
-    required this.soDate,
-    required this.coreInnerDiameter,
-    required this.rollOuterDiameter,
-    required this.width,
-    required this.dispatchQuantityInKg,
-    required this.vehicleNumber,
-    required this.firstTransporter,
-    required this.mobileNumber,
-    required this.consignee,
-  });
+  DispatchDetails(
+      {required this.id,
+      required this.customerName,
+      required this.destination,
+      required this.inventoryNumber,
+      required this.inventoryDate,
+      required this.poNumber,
+      required this.soNumber,
+      required this.soDate,
+      required this.coreInnerDiameter,
+      required this.rollOuterDiameter,
+      required this.width,
+      required this.dispatchQuantityInKg,
+      required this.vehicleNumber,
+      required this.firstTransporter,
+      required this.mobileNumber,
+      required this.consignee,
+      required this.dispatchQuantityInSqm});
 
   factory DispatchDetails.fromJson(Map<String, dynamic> json) =>
       DispatchDetails(
-        id: json["_id"],
-        customerName: json["customerName"],
-        destination: json["destination"],
-        inventoryNumber: json["inventoryNumber"],
-        inventoryDate: json["inventoryDate"],
-        poNumber: json["poNumber"],
-        soNumber: json["soNumber"],
-        soDate: json["soDate"],
-        coreInnerDiameter: json["coreInnerDiameter"],
-        rollOuterDiameter: json["rollOuterDiameter"],
-        width: json["width"],
-        dispatchQuantityInKg: json["dispatchQuantityInKg"],
-        vehicleNumber: json["vehicleNumber"],
-        firstTransporter: json["firstTransporter"],
-        mobileNumber: json["mobileNumber"],
-        consignee: json["consignee"],
-      );
+          id: json["_id"],
+          customerName: json["customerName"],
+          destination: json["destination"],
+          inventoryNumber: json["inventoryNumber"],
+          inventoryDate: json["inventoryDate"],
+          poNumber: json["poNumber"],
+          soNumber: json["soNumber"],
+          soDate: json["soDate"],
+          coreInnerDiameter: json["coreInnerDiameter"],
+          rollOuterDiameter: json["rollOuterDiameter"],
+          width: json["width"],
+          dispatchQuantityInKg: json["dispatchQuantityInKg"],
+          vehicleNumber: json["vehicleNumber"],
+          firstTransporter: json["firstTransporter"],
+          mobileNumber: json["mobileNumber"],
+          consignee: json["consignee"],
+          dispatchQuantityInSqm: json["dispatchQuantityInSqm"]);
 
   Map<String, dynamic> toJson() => {
         "_id": id,
@@ -103,5 +104,6 @@ class DispatchDetails {
         "firstTransporter": firstTransporter,
         "mobileNumber": mobileNumber,
         "consignee": consignee,
+        "dispatchQuantityInSqm": dispatchQuantityInSqm
       };
 }

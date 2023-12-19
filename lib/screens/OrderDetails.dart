@@ -33,16 +33,17 @@ final List orderDetails = [
     'filmType',
   ],
   [
-    'Width (mm)',
+    'Width',
     'widthMm',
   ],
+  ["Length", "length"],
   [
-    'Core ID (Mm)',
+    'Core ID',
     'coreIdMm',
   ],
   [
-    'Roll OD (Mm)',
-    'length',
+    'Roll OD',
+    'odMm',
   ],
   [
     'Order Quantity',
@@ -54,13 +55,15 @@ final List orderDetails = [
   ],
   [
     'Total Ready Stock',
-    'pendToDespatchQty',
+    'totalAvailableStockFgPack',
   ],
-  ['Unit', 'uom'],
+
   [
     'Pending for Production',
     'toProduceSoQty',
   ],
+  ['Unit', 'uom'],
+  ["Grade", 'grade'],
   [
     'Request Date',
     'requestDate',
@@ -88,10 +91,10 @@ final dispatchDetailsOrder = [
   ["Roll OD", "rollOuterDiameter"],
 
   ["Dispatch Quantity (kg)", "dispatchQuantityInKg"],
+  ["Dispatch Quantity (Sqm) -", "dispatchQuantityInSqm"],
   ["Vehicle Number", "vehicleNumber"],
   // ["Customer Account Code -", "customerAccountCode"],
   // ["MKT SO Number -", "mktSoNumber"],
-  // ["Dispatch Quantity In Sqm -", "dispatchQuantityInSqm"],
   ["First Transporter", "firstTransporter"],
   // ["Trip Number -", "tripNumber"],
   // ["LR Number -", "lrNumber"],
@@ -109,9 +112,9 @@ Map<String, double> columnWidths = {
   'soNumber': 100.0,
   'soDate': 100.0,
   'filmType': 100.0,
-  'widthMm': 80.0,
-  'coreIdMm': 80.0,
-  'length': 80.0,
+  'widthMm': 50.0,
+  'coreIdMm': 50.0,
+  'length': 60.0,
   'soQuantity': 100.0,
   'despQty': 100.0,
   'pendToDespatchQty': 100.0,
@@ -122,13 +125,17 @@ Map<String, double> columnWidths = {
   'consignee': 100.0,
   'poNumber': 100.0,
   "width": 50.0,
-  "coreInnerDiameter": 100.0,
+  "coreInnerDiameter": 50.0,
   "rollOuterDiameter": 50.0,
   "dispatchQuantityInKg": 100.0,
   "vehicleNumber": 100.0,
   "firstTransporter": 150.0,
   "mobileNumber": 150.0,
   "collectorName": 100.0,
+  "uom": 50.0,
+  'grade': 50.0,
+  'odMm': 50.0,
+  'dispatchQuantityInSqm': 100.0
 };
 
 class OrderDetails extends StatefulWidget {
@@ -224,12 +231,23 @@ class _OrderDetailsState extends State<OrderDetails> {
         children: headerMap.keys.map((apiHeader) {
           var value = item[apiHeader];
           if (value == null || value.toString().isEmpty) {
-            value = 'N/A';
+            if (apiHeader == "remark" ||
+                apiHeader == "consignee" ||
+                apiHeader == "collectorName") {
+              value = 'N/A';
+            } else {
+              value = 0;
+            }
           }
           if (apiHeader == "promiseDate" ||
               apiHeader == "requestDate" ||
               apiHeader == "soDate") {
-            value = value.split("T")[0];
+            value = value.toString();
+            if (value.contains("T")) {
+              value = value.split("T")[0];
+            } else {
+              value = "N/A";
+            }
           }
           double columnWidth = columnWidths[apiHeader] ??
               100.0; // Default width if not specified
