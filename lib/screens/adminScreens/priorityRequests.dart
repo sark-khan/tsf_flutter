@@ -41,7 +41,6 @@ class _PriorityRequestsState extends State<PriorityRequests> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
         body: BaseUI(
             headline: "USER COMMENTS",
             child: Column(

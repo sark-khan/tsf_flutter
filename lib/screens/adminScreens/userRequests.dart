@@ -30,6 +30,7 @@ class _UserRequestsState extends State<UserRequests> {
       ReturnObj returnObj2 = await CommonFunctions().getSubadminList();
       ReturnObj returnObj = await CommonFunctions().getUserActivationRequests();
       userActivationRequestList = returnObj.data;
+      print("${userActivationRequestList[0].assignedSubadmin!.name} hello2");
       subAdminsList = returnObj2.data;
       subAdminNames = subAdminsList
           .map((subadmin) => subadmin.name.toString())
@@ -38,9 +39,9 @@ class _UserRequestsState extends State<UserRequests> {
 
       _isScreenLoading = false;
       getterStatus = returnObj.status;
-      userActivationRequestList.forEach((element) {
-        element.selectedSubAdmin = subAdminsList[0].name;
-      });
+      // userActivationRequestList.forEach((element) {
+      //   element.selectedSubAdmin = subAdminsList[0].name;
+      // });
       setState(() {});
     } catch (e) {
       _isScreenLoading = getterStatus = false;
@@ -63,7 +64,7 @@ class _UserRequestsState extends State<UserRequests> {
     if (_isScreenLoading) {
       return Center(child: CircularProgressIndicator(color: Colors.grey));
     } else if (!getterStatus!) {
-      return Center(child: Text("Something Went Wrong! :/"));
+      return Center(child: Text("No Auth Request Found"));
     } else {
       return Expanded(
         child: SingleChildScrollView(
@@ -179,12 +180,14 @@ class _UserRequestsState extends State<UserRequests> {
 
   Widget _buildAssignSubadminCell(int index, String status) {
     Request request = userActivationRequestList[index];
+    print("${request.assignedSubadmin!.name} hello");
     bool isDropdownEnabled = status != "ACTIVATED" && status != "DEACTIVATED";
 
     // Ensuring the selectedSubAdmin is in the list of subAdminNames
-    String? dropdownValue = subAdminNames.contains(request.selectedSubAdmin)
-        ? request.selectedSubAdmin
-        : null;
+    String? dropdownValue =
+        subAdminNames.contains(request.assignedSubadmin!.name)
+            ? request.assignedSubadmin!.name
+            : null;
 
     // If subAdminNames is empty, or selectedSubAdmin is not in subAdminNames, set to null.
     if (subAdminNames.isEmpty || dropdownValue == null) {
@@ -208,7 +211,7 @@ class _UserRequestsState extends State<UserRequests> {
             ? (String? newValue) {
                 if (newValue != null) {
                   setState(() {
-                    userActivationRequestList[index].selectedSubAdmin =
+                    userActivationRequestList[index].assignedSubadmin!.name =
                         newValue;
                   });
                   _assignSubadminToRequest(
@@ -244,7 +247,7 @@ class _UserRequestsState extends State<UserRequests> {
 
   void _activateUser(int index) async {
     // Assuming each request has a unique identifier
-    String requestId = userActivationRequestList[index].requestCreatedBy.id;
+    String requestId = userActivationRequestList[index].id;
 
     try {
       // Call the function to activate the user

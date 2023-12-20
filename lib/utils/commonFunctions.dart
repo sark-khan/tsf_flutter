@@ -260,7 +260,7 @@ class CommonFunctions {
         return ReturnObj(message: "Server is Busy", status: false);
       }
     } catch (error) {
-      print("Error In getOrders $error");
+      print("Error In getComments $error");
       return ReturnObj(status: false, message: "Internal Server Error");
     }
   }
