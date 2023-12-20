@@ -30,7 +30,6 @@ class _UserRequestsState extends State<UserRequests> {
       ReturnObj returnObj2 = await CommonFunctions().getSubadminList();
       ReturnObj returnObj = await CommonFunctions().getUserActivationRequests();
       userActivationRequestList = returnObj.data;
-      print("${userActivationRequestList[0].assignedSubadmin!.name} hello2");
       subAdminsList = returnObj2.data;
       subAdminNames = subAdminsList
           .map((subadmin) => subadmin.name.toString())
@@ -180,7 +179,6 @@ class _UserRequestsState extends State<UserRequests> {
 
   Widget _buildAssignSubadminCell(int index, String status) {
     Request request = userActivationRequestList[index];
-    print("${request.assignedSubadmin!.name} hello");
     bool isDropdownEnabled = status != "ACTIVATED" && status != "DEACTIVATED";
 
     // Ensuring the selectedSubAdmin is in the list of subAdminNames
