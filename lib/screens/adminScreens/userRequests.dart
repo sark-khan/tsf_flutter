@@ -87,8 +87,13 @@ class _UserRequestsState extends State<UserRequests> {
                     userActivationRequestList[index]
                         .requestCreatedBy
                         .accountNumber,
-                    "Ankit04", // Replace with actual data
-                    "ankit@webmobsoft.com", // Replace with actual data
+                    userActivationRequestList[index]
+                        .requestCreatedBy
+                        .partyName, // Replace with actual data
+                    userActivationRequestList[index]
+                        .requestCreatedBy
+                        .email
+                        .split(" ")[0], // Replace with actual data
                     !userActivationRequestList[index].isResponded
                         ? "PENDING"
                         : userActivationRequestList[index].isApproved
