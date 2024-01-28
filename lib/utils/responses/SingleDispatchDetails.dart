@@ -47,6 +47,7 @@ class DispatchDetails {
   String mobileNumber;
   String consignee;
   String dispatchQuantityInSqm;
+  String filmtype;
 
   DispatchDetails(
       {required this.id,
@@ -65,6 +66,7 @@ class DispatchDetails {
       required this.firstTransporter,
       required this.mobileNumber,
       required this.consignee,
+        required this.filmtype,
       required this.dispatchQuantityInSqm});
 
   factory DispatchDetails.fromJson(Map<String, dynamic> json) =>
@@ -74,6 +76,7 @@ class DispatchDetails {
           destination: json["destination"],
           inventoryNumber: json["inventoryNumber"],
           inventoryDate: json["inventoryDate"],
+          filmtype:json["filmtype"],
           poNumber: json["poNumber"],
           soNumber: json["soNumber"],
           soDate: json["soDate"],
@@ -104,6 +107,7 @@ class DispatchDetails {
         "firstTransporter": firstTransporter,
         "mobileNumber": mobileNumber,
         "consignee": consignee,
+    "filmtype":filmtype,
         "dispatchQuantityInSqm": dispatchQuantityInSqm
       };
 }
