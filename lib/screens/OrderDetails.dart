@@ -95,13 +95,13 @@ final dispatchDetailsOrder = [
   ["Vehicle Number", "vehicleNumber"],
   // ["Customer Account Code -", "customerAccountCode"],
   // ["MKT SO Number -", "mktSoNumber"],
-  ["First Transporter", "firstTransporter"],
+  // ["First Transporter", "firstTransporter"],
   // ["Trip Number -", "tripNumber"],
   // ["LR Number -", "lrNumber"],
   // ["Second Transporter -", "secondTransporter"],
   ["Mobile Number", "mobileNumber"],
   // ["Sale Category -", "saleCategory"],
-  ["Collector Name", "collectorName"],
+  // ["Collector Name", "collectorName"],
   // ["Grade -", "grade"],
   // ["Value -", "value"],
   // ["Packing Type -", "packingType"],
@@ -112,6 +112,7 @@ Map<String, double> columnWidths = {
   'soNumber': 100.0,
   'soDate': 100.0,
   'filmType': 100.0,
+  'filmtype':100.0,
   'widthMm': 50.0,
   'coreIdMm': 50.0,
   'length': 60.0,
@@ -233,7 +234,11 @@ class _OrderDetailsState extends State<OrderDetails> {
           if (value == null || value.toString().isEmpty) {
             if (apiHeader == "remark" ||
                 apiHeader == "consignee" ||
-                apiHeader == "collectorName") {
+                apiHeader == "collectorName" ||
+                apiHeader == "promiseDate" ||
+                apiHeader == "requestDate" ||
+                apiHeader == "soDate") {
+
               value = 'N/A';
             } else {
               value = 0;
@@ -245,9 +250,8 @@ class _OrderDetailsState extends State<OrderDetails> {
             value = value.toString();
             if (value.contains("T")) {
               value = value.split("T")[0];
-            } else {
-              value = "N/A";
             }
+
           }
           double columnWidth = columnWidths[apiHeader] ??
               100.0; // Default width if not specified
@@ -350,7 +354,7 @@ class _OrderDetailsState extends State<OrderDetails> {
               ReturnObj response = snapshot.data!;
 
               var data = json.decode(json.encode(response.data));
-              // print('hellooooooo${data[0]["customerPoNo"]}');
+              print('hellooooooo ${data[0]["soDate"]}');
               // // print('heeeeeee${data[0]}'); // Assuming 'data' is a JSON array
               if (widget.isOrderPage!) {
                 var tempPoNumber = data[0]["customerPoNo"];
