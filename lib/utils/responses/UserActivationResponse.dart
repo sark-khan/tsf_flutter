@@ -34,36 +34,30 @@ class Request {
   List<String> requestFor;
   bool isResponded;
   bool isApproved;
-  bool isStatusLoading;
-  String? selectedSubAdmin;
-  AssignedSubadmin? assignedSubadmin;
-  String createdAt;
+  DateTime createdAt;
   int v;
+  AssignedSubadmin assignedSubadmin;
 
   Request({
     required this.id,
     required this.requestCreatedBy,
     required this.requestFor,
     required this.isResponded,
-    this.selectedSubAdmin,
     required this.isApproved,
     required this.createdAt,
-    this.assignedSubadmin,
-    this.isStatusLoading = false,
     required this.v,
+    required this.assignedSubadmin,
   });
 
   factory Request.fromJson(Map<String, dynamic> json) => Request(
         id: json["_id"],
         requestCreatedBy: RequestCreatedBy.fromJson(json["requestCreatedBy"]),
-        createdAt: json["createdAt"],
         requestFor: List<String>.from(json["requestFor"].map((x) => x)),
         isResponded: json["isResponded"],
         isApproved: json["isApproved"],
-        assignedSubadmin: json["assignedSubadmin"] == null
-            ? null
-            : AssignedSubadmin.fromJson(json["assignedSubadmin"]),
+        createdAt: DateTime.parse(json["createdAt"]),
         v: json["__v"],
+        assignedSubadmin: AssignedSubadmin.fromJson(json["assignedSubadmin"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -72,9 +66,9 @@ class Request {
         "requestFor": List<dynamic>.from(requestFor.map((x) => x)),
         "isResponded": isResponded,
         "isApproved": isApproved,
-        "createdAt": createdAt,
-        "assignedSubadmin": assignedSubadmin?.toJson(),
+        "createdAt": createdAt.toIso8601String(),
         "__v": v,
+        "assignedSubadmin": assignedSubadmin.toJson(),
       };
 }
 
@@ -101,28 +95,29 @@ class AssignedSubadmin {
 
 class RequestCreatedBy {
   String id;
-  String accountNumber;
   String email;
+  String accountNumber;
   String partyName;
 
-  RequestCreatedBy(
-      {required this.id,
-      required this.accountNumber,
-      required this.email,
-      required this.partyName});
+  RequestCreatedBy({
+    required this.id,
+    required this.email,
+    required this.accountNumber,
+    required this.partyName,
+  });
 
   factory RequestCreatedBy.fromJson(Map<String, dynamic> json) =>
       RequestCreatedBy(
         id: json["_id"],
-        accountNumber: json["accountNumber"],
         email: json["email"],
+        accountNumber: json["accountNumber"],
         partyName: json["partyName"],
       );
 
   Map<String, dynamic> toJson() => {
         "_id": id,
-        "accountNumber": accountNumber,
         "email": email,
+        "accountNumber": accountNumber,
         "partyName": partyName,
       };
 }
