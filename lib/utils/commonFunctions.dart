@@ -20,8 +20,8 @@ import 'responses/UserActivationResponse.dart';
 
 class CommonFunctions {
   static Dio dio = Dio();
-  static String APIURL = "http://192.168.10.10:2000";
-  // static String APIURL = "http://43.204.181.73";
+  // static String APIURL = "http://192.168.10.10:2000";
+  static String APIURL = "http://43.204.181.73";
   // static String APIURL = "https://eager-rain-80700.pktriot.net";
   static var headers = {'Content-Type': 'application/json'};
 
@@ -195,7 +195,7 @@ class CommonFunctions {
             data: orderDetailsResponse.singleOrderDetails);
       } else {
         return ReturnObj(
-            message: "Unable to get the Dispatch Details", status: false);
+            message: "Unable to get the Order Details", status: false);
       }
     } catch (error) {
       printError(info: "Error in Order Details $error");
@@ -252,6 +252,7 @@ class CommonFunctions {
       if (response.statusCode == 200) {
         GetComments.GetCommentsResponse commentsMap =
             GetComments.GetCommentsResponse.fromJson(response.data);
+        print("reached here");
         return ReturnObj<List<GetComments.GetOrderCommentsDetail>>(
             message: "Comments Received Successfully",
             status: true,
