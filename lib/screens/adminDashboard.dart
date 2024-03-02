@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:collapsible_sidebar/collapsible_sidebar.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,8 @@ import 'package:tsf/utils/commonFunctions.dart';
 import 'package:tsf/utils/stateController.dart';
 
 import 'adminScreens/SubAdmins.dart';
+
+late CollapsibleSidebar collapsibleSidebar;
 
 class AdminDashboard extends StatelessWidget {
   const AdminDashboard({super.key});
@@ -30,6 +33,7 @@ class SidebarPage extends StatefulWidget {
 class _SidebarPageState extends State<SidebarPage> {
   late List<CollapsibleItem> _items;
   late String _headline;
+
   StateController stateController = Get.put(StateController());
   @override
   void initState() {
@@ -74,42 +78,41 @@ class _SidebarPageState extends State<SidebarPage> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-
-    return SafeArea(
-      child: CollapsibleSidebar(
-        isCollapsed: false,
-        items: _items,
-        title: 'TSF',
-        bottomPadding: 0,
-        body: _body(size, context),
-        backgroundColor: Colors.black87,
-        selectedTextColor: Colors.white70,
-        textStyle: const TextStyle(
-            fontSize: 15,
-            fontStyle: FontStyle.normal,
-            fontWeight: FontWeight.bold),
-        titleStyle: const TextStyle(
-            fontSize: 20,
-            fontStyle: FontStyle.normal,
-            fontWeight: FontWeight.bold),
-        toggleTitleStyle:
-            const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        sidebarBoxShadow: const [
-          BoxShadow(
-            color: Colors.blueGrey,
-            blurRadius: 20,
-            spreadRadius: 0.01,
-            offset: Offset(3, 3),
-          ),
-          BoxShadow(
-            color: Colors.blueGrey,
-            blurRadius: 50,
-            spreadRadius: 0.01,
-            offset: Offset(3, 3),
-          ),
-        ],
-      ),
+    collapsibleSidebar = CollapsibleSidebar(
+      collapseOnBodyTap: false,
+      isCollapsed: true,
+      items: _items,
+      title: 'TSF',
+      bottomPadding: 0,
+      body: _body(size, context),
+      backgroundColor: Colors.black87,
+      selectedTextColor: Colors.white70,
+      textStyle: const TextStyle(
+          fontSize: 15,
+          fontStyle: FontStyle.normal,
+          fontWeight: FontWeight.bold),
+      titleStyle: const TextStyle(
+          fontSize: 20,
+          fontStyle: FontStyle.normal,
+          fontWeight: FontWeight.bold),
+      toggleTitleStyle:
+          const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      sidebarBoxShadow: const [
+        BoxShadow(
+          color: Colors.blueGrey,
+          blurRadius: 20,
+          spreadRadius: 0.01,
+          offset: Offset(3, 3),
+        ),
+        BoxShadow(
+          color: Colors.blueGrey,
+          blurRadius: 50,
+          spreadRadius: 0.01,
+          offset: Offset(3, 3),
+        ),
+      ],
     );
+    return SafeArea(child: collapsibleSidebar);
   }
 
   Widget _body(Size size, BuildContext context) {

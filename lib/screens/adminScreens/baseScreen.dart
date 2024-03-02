@@ -1,5 +1,6 @@
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:tsf/screens/adminDashboard.dart';
 import 'package:tsf/utils/Storage.dart';
 
 import 'package:flutter/material.dart';
@@ -82,9 +83,9 @@ class _BaseUIState extends State<BaseUI> {
           color: Colors.grey[300],
           child: Padding(
             padding: EdgeInsets.only(
-              left: screenWidth < 500 ? 20 : 220,
+              left: screenWidth < 500 ? 10 : 100,
               top: 50,
-              right: 20,
+              right: 10,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -117,7 +118,7 @@ class _BaseUIState extends State<BaseUI> {
             child: Text(
               widget.headline,
               style: TextStyle(
-                fontSize: 40,
+                fontSize: screenWidth > 500 ? 40 : 20,
                 color: Colors.grey[700],
                 fontWeight: FontWeight.bold,
               ),
@@ -131,11 +132,34 @@ class _BaseUIState extends State<BaseUI> {
   }
 
   Widget _buildSmallScreenActions(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.more_vert),
-      onPressed: () {
-        // Actions for smaller screens
+    return PopupMenuButton<String>(
+      onSelected: (value) {
+        switch (value) {
+          case 'logout':
+            // Perform the logout operation
+            Storage.clearUser();
+            Navigator.of(context)
+                .pushNamed("/login"); // Adjust navigation as needed
+            break;
+          // Handle other actions if necessary
+        }
       },
+      itemBuilder: (BuildContext context) {
+        return [
+          // Add more PopupMenuItem widgets for other actions if needed
+          const PopupMenuItem<String>(
+            value: 'logout',
+            child: Row(
+              children: [
+                Icon(Icons.logout, color: Colors.blueGrey),
+                SizedBox(width: 8),
+                Text('Logout'),
+              ],
+            ),
+          ),
+        ];
+      },
+      icon: const Icon(Icons.more_vert),
     );
   }
 
