@@ -18,6 +18,10 @@ class _UserRequestsState extends State<UserRequests> {
   List<String> subAdminNames = [];
   bool _isScreenLoading = true;
   bool? getterStatus;
+  final ScrollController _scrollController = ScrollController();
+  final ScrollController _controller = ScrollController();
+  double _initialScrollOffset = 0.0;
+  double _initialDragOffset = 0.0;
 
   @override
   void initState() {
@@ -65,42 +69,64 @@ class _UserRequestsState extends State<UserRequests> {
     } else if (!getterStatus!) {
       return Center(child: Text("No Auth Request Found"));
     } else {
-      return Expanded(
+      return GestureDetector(
+        onVerticalDragStart: (DragStartDetails details) {
+          _initialScrollOffset = _controller.offset;
+          _initialDragOffset = details.globalPosition.dy;
+        },
+        onVerticalDragUpdate: (DragUpdateDetails details) {
+          double dragOffset = details.globalPosition.dy - _initialDragOffset;
+          double scrollOffset = _initialScrollOffset - dragOffset;
+          _controller.jumpTo(scrollOffset);
+        },
         child: SingleChildScrollView(
-          child: Table(
-            columnWidths: {
-              0: FlexColumnWidth(5),
-              1: FlexColumnWidth(5),
-              2: FlexColumnWidth(5),
-              3: FlexColumnWidth(5),
-              4: FlexColumnWidth(8),
-              5: FlexColumnWidth(5)
-            },
-            defaultVerticalAlignment: TableCellVerticalAlignment.bottom,
-            border: TableBorder.all(),
-            children: [
-              _buildTableHeader(),
-              ...List.generate(
-                userActivationRequestList.length,
-                (index) => _tableRow(
-                    index,
-                    userActivationRequestList[index]
-                        .requestCreatedBy
-                        .accountNumber,
-                    userActivationRequestList[index]
-                        .requestCreatedBy
-                        .partyName, // Replace with actual data
-                    userActivationRequestList[index]
-                        .requestCreatedBy
-                        .email
-                        .split(" ")[0], // Replace with actual data
-                    !userActivationRequestList[index].isResponded
-                        ? "PENDING"
-                        : userActivationRequestList[index].isApproved
-                            ? 'ACTIVATED'
-                            : 'DEACTIVATED'),
+          scrollDirection: Axis.vertical,
+          child: Scrollbar(
+            controller: _scrollController,
+            thumbVisibility: true,
+            trackVisibility: true,
+            interactive: true,
+            thickness: 5.0, // Set the thickness of the scrollbar (optional)
+            radius: Radius.circular(10.0),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              controller: _scrollController,
+              child: Table(
+                columnWidths: {
+                  0: FixedColumnWidth(160),
+                  1: FixedColumnWidth(160),
+                  2: FixedColumnWidth(160),
+                  3: FixedColumnWidth(160),
+                  4: FixedColumnWidth(200),
+                  5: FixedColumnWidth(160)
+                },
+                defaultVerticalAlignment: TableCellVerticalAlignment.bottom,
+                border: TableBorder.all(),
+                children: [
+                  _buildTableHeader(),
+                  ...List.generate(
+                    userActivationRequestList.length,
+                    (index) => _tableRow(
+                        index,
+                        userActivationRequestList[index]
+                            .requestCreatedBy
+                            .accountNumber,
+                        userActivationRequestList[index]
+                            .requestCreatedBy
+                            .partyName, // Replace with actual data
+                        userActivationRequestList[index]
+                            .requestCreatedBy
+                            .email
+                            .split(" ")[0], // Replace with actual data
+                        !userActivationRequestList[index].isResponded
+                            ? "PENDING"
+                            : userActivationRequestList[index].isApproved
+                                ? 'ACTIVATED'
+                                : 'DEACTIVATED'),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       );

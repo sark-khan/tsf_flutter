@@ -57,80 +57,84 @@ class _PriorityRequestsState extends State<PriorityRequests> {
                           color: Colors.blueGrey,
                         ))
                       : SingleChildScrollView(
-                          child: Table(
-                              columnWidths: {
-                                0: FlexColumnWidth(10),
-                                1: FlexColumnWidth(10),
-                                2: FlexColumnWidth(10),
-                                3: FlexColumnWidth(10),
-                                4: FlexColumnWidth(20),
-                                5: FlexColumnWidth(10)
-                              },
-                              defaultVerticalAlignment:
-                                  TableCellVerticalAlignment.bottom,
-                              border: TableBorder.all(),
-                              children: [
-                                TableRow(children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'So Number',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'Customer Po Number',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'Customer Name',
-                                      style: TextStyle(
+                          scrollDirection: Axis.horizontal,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            child: Table(
+                                columnWidths: {
+                                  0: FixedColumnWidth(160),
+                                  1: FixedColumnWidth(160),
+                                  2: FixedColumnWidth(160),
+                                  3: FixedColumnWidth(160),
+                                  4: FixedColumnWidth(260),
+                                  5: FixedColumnWidth(160)
+                                },
+                                defaultVerticalAlignment:
+                                    TableCellVerticalAlignment.bottom,
+                                border: TableBorder.all(),
+                                children: [
+                                  TableRow(children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'So Number',
+                                        style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 18),
+                                          fontSize: 18,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text('Customer Code',
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'Customer Po Number',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'Customer Name',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 18)),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'User Comments',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18),
+                                            fontSize: 18),
+                                      ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'CommentedAt',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text('Customer Code',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18)),
                                     ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'User Comments',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'CommentedAt',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18),
+                                      ),
+                                    )
+                                  ]),
+                                  ...List.generate(
+                                    commentsList.length,
+                                    (index) => _tableRow(index),
                                   )
                                 ]),
-                                ...List.generate(
-                                  commentsList.length,
-                                  (index) => _tableRow(index),
-                                )
-                              ]),
+                          ),
                         ),
                 ),
               ],
