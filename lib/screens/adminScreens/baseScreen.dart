@@ -177,6 +177,9 @@ class _BaseUIState extends State<BaseUI> {
         if (stateController.headline.value == "Sub Admins")
           _addSubAdminButton(context),
         _logoutButton(context),
+        SizedBox(
+          width: 50,
+        )
       ],
     );
   }

@@ -35,7 +35,7 @@ class GetOrderCommentsDetail {
   Order order;
   Sender sender;
   String text;
-  DateTime updatedAt;
+  String updatedAt;
   int v;
 
   GetOrderCommentsDetail({
@@ -53,7 +53,7 @@ class GetOrderCommentsDetail {
         order: Order.fromJson(json["order"]),
         sender: Sender.fromJson(json["sender"]),
         text: json["text"],
-        updatedAt: DateTime.parse(json["updatedAt"]),
+        updatedAt: json["updatedAt"],
         v: json["__v"],
       );
 
@@ -62,7 +62,7 @@ class GetOrderCommentsDetail {
         "order": order.toJson(),
         "sender": sender.toJson(),
         "text": text,
-        "updatedAt": updatedAt.toIso8601String(),
+        "updatedAt": updatedAt,
         "__v": v,
       };
 }

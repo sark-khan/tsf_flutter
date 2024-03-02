@@ -143,8 +143,8 @@ class _PriorityRequestsState extends State<PriorityRequests> {
 
   TableRow _tableRow(int index) {
     GetOrderCommentsDetail commentsDetail = commentsList[index];
-    DateTime timestamp = DateTime.parse(commentsDetail.updatedAt.toString());
-    String formattedTimestamp = DateFormat.yMd().add_Hms().format(timestamp);
+    // DateTime timestamp = DateTime.parse(commentsDetail.updatedAt.toString());
+    String formattedTimestamp = commentsDetail.updatedAt;
 
     return TableRow(
         decoration: !(index % 2 == 0)

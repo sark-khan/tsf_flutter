@@ -141,9 +141,9 @@ class _SubAdminsState extends State<SubAdmins> {
             child: Text(
               name,
               style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w800),
+                color: Colors.black,
+                fontSize: 15,
+              ),
             ),
           ),
           Padding(
@@ -151,9 +151,9 @@ class _SubAdminsState extends State<SubAdmins> {
             child: Text(
               email,
               style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w800),
+                color: Colors.black,
+                fontSize: 15,
+              ),
             ),
           ),
           Padding(

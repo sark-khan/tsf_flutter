@@ -167,25 +167,25 @@ class _UserRequestsState extends State<UserRequests> {
           padding: const EdgeInsets.all(8.0),
           child: Text(name,
               style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w800)),
+                color: Colors.black,
+                fontSize: 15,
+              )),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(userName,
               style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w800)),
+                color: Colors.black,
+                fontSize: 15,
+              )),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(customerCode,
               style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 15,
-                  fontWeight: FontWeight.w800)),
+                color: Colors.grey[600],
+                fontSize: 15,
+              )),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
