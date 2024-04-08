@@ -20,10 +20,12 @@ class _HomeScreenState extends State<HomeScreen> {
   int toggleIndex = 0;
   Future<ReturnObj>? futureData;
   String customerName = "Home";
+  String destination = "Destination";
 
   void initState() {
     super.initState();
     customerName = getUserName();
+    destination = getDestination() ?? "destination";
     futureData = CommonFunctions().getOrders(); // Default data
   }
 
@@ -49,7 +51,20 @@ class _HomeScreenState extends State<HomeScreen> {
           elevation: 0,
           title: Padding(
             padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.01),
-            child: Text(customerName),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  customerName,
+                  style: TextStyle(fontSize: 16.0, color: Colors.white),
+                ),
+                Text(
+                  destination,
+                  style: TextStyle(fontSize: 16.0, color: Colors.white),
+                )
+              ],
+            ),
           ),
           toolbarHeight: screenSize.height * 0.1087,
           actions: [
@@ -161,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   : HomeCard().dispatchCard(
                                       orders[index].invoiceNumber[0]!,
                                       orders[index].promiseDate[0]!,
-                                      orders[index].id!,
+                                      orders[index].destination[0]!,
                                       orders[index].customerPoNumbers[0],
                                       context),
                             );

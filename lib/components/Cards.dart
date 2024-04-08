@@ -211,7 +211,7 @@ class HomeCard {
                               color: Colors.black,
                               fontSize: 10),
                           children: [
-                            TextSpan(text: "Order ID: \n"),
+                            TextSpan(text: "Destination: \n"),
                             TextSpan(
                                 text: "${orderId.toString().split(" ")[0]}",
                                 style: const TextStyle(
