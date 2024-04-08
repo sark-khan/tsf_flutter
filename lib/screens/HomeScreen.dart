@@ -178,6 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       orders[index].promiseDate[0]!,
                                       orders[index].destination[0]!,
                                       orders[index].customerPoNumbers[0],
+                                      orders[index].id!,
                                       context),
                             );
                           },

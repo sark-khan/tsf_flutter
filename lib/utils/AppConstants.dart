@@ -51,5 +51,5 @@ There are many variations of passages of Lorem Ipsum available, but the majority
 class BackgroundImagePath {
   String INNERBACKGROUND = "assets/InnerBackground.png";
   String LOGINBACKGROUND = "assets/Login.png";
-  String SPLASHBACKGROUND = "assets/Splash.png";
+  String SPLASHBACKGROUND = "assets/splash_screen.png";
 }

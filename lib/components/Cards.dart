@@ -153,11 +153,11 @@ class HomeCard {
   }
 
   Widget dispatchCard(String invoiceNumber, String promiseDate, String orderId,
-      String customerPoNumber, BuildContext context) {
+      String customerPoNumber, String id, BuildContext context) {
     return InkWell(
       onTap: () {
         Navigator.of(context).pushNamed("/order-details",
-            arguments: {"orderId": orderId, "isOrderPage": false});
+            arguments: {"orderId": id, "isOrderPage": false});
       },
       child: Card(
         elevation: 3,
