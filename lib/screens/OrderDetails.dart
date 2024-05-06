@@ -63,17 +63,17 @@ final List orderDetails = [
     'toProduceSoQty',
   ],
   ['Unit', 'uom'],
-  ["Grade", 'grade'],
-  [
-    'Request Date',
-    'requestDate',
-  ],
+  // ["Grade", 'grade'],
+  // [
+  //   'Request Date',
+  //   'requestDate',
+  // ],
   [
     'Promise Date',
     'promiseDate',
   ],
-  ['Remark', 'remark'],
-  ['Consignee', 'consignee']
+  ['Remark', 'remarks'],
+  ['Consignee', 'consigneeDetails']
 ];
 
 final dispatchDetailsOrder = [
@@ -112,7 +112,7 @@ Map<String, double> columnWidths = {
   'soNumber': 100.0,
   'soDate': 100.0,
   'filmType': 100.0,
-  'filmtype':100.0,
+  'filmtype': 100.0,
   'widthMm': 50.0,
   'coreIdMm': 50.0,
   'length': 60.0,
@@ -122,8 +122,8 @@ Map<String, double> columnWidths = {
   'toProduceSoQty': 100.0,
   'requestDate': 100.0,
   'promiseDate': 100.0,
-  'remark': 100.0,
-  'consignee': 100.0,
+  'remarks': 100.0,
+  'consigneeDetails': 100.0,
   'poNumber': 100.0,
   "width": 50.0,
   "coreInnerDiameter": 50.0,
@@ -156,6 +156,8 @@ class _OrderDetailsState extends State<OrderDetails> {
   String destination = "";
   String invoiceNumber = "";
   String invoiceDate = "";
+  String grade = "";
+  String remark = "";
 
   bool dataProcessed = false;
   @override
@@ -238,7 +240,6 @@ class _OrderDetailsState extends State<OrderDetails> {
                 apiHeader == "promiseDate" ||
                 apiHeader == "requestDate" ||
                 apiHeader == "soDate") {
-
               value = 'N/A';
             } else {
               value = 0;
@@ -251,7 +252,6 @@ class _OrderDetailsState extends State<OrderDetails> {
             if (value.contains("T")) {
               value = value.split("T")[0];
             }
-
           }
           double columnWidth = columnWidths[apiHeader] ??
               100.0; // Default width if not specified
@@ -292,6 +292,14 @@ class _OrderDetailsState extends State<OrderDetails> {
                     Text("Destination :", style: TextStyle(fontSize: 12)),
                     Text(
                       destination,
+                      style: TextStyle(fontSize: 10),
+                    )
+                  ]),
+                  SizedBox(width: 15),
+                  Column(children: [
+                    Text("Grade :", style: TextStyle(fontSize: 12)),
+                    Text(
+                      grade,
                       style: TextStyle(fontSize: 10),
                     )
                   ])
@@ -359,11 +367,17 @@ class _OrderDetailsState extends State<OrderDetails> {
               if (widget.isOrderPage!) {
                 var tempPoNumber = data[0]["customerPoNo"];
                 var tempDestination = data[0]["destination"];
+                var tempGrade = data[0]["grade"];
+                var remark = data[0]["remarks"];
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   if (!dataProcessed) {
                     setState(() {
+                      if (remark != "" || remark != null) {
+                        columnWidths["remarks"] = 200.0;
+                      }
                       poNumber = tempPoNumber;
                       destination = tempDestination;
+                      grade = tempGrade;
                     });
                     dataProcessed = true;
                   }
