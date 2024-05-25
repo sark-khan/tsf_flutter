@@ -12,14 +12,15 @@ final List orderDetails = [
   //   'Customer Name',
   //   'customerName',
   // ],
+
   // [
   //   'Destination',
   //   'destination',
   // ],
-  // [
-  //   'Customer PO No',
-  //   'customerPoNo',
-  // ],
+  [
+    'Customer PO No',
+    'customerPoNo',
+  ],
   [
     'So Number',
     'soNumber',
@@ -63,7 +64,8 @@ final List orderDetails = [
     'toProduceSoQty',
   ],
   ['Unit', 'uom'],
-  // ["Grade", 'grade'],
+  ["Grade", 'grade'],
+
   // [
   //   'Request Date',
   //   'requestDate',
@@ -71,6 +73,10 @@ final List orderDetails = [
   [
     'Promise Date',
     'promiseDate',
+  ],
+  [
+    'Destination',
+    'destination',
   ],
   ['Remark', 'remarks'],
   ['Consignee', 'consigneeDetails']
@@ -80,8 +86,8 @@ final dispatchDetailsOrder = [
   // ["Customer Name -", "customerName"],
   // // ["Region -", "region"],
   // ["Destination -", "destination"],
-  // ["Invoice Number -", "inventoryNumber"],
-  // ["Invoice Date -", "inventoryDate"],
+  ["Invoice Number", "inventoryNumber"],
+  ["Invoice Date", "inventoryDate"],
   ["PO Number", "poNumber"],
   ["SO Number", "soNumber"],
   ["SO Date", "soDate"],
@@ -100,6 +106,7 @@ final dispatchDetailsOrder = [
   // ["LR Number -", "lrNumber"],
   // ["Second Transporter -", "secondTransporter"],
   ["Mobile Number", "mobileNumber"],
+  ["Destination", "destination"],
   // ["Sale Category -", "saleCategory"],
   // ["Collector Name", "collectorName"],
   // ["Grade -", "grade"],
@@ -124,7 +131,8 @@ Map<String, double> columnWidths = {
   'promiseDate': 100.0,
   'remarks': 100.0,
   'consigneeDetails': 100.0,
-  'poNumber': 100.0,
+  'poNumber': 140.0,
+  "customerPoNo": 200.0,
   "width": 50.0,
   "coreInnerDiameter": 50.0,
   "rollOuterDiameter": 50.0,
@@ -187,11 +195,23 @@ class _OrderDetailsState extends State<OrderDetails> {
     Map<String, String> headerMap = {};
     if (widget.isOrderPage!) {
       for (var detail in orderDetails) {
+        if (widget.orderId != "-1" &&
+            (detail[1] == "customerPoNo" ||
+                detail[1] == "destination" ||
+                detail[1] == "grade")) {
+          continue;
+        }
         headerMap[detail[1]] = detail[0];
       }
       return headerMap;
     } else {
       for (var detail in dispatchDetailsOrder) {
+        if (widget.orderId != "-1" &&
+            (detail[1] == "inventoryNumber" ||
+                detail[1] == "destination" ||
+                detail[1] == "inventoryDate")) {
+          continue;
+        }
         headerMap[detail[1]] = detail[0];
       }
       return headerMap;
@@ -278,31 +298,43 @@ class _OrderDetailsState extends State<OrderDetails> {
                     style: TextStyle(fontSize: 15),
                   ),
                   SizedBox(width: 25),
-                  Column(
-                    children: [
-                      Text("Po Number :", style: TextStyle(fontSize: 12)),
-                      Text(
-                        poNumber,
-                        style: TextStyle(fontSize: 10),
-                      )
-                    ],
-                  ),
-                  SizedBox(width: 15),
-                  Column(children: [
-                    Text("Destination :", style: TextStyle(fontSize: 12)),
-                    Text(
-                      destination,
-                      style: TextStyle(fontSize: 10),
-                    )
-                  ]),
-                  SizedBox(width: 15),
-                  Column(children: [
-                    Text("Grade :", style: TextStyle(fontSize: 12)),
-                    Text(
-                      grade,
-                      style: TextStyle(fontSize: 10),
-                    )
-                  ])
+                  widget.orderId != "-1"
+                      ? Row(
+                          children: [
+                            Column(
+                              children: [
+                                Text("Po Number :",
+                                    style: TextStyle(fontSize: 12)),
+                                Text(
+                                  poNumber,
+                                  style: TextStyle(fontSize: 10),
+                                ),
+                              ],
+                            ),
+                            SizedBox(width: 15),
+                            Column(
+                              children: [
+                                Text("Destination :",
+                                    style: TextStyle(fontSize: 12)),
+                                Text(
+                                  destination,
+                                  style: TextStyle(fontSize: 10),
+                                ),
+                              ],
+                            ),
+                            SizedBox(width: 15),
+                            Column(
+                              children: [
+                                Text("Grade :", style: TextStyle(fontSize: 12)),
+                                Text(
+                                  grade,
+                                  style: TextStyle(fontSize: 10),
+                                ),
+                              ],
+                            ),
+                          ],
+                        )
+                      : SizedBox()
                 ],
               )
             : Row(
@@ -313,39 +345,50 @@ class _OrderDetailsState extends State<OrderDetails> {
                     style: TextStyle(fontSize: 15),
                   ),
                   SizedBox(width: 25),
-                  Column(
-                    children: [
-                      Text("INV. #:", style: TextStyle(fontSize: 12)),
-                      Text(
-                        invoiceNumber,
-                        style: TextStyle(fontSize: 10),
-                      )
-                    ],
-                  ),
-                  SizedBox(width: 15),
-                  Column(
-                    children: [
-                      Text("Inv. Date", style: TextStyle(fontSize: 12)),
-                      Text(
-                        invoiceDate,
-                        style: TextStyle(fontSize: 10),
-                      )
-                    ],
-                  ),
-                  SizedBox(width: 15),
-                  Column(children: [
-                    Text("Destination :", style: TextStyle(fontSize: 12)),
-                    Text(
-                      destination,
-                      style: TextStyle(fontSize: 10),
-                    )
-                  ])
+                  widget.orderId != "-1"
+                      ? Row(
+                          children: [
+                            Column(
+                              children: [
+                                const Text("INV. #:",
+                                    style: TextStyle(fontSize: 12)),
+                                Text(
+                                  invoiceNumber,
+                                  style: TextStyle(fontSize: 10),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(width: 15),
+                            Column(
+                              children: [
+                                const Text("Inv. Date",
+                                    style: TextStyle(fontSize: 12)),
+                                Text(
+                                  invoiceDate,
+                                  style: const TextStyle(fontSize: 10),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(width: 15),
+                            Column(
+                              children: [
+                                const Text("Destination :",
+                                    style: TextStyle(fontSize: 12)),
+                                Text(
+                                  destination,
+                                  style: const TextStyle(fontSize: 10),
+                                ),
+                              ],
+                            ),
+                          ],
+                        )
+                      : const SizedBox()
                 ],
               ),
         backgroundColor: Colors.blue,
         elevation: 4.0,
         toolbarHeight: 70.0,
-        actions: widget.isOrderPage!
+        actions: widget.isOrderPage! && widget.orderId != "-1"
             ? [
                 Buttons()
                     .addCommentsButton("Add Comments", context, widget.orderId!)
@@ -362,40 +405,46 @@ class _OrderDetailsState extends State<OrderDetails> {
               ReturnObj response = snapshot.data!;
 
               var data = json.decode(json.encode(response.data));
-              print('hellooooooo ${data[0]["soDate"]}');
+              // print(
+              //     "data >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${data.length}");
+              // if (data.length == 0) {
+              //   return SizedBox();
+              // }
               // // print('heeeeeee${data[0]}'); // Assuming 'data' is a JSON array
-              if (widget.isOrderPage!) {
-                var tempPoNumber = data[0]["customerPoNo"];
-                var tempDestination = data[0]["destination"];
-                var tempGrade = data[0]["grade"];
-                var remark = data[0]["remarks"];
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (!dataProcessed) {
-                    setState(() {
-                      if (remark != "" || remark != null) {
-                        columnWidths["remarks"] = 200.0;
-                      }
-                      poNumber = tempPoNumber;
-                      destination = tempDestination;
-                      grade = tempGrade;
-                    });
-                    dataProcessed = true;
-                  }
-                });
-              } else {
-                var tempInvoiceNumber = data[0]["inventoryNumber"];
-                var tempinvoiceDate = data[0]["inventoryDate"];
-                var tempDestination = data[0]["destination"];
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (!dataProcessed) {
-                    setState(() {
-                      invoiceNumber = tempInvoiceNumber;
-                      invoiceDate = tempinvoiceDate;
-                      destination = tempDestination;
-                    });
-                    dataProcessed = true;
-                  }
-                });
+              if (data.length != 0) {
+                if (widget.isOrderPage!) {
+                  var tempPoNumber = data?[0]["customerPoNo"];
+                  var tempDestination = data?[0]["destination"];
+                  var tempGrade = data?[0]["grade"];
+                  var remark = data?[0]["remarks"];
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (!dataProcessed) {
+                      setState(() {
+                        if (remark != "" || remark != null) {
+                          columnWidths["remarks"] = 200.0;
+                        }
+                        poNumber = tempPoNumber;
+                        destination = tempDestination;
+                        grade = tempGrade;
+                      });
+                      dataProcessed = true;
+                    }
+                  });
+                } else {
+                  var tempInvoiceNumber = data[0]["inventoryNumber"];
+                  var tempinvoiceDate = data[0]["inventoryDate"];
+                  var tempDestination = data[0]["destination"];
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (!dataProcessed) {
+                      setState(() {
+                        invoiceNumber = tempInvoiceNumber;
+                        invoiceDate = tempinvoiceDate;
+                        destination = tempDestination;
+                      });
+                      dataProcessed = true;
+                    }
+                  });
+                }
               }
               List<String> headers = data.isNotEmpty
                   ? data.first.keys.cast<String>().toList()
@@ -411,7 +460,8 @@ class _OrderDetailsState extends State<OrderDetails> {
                           scrollDirection: Axis.horizontal,
                           controller: _bodyScrollController,
                           child: Column(
-                            children: data.asMap().entries.map<Widget>((entry) {
+                            children:
+                                data?.asMap().entries.map<Widget>((entry) {
                               int index = entry.key;
                               Map<String, dynamic> item = entry.value;
                               return _buildRow(item, index);

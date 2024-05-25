@@ -85,14 +85,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     ToggleSwitch(
                       minWidth: MediaQuery.of(context).size.width,
-                      minHeight: screenSize.height * 0.0592105263,
+                      minHeight: screenSize.height * 0.0392105263,
                       initialLabelIndex: toggleIndex,
                       cornerRadius: 5.0,
                       activeFgColor: AppColors().white,
                       inactiveBgColor: AppColors().inactiveToggle,
                       inactiveFgColor: AppColors().white,
                       totalSwitches: 2,
-                      labels: const ["Sales Order", "Dispatch Summary"],
+                      labels: const [
+                        "Live Sales Order",
+                        "Invoice-wise Dispatches"
+                      ],
                       borderWidth: 2.0,
                       // borderColor: [Colors.blueGrey],
                       activeBgColors: [
@@ -102,6 +105,43 @@ class _HomeScreenState extends State<HomeScreen> {
                       onToggle: (index) {
                         toggleIndex = index!;
                         updateData();
+                      },
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ToggleSwitch(
+                      minWidth: MediaQuery.of(context).size.width,
+                      minHeight: screenSize.height * 0.0392105263,
+                      initialLabelIndex: -1,
+                      cornerRadius: 5.0,
+                      activeFgColor: AppColors().white,
+                      inactiveBgColor: AppColors().inactiveToggle,
+                      inactiveFgColor: AppColors().white,
+                      totalSwitches: 2,
+                      labels: const ["Pending Summary", "Dispatch Summary"],
+                      borderWidth: 2.0,
+                      // borderColor: [Colors.blueGrey],
+                      activeBgColors: [
+                        [AppColors().inactiveToggle],
+                        [AppColors().inactiveToggle],
+                      ],
+                      onToggle: (index) {
+                        if (index == 0) {
+                          Navigator.pushNamed(context, "/order-details",
+                              arguments: {
+                                "orderId": "-1",
+                                "isOrderPage": true
+                              });
+                        } else {
+                          Navigator.pushNamed(context, "/order-details",
+                              arguments: {
+                                "orderId": "-1",
+                                "isOrderPage": false
+                              });
+                        }
                       },
                     ),
                   ],

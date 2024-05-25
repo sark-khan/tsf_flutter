@@ -17,12 +17,12 @@ class Buttons {
             },
           );
         },
-        child: Text(
-          text,
-          style: TextStyle(fontSize: 12),
-        ),
         style: ElevatedButton.styleFrom(
             backgroundColor: AppColors().buttonColorPurple),
+        child: Text(
+          text,
+          style: const TextStyle(fontSize: 12, color: Colors.white),
+        ),
       ),
     );
   }
@@ -137,7 +137,10 @@ class Buttons {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 35, vertical: 12),
               ),
-              child: Text(TextConstants().SUBMIT),
+              child: Text(
+                TextConstants().SUBMIT,
+                style: const TextStyle(color: Colors.white),
+              ),
             ),
           ],
         ),

@@ -60,8 +60,8 @@ class CommonFunctions {
   Future<ReturnObj> Login(String email, String password) async {
     try {
       var headers = {'Content-Type': 'application/json'};
-      var data = json.encode(
-          {"accountNumberOrEmail": email.toLowerCase(), "password": password});
+      var data =
+          json.encode({"accountNumberOrEmail": email, "password": password});
       var dio = Dio();
       var response = await dio.request(
         '$APIURL/api/auth/login',
@@ -126,8 +126,8 @@ class CommonFunctions {
       if (accountNumberOrEmail.isEmpty) {
         return ReturnObj(message: "Please Enter the Email", status: false);
       }
-      var bodyData = json
-          .encode({"accountNumberOrEmail": accountNumberOrEmail.toLowerCase()});
+      var bodyData =
+          json.encode({"accountNumberOrEmail": accountNumberOrEmail});
       var response = await dio.request(
         "$APIURL/api/auth/check-user",
         options: Options(
@@ -560,7 +560,8 @@ class ReturnObj<T> {
 
 String getUserRole() => Jwt.parseJwt(Storage.getJwtToken())['role'];
 String getUserName() => Jwt.parseJwt(Storage.getJwtToken())['name'];
-String getDestination() => Jwt.parseJwt(Storage.getJwtToken())['city'];
+String getDestination() => Jwt.parseJwt(Storage.getJwtToken())['city']!; 
+// String getDestination2() => Jwt.parseJwt(Storage.getJwtToken())['state']!;
 
 // String getIdFromQueryParameter() {
 //   // if (kIsWeb) {
