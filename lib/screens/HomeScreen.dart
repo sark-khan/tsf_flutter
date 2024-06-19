@@ -57,11 +57,11 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Text(
                   customerName,
-                  style: TextStyle(fontSize: 16.0, color: Colors.white),
+                  style: const TextStyle(fontSize: 16.0, color: Colors.white),
                 ),
                 Text(
                   destination,
-                  style: TextStyle(fontSize: 16.0, color: Colors.white),
+                  style: const TextStyle(fontSize: 16.0, color: Colors.white),
                 )
               ],
             ),
@@ -93,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       inactiveFgColor: AppColors().white,
                       totalSwitches: 2,
                       labels: const [
-                        "Live Sales Order",
+                        "Live Sale Orders",
                         "Invoice-wise Dispatches"
                       ],
                       borderWidth: 2.0,
@@ -121,7 +121,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       inactiveBgColor: AppColors().inactiveToggle,
                       inactiveFgColor: AppColors().white,
                       totalSwitches: 2,
-                      labels: const ["Pending Summary", "Dispatch Summary"],
+                      labels: const [
+                        "Pending Order Summary",
+                        "Dispatch Summary"
+                      ],
                       borderWidth: 2.0,
                       // borderColor: [Colors.blueGrey],
                       activeBgColors: [

@@ -21,14 +21,7 @@ final List orderDetails = [
     'Customer PO No',
     'customerPoNo',
   ],
-  [
-    'So Number',
-    'soNumber',
-  ],
-  [
-    'So Date',
-    'soDate',
-  ],
+
   [
     'Film Type',
     'filmType',
@@ -37,7 +30,7 @@ final List orderDetails = [
     'Width',
     'widthMm',
   ],
-  ["Length", "length"],
+  // ["Length", "length"],
   [
     'Core ID',
     'coreIdMm',
@@ -78,7 +71,15 @@ final List orderDetails = [
     'Destination',
     'destination',
   ],
-  ['Remark', 'remarks'],
+  [
+    'So Number',
+    'soNumber',
+  ],
+  [
+    'So Date',
+    'soDate',
+  ],
+  // ['Remark', 'remarks'],
   ['Consignee', 'consigneeDetails']
 ];
 
@@ -86,12 +87,11 @@ final dispatchDetailsOrder = [
   // ["Customer Name -", "customerName"],
   // // ["Region -", "region"],
   // ["Destination -", "destination"],
+  ["PO Number", "poNumber"],
   ["Invoice Number", "inventoryNumber"],
   ["Invoice Date", "inventoryDate"],
-  ["PO Number", "poNumber"],
-  ["SO Number", "soNumber"],
-  ["SO Date", "soDate"],
-  ["Film Type", "filmtype"],
+
+  ["Film Code", "filmtype"],
   ["Width (mm)", "width"],
   ["Core ID", "coreInnerDiameter"],
   ["Roll OD", "rollOuterDiameter"],
@@ -107,6 +107,8 @@ final dispatchDetailsOrder = [
   // ["Second Transporter -", "secondTransporter"],
   ["Mobile Number", "mobileNumber"],
   ["Destination", "destination"],
+  ["SO Number", "soNumber"],
+  ["SO Date", "soDate"],
   // ["Sale Category -", "saleCategory"],
   // ["Collector Name", "collectorName"],
   // ["Grade -", "grade"],
@@ -118,8 +120,8 @@ final dispatchDetailsOrder = [
 Map<String, double> columnWidths = {
   'soNumber': 100.0,
   'soDate': 100.0,
-  'filmType': 100.0,
-  'filmtype': 100.0,
+  'filmType': 120.0,
+  'filmtype': 120.0,
   'widthMm': 50.0,
   'coreIdMm': 50.0,
   'length': 60.0,
