@@ -73,6 +73,17 @@ class Buttons {
 
   Dialog showDialogs(BuildContext context, String orderId) {
     TextEditingController commentController = TextEditingController();
+    FocusNode commentFocusNode = FocusNode();
+
+    void handleSubmit() async {
+      ReturnObj response =
+          await CommonFunctions().addComments(commentController.text, orderId);
+      Fluttertoast.showToast(msg: response.message);
+      if (response.status) {
+        Navigator.of(context).pop();
+      }
+    }
+
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
@@ -102,6 +113,8 @@ class Buttons {
               ),
               TextFormField(
                 controller: commentController,
+                focusNode: commentFocusNode,
+                textInputAction: TextInputAction.done,
                 decoration: InputDecoration(
                   hintText: 'Enter Your Comment here...',
                   contentPadding:
@@ -120,27 +133,14 @@ class Buttons {
                     borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                   ),
                 ),
-                // minLines: 3,
                 maxLines: 5,
-                onFieldSubmitted: (value) async {
-                  ReturnObj response = await CommonFunctions()
-                      .addComments(commentController.text, orderId);
-                  Fluttertoast.showToast(msg: response.message);
-                  if (response.status) {
-                    Navigator.of(context).pop();
-                  }
+                onFieldSubmitted: (value) {
+                  handleSubmit();
                 },
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () async {
-                  ReturnObj response = await CommonFunctions()
-                      .addComments(commentController.text, orderId);
-                  Fluttertoast.showToast(msg: response.message);
-                  if (response.status) {
-                    Navigator.of(context).pop();
-                  }
-                },
+                onPressed: handleSubmit,
                 style: ElevatedButton.styleFrom(
                   backgroundColor:
                       AppColors().buttonColorPurple, // Background color
