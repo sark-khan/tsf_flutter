@@ -132,7 +132,7 @@ Map<String, double> columnWidths = {
   'requestDate': 100.0,
   'promiseDate': 100.0,
   'remarks': 100.0,
-  'consigneeDetails': 100.0,
+  'consigneeDetails': 150.0,
   'poNumber': 140.0,
   "customerPoNo": 200.0,
   "width": 50.0,
