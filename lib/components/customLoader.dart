@@ -1,7 +1,5 @@
-import 'package:data_connection_checker_nulls/data_connection_checker_nulls.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 
 ProgressDialog customLoader(BuildContext context) {
@@ -32,7 +30,3 @@ hasConnectionWrapper(Function callback) {
     // });
   };
 }
-
-
-
-

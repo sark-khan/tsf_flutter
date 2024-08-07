@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 // import 'package:get_storage/get_storage.dart';
 import 'package:lottie/lottie.dart';
 import 'package:toggle_switch/toggle_switch.dart';
@@ -42,7 +43,8 @@ class _HomeScreenState extends State<HomeScreen> {
     Size screenSize = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: () async {
-        return false;
+        SystemNavigator.pop();
+        return true;
       },
       child: Scaffold(
         appBar: AppBar(

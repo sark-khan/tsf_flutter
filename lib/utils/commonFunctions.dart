@@ -16,6 +16,7 @@ import 'package:tsf/utils/responses/SingleDispatchDetails.dart';
 import 'package:tsf/utils/responses/SingleOrderDetailsResponse.dart';
 import 'package:tsf/utils/responses/OrdersResponse.dart';
 import 'package:tsf/utils/responses/SubadminResponse.dart';
+import 'package:tsf/utils/responses/pastComments.dart';
 import 'responses/UserActivationResponse.dart';
 
 class CommonFunctions {
@@ -203,6 +204,42 @@ class CommonFunctions {
     }
   }
 
+  Future<ReturnObj<List<OrderPastComment>>> getPastCommments(
+      String orderId) async {
+    try {
+      if (orderId.isEmpty) {
+        return ReturnObj(
+            message: "Error in get Particular Details", status: false);
+      }
+      headers['token'] = Storage.getJwtToken();
+      var data = json.encode({"soNumber": orderId});
+      var response = await dio.request(
+        '$APIURL/api/order/get-particular-order-comments?soNumber=$orderId',
+        options: Options(
+          method: 'GET',
+          headers: headers,
+        ),
+        data: data,
+      );
+      if (response.statusCode == 200) {
+        print("ssssssssss  ${response.data}");
+        GetPastComments getPastComments =
+            GetPastComments.fromJson(response.data);
+
+        return ReturnObj<List<OrderPastComment>>(
+            message: "Past comments Fetched successfully",
+            status: true,
+            data: getPastComments.orderPastComments);
+      } else {
+        return ReturnObj(
+            message: "Unable to get the Order Details", status: false);
+      }
+    } catch (error) {
+      printError(info: "Error in Order Details $error");
+      return ReturnObj(message: "Server is Busy", status: false);
+    }
+  }
+
   Future<ReturnObj> getDispatchDetails(String? orderId) async {
     try {
       if (orderId!.isEmpty) {
@@ -218,7 +255,6 @@ class CommonFunctions {
           method: 'GET',
           headers: headers,
         ),
-        data: data,
       );
       if (response.statusCode == 200) {
         SingleDispatchDetails dispatchDetailsResponse =

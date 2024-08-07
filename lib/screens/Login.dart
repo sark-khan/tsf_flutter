@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tsf/components/WidgetStyle.dart';
@@ -35,6 +36,7 @@ class _LoginState extends State<Login> {
   bool _isLoading = false;
   bool toastShowingPassword = false;
   bool toastShowing = false;
+
   @override
   void dispose() {
     emailController!.dispose(); // Don't forget to dispose of the controller
@@ -45,7 +47,8 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        return false;
+        SystemNavigator.pop();
+        return true; // Allow the back button to close the app
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,

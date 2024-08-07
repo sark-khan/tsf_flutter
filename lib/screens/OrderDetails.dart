@@ -117,38 +117,6 @@ final dispatchDetailsOrder = [
   ["Consignee", "consignee"],
 ];
 
-Map<String, double> columnWidths = {
-  'soNumber': 100.0,
-  'soDate': 100.0,
-  'filmType': 120.0,
-  'filmtype': 120.0,
-  'widthMm': 50.0,
-  'coreIdMm': 50.0,
-  'length': 60.0,
-  'soQuantity': 100.0,
-  'despQty': 100.0,
-  'pendToDespatchQty': 100.0,
-  'toProduceSoQty': 100.0,
-  'requestDate': 100.0,
-  'promiseDate': 100.0,
-  'remarks': 100.0,
-  'consigneeDetails': 150.0,
-  'poNumber': 140.0,
-  "customerPoNo": 200.0,
-  "width": 50.0,
-  "coreInnerDiameter": 50.0,
-  "rollOuterDiameter": 50.0,
-  "dispatchQuantityInKg": 100.0,
-  "vehicleNumber": 100.0,
-  "firstTransporter": 150.0,
-  "mobileNumber": 150.0,
-  "collectorName": 100.0,
-  "uom": 50.0,
-  'grade': 50.0,
-  'odMm': 50.0,
-  'dispatchQuantityInSqm': 100.0
-};
-
 class OrderDetails extends StatefulWidget {
   final String? orderId;
   final bool? isOrderPage;
@@ -170,6 +138,39 @@ class _OrderDetailsState extends State<OrderDetails> {
   String remark = "";
 
   bool dataProcessed = false;
+
+  Map<String, double> columnWidths = {
+    'soNumber': 100.0,
+    'soDate': 100.0,
+    'filmType': 120.0,
+    'filmtype': 120.0,
+    'widthMm': 50.0,
+    'coreIdMm': 50.0,
+    'length': 60.0,
+    'soQuantity': 100.0,
+    'despQty': 100.0,
+    'pendToDespatchQty': 100.0,
+    'toProduceSoQty': 100.0,
+    'requestDate': 100.0,
+    'promiseDate': 100.0,
+    'remarks': 100.0,
+    'consigneeDetails': 450.0,
+    'consignee': 450.0,
+    'poNumber': 140.0,
+    "customerPoNo": 200.0,
+    "width": 50.0,
+    "coreInnerDiameter": 50.0,
+    "rollOuterDiameter": 50.0,
+    "dispatchQuantityInKg": 100.0,
+    "vehicleNumber": 100.0,
+    "firstTransporter": 150.0,
+    "mobileNumber": 150.0,
+    "collectorName": 100.0,
+    "uom": 50.0,
+    'grade': 50.0,
+    'odMm': 50.0,
+    'dispatchQuantityInSqm': 100.0
+  };
   @override
   void initState() {
     super.initState();
@@ -234,9 +235,9 @@ class _OrderDetailsState extends State<OrderDetails> {
                 100.0; // Default width if not specified
             return Container(
               width: columnWidth,
-              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
               child: Text(entry.value,
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
             );
           }).toList(),
         ),
@@ -261,10 +262,15 @@ class _OrderDetailsState extends State<OrderDetails> {
                 apiHeader == "collectorName" ||
                 apiHeader == "promiseDate" ||
                 apiHeader == "requestDate" ||
-                apiHeader == "soDate") {
+                apiHeader == "soDate" ||
+                apiHeader == "consigneeDetails") {
               value = 'N/A';
             } else {
               value = 0;
+            }
+            print("${apiHeader} dadsadsa ${columnWidths[apiHeader]}");
+            if (columnWidths[apiHeader] != null) {
+              columnWidths[apiHeader] = 100;
             }
           }
           if (apiHeader == "promiseDate" ||
@@ -279,7 +285,7 @@ class _OrderDetailsState extends State<OrderDetails> {
               100.0; // Default width if not specified
           return Container(
             width: columnWidth,
-            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
             child: Text(value.toString()),
           );
         }).toList(),
@@ -392,6 +398,8 @@ class _OrderDetailsState extends State<OrderDetails> {
         toolbarHeight: 70.0,
         actions: widget.isOrderPage! && widget.orderId != "-1"
             ? [
+                Buttons().pastCommentsButton(
+                    "Previous Comments", context, widget.orderId!),
                 Buttons()
                     .addCommentsButton("Add Comments", context, widget.orderId!)
               ]
@@ -405,8 +413,9 @@ class _OrderDetailsState extends State<OrderDetails> {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               ReturnObj response = snapshot.data!;
-
+              print("${response.data} ;djsa;d;slad;");
               var data = json.decode(json.encode(response.data));
+
               // print(
               //     "data >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${data.length}");
               // if (data.length == 0) {

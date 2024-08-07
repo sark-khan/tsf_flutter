@@ -3,7 +3,7 @@
     <application
         android:enableOnBackInvokedCallback="true"
         android:usesCleartextTraffic="true"
-        android:label="tsf"
+        android:label="TSF Touch Support"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

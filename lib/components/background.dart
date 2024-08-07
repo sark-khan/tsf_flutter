@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
 import 'package:tsf/utils/AppConstants.dart';
 import 'package:tsf/utils/Storage.dart';
 import 'package:tsf/utils/commonFunctions.dart';
@@ -22,7 +22,7 @@ class _bgState extends State<SplashScreen> {
       if (token.isEmpty) {
         Navigator.of(context).pushReplacementNamed("/login");
       } else {
-        getUserRole() == "Admin" || getUserRole()== "Subadmin"
+        getUserRole() == "Admin" || getUserRole() == "Subadmin"
             ? Navigator.pushNamed(context, "/admin-dashboard")
             : Navigator.pushNamed(context, "/home");
       }
@@ -31,9 +31,17 @@ class _bgState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [Background(context, BackgroundImagePath().SPLASHBACKGROUND)],
+    return WillPopScope(
+      onWillPop: () async {
+        SystemNavigator.pop();
+        return true;
+      },
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Background(context, BackgroundImagePath().SPLASHBACKGROUND)
+          ],
+        ),
       ),
     );
   }
