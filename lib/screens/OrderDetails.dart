@@ -171,6 +171,7 @@ class _OrderDetailsState extends State<OrderDetails> {
     'odMm': 50.0,
     'dispatchQuantityInSqm': 100.0
   };
+
   @override
   void initState() {
     super.initState();
@@ -268,10 +269,10 @@ class _OrderDetailsState extends State<OrderDetails> {
             } else {
               value = 0;
             }
-            print("${apiHeader} dadsadsa ${columnWidths[apiHeader]}");
-            if (columnWidths[apiHeader] != null) {
-              columnWidths[apiHeader] = 100;
-            }
+            // print("${apiHeader} dadsadsa ${columnWidths[apiHeader]}");
+            // if (columnWidths[apiHeader] != null && column) {
+            //   columnWidths[apiHeader] = 100;
+            // }
           }
           if (apiHeader == "promiseDate" ||
               apiHeader == "requestDate" ||
