@@ -196,6 +196,7 @@ class _LoginState extends State<Login> {
                             }
                             ReturnObj returnObj =
                                 await CommonFunctions().CheckUser(email!);
+                                print("reached herer");
 
                             if (returnObj.status) {
                               setState(() {
