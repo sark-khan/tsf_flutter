@@ -19,7 +19,7 @@ import 'package:tsf/utils/responses/pastComments.dart';
 
 Widget pastCommentDialogBox(BuildContext context, String orderId) {
   Future<ReturnObj<List<OrderPastComment>>>? futureData;
-  futureData = CommonFunctions().getPastCommments(orderId);
+  futureData = CommonFunctions().getPastComments(orderId);
 
   return FutureBuilder<ReturnObj<List<OrderPastComment>>>(
     future: futureData,
