@@ -331,19 +331,20 @@ class _OrderDetailsState extends State<OrderDetails> {
                                 ),
                               ],
                             ),
-                            SizedBox(width: 15),
+                            const SizedBox(width: 15),
                             Column(
                               children: [
-                                Text("Grade :", style: TextStyle(fontSize: 12)),
+                                const Text("Grade :",
+                                    style: TextStyle(fontSize: 12)),
                                 Text(
                                   grade,
-                                  style: TextStyle(fontSize: 10),
+                                  style: const TextStyle(fontSize: 10),
                                 ),
                               ],
                             ),
                           ],
                         )
-                      : SizedBox()
+                      : const SizedBox()
                 ],
               )
             : Row(
@@ -351,9 +352,9 @@ class _OrderDetailsState extends State<OrderDetails> {
                 children: [
                   Text(
                     TextConstants().DISPATCH_DETAILS,
-                    style: TextStyle(fontSize: 15),
+                    style: const TextStyle(fontSize: 15),
                   ),
-                  SizedBox(width: 25),
+                  const SizedBox(width: 25),
                   widget.orderId != "-1"
                       ? Row(
                           children: [
@@ -409,7 +410,7 @@ class _OrderDetailsState extends State<OrderDetails> {
       body: FutureBuilder(
         future: widget.isOrderPage!
             ? CommonFunctions().getOrderDetails(widget.orderId!)
-            : CommonFunctions().getDispatchDetails(widget.orderId),
+            : CommonFunctions().getDispatchDetails(widget.orderId!),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
